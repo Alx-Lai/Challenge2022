@@ -75,10 +75,19 @@ class EventTimesUp(BaseEvent):
 
 class EventPlayerMove(BaseEvent):
     name = 'PlayerMove event'
-
-    def __init__(self, player_id, direction):
-        self.player_id = player_id
-        self.direction = direction
+    def __init__(self, player_id : int, direction : int):
+        if (player_id < 0 or player_id > 3 or ( (not (direction == 1) ) and (not (direction == -1) ) ) ):
+            return
+        self.player_id = player_id # 0, 1, 2, 3
+        self.direction = direction # 1 : frontward, -1 : backward
 
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} move {self.direction}'
+
+class EventPlayerRotate(BaseEvent):
+    name = 'PlayerRotate event'
+    def __init__(self, player_id : int, direction : int):
+        if (player_id < 0 or player_id > 3 or ( (not (direction == 1) ) and (not (direction == -1) ) ) ):
+            return
+        self.player_id = player_id # 0, 1, 2, 3
+        self.direction = direction # 1 : rotate_left, -1 : rotate_right
