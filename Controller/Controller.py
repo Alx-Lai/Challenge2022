@@ -50,19 +50,61 @@ class Controller:
             if cur_state == Const.STATE_STOP: self.ctrl_stop(key_down_events)
             if cur_state == Const.STATE_ENDGAME: self.ctrl_endgame(key_down_events)
 
+    def check_screen_keys(self, key):
+            '''
+            check the keys that should be caught regardless of game state
+            for example: FULL_SCREEN_KEY
+            TODO: change volume
+            '''
+            if key == Const.GAME_FULLSCREEN_KEY:
+                self.ev_manager.post(EventToggleFullScreen())
+
     def ctrl_menu(self, key_down_events):
         for event_pg in key_down_events:
             if event_pg.type == pg.KEYDOWN and event_pg.key == pg.K_SPACE:
                 self.ev_manager.post(EventStateChange(Const.STATE_PLAY))
+            # detect fullscreen change
+            self.check_screen_keys(event_pg.key)
 
     def ctrl_play(self, key_down_events):
+        # handle movement using key pressed state
         keys = pg.key.get_pressed()
-        for k, v in Const.PLAYER_KEYS.items():
+        for k, v in Const.PLAYER_MOVE_KEYS.items():
             if keys[k]:
                 self.ev_manager.post(EventPlayerMove(*v))
 
+        for k, v in Const.PLAYER_ROTATE_KEYS.items():
+            if keys[k]:
+                self.ev_manager.post(EventPlayerRotate(*v))
+
+        for event_pg in key_down_events:
+            # handle attack using keydown events
+            if event_pg.type == pg.KEYDOWN:
+                key = event_pg.key
+                if key in Const.PLAYER_ATTACK_KEYS:
+                    player_id = Const.PLAYER_ATTACK_KEYS[key][0]
+                    self.ev_manager.post(EventPlayerAttack(player_id))
+                # detect stop
+                if event_pg.key == Const.GAME_STOP_KEY:
+                    self.ev_manager.post(EventStateChange(Const.STATE_STOP))
+                    self.ev_manager.post(EventStop())
+                else:
+                    self.check_screen_keys(event_pg.key)
+
     def ctrl_stop(self, key_down_events):
-        pass
+        # detect start/stop events
+        for event_pg in key_down_events:
+            if event_pg.key == Const.GAME_CONTINUE_KEY:
+                self.ev_manager.post(EventStateChange(Const.STATE_PLAY))
+                self.ev_manager.post(EventContinue())
+            else:
+                self.check_screen_keys(event_pg.key)
 
     def ctrl_endgame(self, key_down_events):
-        pass
+        # detect restart event
+        for event_pg in key_down_events:
+            if event_pg.key == Const.GAME_RESTART_KEY:
+                self.ev_manager.post(EventStateChange(Const.STATE_MENU))
+                self.ev_manager.post(EventRestart())
+            else:
+                self.check_screen_keys(event_pg.key)
