@@ -72,6 +72,26 @@ class EventEveryTick(BaseEvent):
 class EventTimesUp(BaseEvent):
     name = "Time's Up event"
 
+class EventToggleFullScreen(BaseEvent):
+    name = 'ToggleFullScreen event'
+
+class EventStop(BaseEvent):
+    name = 'GameStop event'
+    '''
+    game stop and model stage change to STATE_STOP
+    '''
+
+class EventContinue(BaseEvent):
+    name = 'GameContinue event'
+    '''
+    game continue and model stage change to STATE_PLAY
+    '''
+
+class EventRestart(BaseEvent):
+    name = 'GameContinue event'
+    '''
+    game restart and model stage change to STATE_MENU
+    '''
 
 class EventPlayerMove(BaseEvent):
     name = 'PlayerMove event'
@@ -91,3 +111,12 @@ class EventPlayerRotate(BaseEvent):
             return
         self.player_id = player_id # 0, 1, 2, 3
         self.direction = direction # 1 : rotate_left, -1 : rotate_right
+
+class EventPlayerAttack (BaseEvent):
+    name = 'PlayerAttack event'
+
+    def __init__(self, player_id):
+        self.player_id = player_id
+
+    def __str__(self):
+        return f'{self.name} => player_id {self.player_id} attack'
