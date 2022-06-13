@@ -33,9 +33,6 @@ PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.C
 
 
 # controller
-
-PLAYER_MOVE_FRONT = 1
-PLAYER_MOVE_BACK = -1
 PLAYER_ROTATE_LEFT = 1
 PLAYER_ROTATE_RIGHT = -1
 

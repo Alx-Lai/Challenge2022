@@ -1,5 +1,4 @@
 import random
-
 import pygame as pg
 
 from EventManager.EventManager import *
