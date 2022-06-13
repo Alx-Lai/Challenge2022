@@ -95,9 +95,7 @@ class EventRestart(BaseEvent):
 
 class EventPlayerMove(BaseEvent):
     name = 'PlayerMove event'
-    def __init__(self, player_id : int, direction : int):
-        if (player_id < 0 or player_id > 3 or ( (not (direction == 1) ) and (not (direction == -1) ) ) ):
-            return
+    def __init__(self, player_id, direction):
         self.player_id = player_id # 0, 1, 2, 3
         self.direction = direction # 1 : frontward, -1 : backward
 

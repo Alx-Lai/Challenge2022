@@ -40,14 +40,14 @@ PLAYER_ROTATE_LEFT = 1
 PLAYER_ROTATE_RIGHT = -1
 
 PLAYER_MOVE_KEYS = {
-    pg.K_w: (0, PLAYER_MOVE_FRONT),
-    pg.K_s: (0, PLAYER_MOVE_BACK),
-    pg.K_t: (1, PLAYER_MOVE_FRONT),
-    pg.K_g: (1, PLAYER_MOVE_BACK),
-    pg.K_i: (2, PLAYER_MOVE_FRONT),
-    pg.K_k: (2, PLAYER_MOVE_BACK),
-    pg.K_UP: (3, PLAYER_MOVE_FRONT),
-    pg.K_DOWN: (3, PLAYER_MOVE_BACK)
+    pg.K_w: (0, 'up'),
+    pg.K_s: (0, 'down'),
+    pg.K_t: (1, 'up'),
+    pg.K_g: (1, 'down'),
+    pg.K_i: (2, 'up'),
+    pg.K_k: (2, 'down'),
+    pg.K_UP: (3, 'up'),
+    pg.K_DOWN: (3, 'down')
 }
 
 
