@@ -1,19 +1,15 @@
+import math
 import pygame as pg
 
 # model
 FPS = 60 # frame per second
-GAME_LENGTH = 30 * FPS
-PLAYER_INIT_POSITION = [pg.Vector2(200, 400), pg.Vector2(600, 400), pg.Vector2(200, 0), pg.Vector2(200, 0)]
+GAME_LENGTH = math.inf * FPS # temporarily set to infinity
+PLAYER_INIT_POSITION = [pg.Vector2(200, 200), pg.Vector2(600, 200), pg.Vector2(200, 600), pg.Vector2(600, 600)]
+PLAYER_INIT_DIRECTION = [pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0)]
 
 PLAYER_RADIUS = 75
-SPEED_ATTACK = 100
-SPEED_DEFENSE = 70
-DIRECTION_TO_VEC2 = {
-    'up': pg.Vector2(0, -1),
-    'left': pg.Vector2(-1, 0),
-    'down': pg.Vector2(0, 1),
-    'right': pg.Vector2(1, 0),
-}
+PLAYER_SPEED = 100
+PLAYER_ROTATION_SPEED = 5
 
 
 # State machine constants
@@ -33,18 +29,21 @@ PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.C
 
 
 # controller
-PLAYER_ROTATE_LEFT = 1
-PLAYER_ROTATE_RIGHT = -1
+PLAYER_MOVE_FORWARD = 1
+PLAYER_MOVE_BACKWARD = -1
+
+PLAYER_ROTATE_LEFT = -1
+PLAYER_ROTATE_RIGHT = 1
 
 PLAYER_MOVE_KEYS = {
-    pg.K_w: (0, 'up'),
-    pg.K_s: (0, 'down'),
-    pg.K_t: (1, 'up'),
-    pg.K_g: (1, 'down'),
-    pg.K_i: (2, 'up'),
-    pg.K_k: (2, 'down'),
-    pg.K_UP: (3, 'up'),
-    pg.K_DOWN: (3, 'down')
+    pg.K_w: (0, PLAYER_MOVE_FORWARD),
+    pg.K_s: (0, PLAYER_MOVE_BACKWARD),
+    pg.K_t: (1, PLAYER_MOVE_FORWARD),
+    pg.K_g: (1, PLAYER_MOVE_BACKWARD),
+    pg.K_i: (2, PLAYER_MOVE_FORWARD),
+    pg.K_k: (2, PLAYER_MOVE_BACKWARD),
+    pg.K_UP: (3, PLAYER_MOVE_FORWARD),
+    pg.K_DOWN: (3, PLAYER_MOVE_BACKWARD)
 }
 
 

@@ -111,6 +111,9 @@ class GameEngine:
         elif isinstance(event, EventPlayerMove):
             self.players[event.player_id].move_direction(event.direction)
 
+        elif isinstance(event, EventPlayerRotate):
+            self.players[event.player_id].rotate(event.direction)
+
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
 
@@ -153,16 +156,23 @@ class Player:
     def __init__(self, player_id):
         self.player_id = player_id
         self.position = Const.PLAYER_INIT_POSITION[player_id] # is a pg.Vector2
-        self.speed = Const.SPEED_ATTACK if player_id == 1 else Const.SPEED_DEFENSE
+        self.direction = Const.PLAYER_INIT_DIRECTION[player_id] # is a pg.Vector2
+        self.speed = Const.PLAYER_SPEED
 
-    def move_direction(self, direction: str):
+    def move_direction(self, direction: int):
         '''
         Move the player along the direction by its speed.
         Will automatically clip the position so no need to worry out-of-bound moving.
         '''
         # Modify position of player
-        self.position += self.speed / Const.FPS * Const.DIRECTION_TO_VEC2[direction]
+        self.position += self.speed / Const.FPS * self.direction * direction
 
         # clipping
         self.position.x = max(0, min(Const.ARENA_SIZE[0], self.position.x))
         self.position.y = max(0, min(Const.ARENA_SIZE[1], self.position.y))
+
+    def rotate(self, direction: int):
+        '''
+        Rotate the player leftward or rightward.
+        '''
+        self.direction = self.direction.rotate_rad(Const.PLAYER_ROTATION_SPEED / Const.FPS * direction)
