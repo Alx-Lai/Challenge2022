@@ -2,6 +2,7 @@ import random
 import pygame as pg
 
 from EventManager.EventManager import *
+from Model.GameObject.player import *
 import Const
 
 
@@ -75,7 +76,8 @@ class GameEngine:
         '''
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
-        self.players = [Player(0), Player(1), Player(2), Player(3)]
+        self.players = [Player(self, i) for i in range(4)]
+        self.bullets = []
 
     def notify(self, event: BaseEvent):
         '''
@@ -114,6 +116,9 @@ class GameEngine:
         elif isinstance(event, EventPlayerRotate):
             self.players[event.player_id].rotate(event.direction)
 
+        elif isinstance(event, EventPlayerAttack):
+            self.players[event.player_id].attack()
+
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
 
@@ -129,7 +134,12 @@ class GameEngine:
         Update the objects not controlled by user.
         For example: obstacles, items, special effects
         '''
-        pass
+        for player in self.players:
+            player.tick()
+
+        for bullet in self.bullets:
+            if bullet.killed(): self.bullets.remove(bullet)
+            else: bullet.tick()
 
     def update_endgame(self):
         '''
@@ -152,27 +162,3 @@ class GameEngine:
             self.clock.tick(Const.FPS)
 
 
-class Player:
-    def __init__(self, player_id):
-        self.player_id = player_id
-        self.position = Const.PLAYER_INIT_POSITION[player_id] # is a pg.Vector2
-        self.direction = Const.PLAYER_INIT_DIRECTION[player_id] # is a pg.Vector2
-        self.speed = Const.PLAYER_SPEED
-
-    def move_direction(self, direction: int):
-        '''
-        Move the player along the direction by its speed.
-        Will automatically clip the position so no need to worry out-of-bound moving.
-        '''
-        # Modify position of player
-        self.position += self.speed / Const.FPS * self.direction * direction
-
-        # clipping
-        self.position.x = max(0, min(Const.ARENA_SIZE[0], self.position.x))
-        self.position.y = max(0, min(Const.ARENA_SIZE[1], self.position.y))
-
-    def rotate(self, direction: int):
-        '''
-        Rotate the player leftward or rightward.
-        '''
-        self.direction = self.direction.rotate_rad(Const.PLAYER_ROTATION_SPEED / Const.FPS * direction)

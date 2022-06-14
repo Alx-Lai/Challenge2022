@@ -70,11 +70,18 @@ class GraphicalView:
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
 
+        # draw bullets
+        for bullet in self.model.bullets:
+            pg.draw.circle(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], bullet.position, Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE)
+
         # draw players
         for player in self.model.players:
-            center = list(map(int, player.position))
-            pg.draw.circle(self.screen, Const.PLAYER_COLOR[player.player_id], center, Const.PLAYER_RADIUS)
+            center = player.position
+            aux_line_end = center + player.direction * Const.ARENA_GRID_SIZE * (player.aux_line_length + 0.5)
 
+            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_end)
+            pg.draw.circle(self.screen, Const.PLAYER_COLOR[player.player_id], center, Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE)
+        
         pg.display.flip()
 
     def render_stop(self):

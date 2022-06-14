@@ -1,15 +1,36 @@
 import math
 import pygame as pg
 
+
+# view
+WINDOW_CAPTION = 'Challenge 2020 Homework'
+WINDOW_SIZE = (800, 800)
+ARENA_SIZE = (800, 800)
+ARENA_GRID_COUNT = 30
+ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
+BACKGROUND_COLOR = pg.Color('black')
+PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.Color('blue')]
+
+
 # model
 FPS = 60 # frame per second
 GAME_LENGTH = math.inf * FPS # temporarily set to infinity
 PLAYER_INIT_POSITION = [pg.Vector2(200, 200), pg.Vector2(600, 200), pg.Vector2(200, 600), pg.Vector2(600, 600)]
 PLAYER_INIT_DIRECTION = [pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0)]
 
-PLAYER_RADIUS = 75
-PLAYER_SPEED = 100
-PLAYER_ROTATION_SPEED = 5
+PLAYER_RADIUS = 0.5        # grid unit 
+PLAYER_SPEED = 5           # grid unit per second
+PLAYER_ROTATION_SPEED = 3  # rad per second
+
+PLAYER_ATTACK_CD = 2       # second
+PLAYER_ATTACK_KICK = 1     # grid unit
+
+BULLET_RADIUS = 0.2        # grid unit
+BULLET_LENGTH = 1.5        # grid unit
+BULLET_REPULSION = 3       # grid unit
+BULLET_SPEED = 10          # grid unit per second
+BULLET_LIFESPAM = 90       # grid unit
+BULLET_HIT_SCORE = 10
 
 
 # State machine constants
@@ -18,14 +39,6 @@ STATE_MENU = 1
 STATE_PLAY = 2
 STATE_STOP = 3 # not implemented yet
 STATE_ENDGAME = 4
-
-
-# view
-WINDOW_CAPTION = 'Challenge 2020 Homework'
-WINDOW_SIZE = (800, 800)
-ARENA_SIZE = (800, 800)
-BACKGROUND_COLOR = pg.Color('black')
-PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.Color('blue')]
 
 
 # controller
