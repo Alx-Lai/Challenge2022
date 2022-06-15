@@ -2,35 +2,36 @@ import math
 import pygame as pg
 
 
+# model
+FPS = 60 # frame per second
+GAME_LENGTH = math.inf * FPS # temporarily set to infinity
+PLAYER_NUMBER = 4
+PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
+PLAYER_INIT_DIRECTION = [pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0)]
+
+PLAYER_RADIUS = 0.5        # grid unit 
+PLAYER_BASE_SPEED = 10     # grid unit per second
+PLAYER_ROTATION_SPEED = 3  # rad per second
+
+PLAYER_ATTACK_CD = 2       # second
+PLAYER_ATTACK_KICK = 15    # grid unit per second
+
+BULLET_RADIUS = 0.2        # grid unit
+BULLET_LENGTH = 1.5        # grid unit
+BULLET_REPULSION = 25      # grid unit per second
+BULLET_SPEED = 15          # grid unit per second
+BULLET_LIFESPAM = 6        # second
+BULLET_HIT_SCORE = 10
+
+
 # view
-WINDOW_CAPTION = 'Challenge 2020 Homework'
+WINDOW_CAPTION = 'Challenge 2022'
 WINDOW_SIZE = (800, 800)
 ARENA_SIZE = (800, 800)
 ARENA_GRID_COUNT = 30
 ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')
 PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.Color('blue')]
-
-
-# model
-FPS = 60 # frame per second
-GAME_LENGTH = math.inf * FPS # temporarily set to infinity
-PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
-PLAYER_INIT_DIRECTION = [pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0)]
-
-PLAYER_RADIUS = 0.5        # grid unit 
-PLAYER_BASE_SPEED = 500    # grid unit per second
-PLAYER_ROTATION_SPEED = 3  # rad per second
-
-PLAYER_ATTACK_CD = 2       # second
-PLAYER_ATTACK_KICK = 1     # grid unit
-
-BULLET_RADIUS = 0.2        # grid unit
-BULLET_LENGTH = 1.5        # grid unit
-BULLET_REPULSION = 3       # grid unit
-BULLET_SPEED = 10          # grid unit per second
-BULLET_LIFESPAM = 90       # grid unit
-BULLET_HIT_SCORE = 10
 
 
 # State machine constants

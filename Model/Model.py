@@ -76,7 +76,7 @@ class GameEngine:
         '''
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
-        self.players = [Player(self, i) for i in range(4)]
+        self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
         self.bullets = []
 
     def notify(self, event: BaseEvent):
@@ -112,6 +112,9 @@ class GameEngine:
 
         elif isinstance(event, EventPlayerMove):
             self.players[event.player_id].move_direction(event.direction)
+
+        elif isinstance(event, EventPlayerNoMove):
+            self.players[event.player_id].stop_moving()
 
         elif isinstance(event, EventPlayerRotate):
             self.players[event.player_id].rotate(event.direction)

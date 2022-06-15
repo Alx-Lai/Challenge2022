@@ -1,21 +1,22 @@
 import pygame as pg
 import Const
 import copy
+import math
 from pygame.math import Vector2
 
 class Base_Game_Object:
     '''
     An abstract class for game objects.
     '''
-    def __init__(self, model, position, radius, bounce = False, slide = False):
+    def __init__(self, model, position, radius):
         self.model = model
         self.position = position
         self.radius = radius
         self.direction = Vector2(1.0, 0.0) # facing rightwards
         self.speed = Vector2(0.0, 0.0)
-        self.bounce = bounce
-        self.slide = slide
+        self.bounce = False
         self.__death = False
+        self.lifespam = math.inf
 
     def clip_position(self):
         '''
@@ -28,6 +29,7 @@ class Base_Game_Object:
         '''
         Take actions in every tick.
         '''
+        self.lifespam -= 1
         self.position += self.speed / Const.FPS
 
         if self.bounce:
@@ -35,10 +37,6 @@ class Base_Game_Object:
                 self.speed.x = -self.speed.x
             if self.y < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.y:
                 self.speed.y = -self.speed.y
-            
-        # slow down due to friction
-        if not self.slide:
-            self.speed = self.speed / 1.1
 
         self.clip_position()
 

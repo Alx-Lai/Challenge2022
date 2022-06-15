@@ -5,14 +5,15 @@ from Model.GameObject.base_game_object import *
 class Bullet(Base_Game_Object):
     def __init__(self, model, player, length, repulsion):
         position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
-        super().__init__(model, position, Const.BULLET_RADIUS, True, True)
+        super().__init__(model, position, Const.BULLET_RADIUS)
 
         self.attacker = player
         self.speed = player.direction * Const.BULLET_SPEED
         self.length = length
         self.repulsion = repulsion
 
-        self.lifespam = Const.BULLET_LIFESPAM
+        self.bounce = True
+        self.lifespam = Const.BULLET_LIFESPAM * Const.FPS
 
         self.__death = False
 

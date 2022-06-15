@@ -24,11 +24,16 @@ class Player(Base_Game_Object):
 
     def move_direction(self, direction: int):
         '''
-        Adjust the player's speed.
+        Increase the player's speed.
         '''
-        # Modify position of player
-        new_speed = Const.PLAYER_BASE_SPEED / Const.FPS * self.direction * direction
-        self.speed = (self.speed * 4 + new_speed) / 5
+        new_speed = Const.PLAYER_BASE_SPEED * self.direction * direction
+        self.speed = (self.speed * 9 + new_speed) / 10
+
+    def stop_moving(self):
+        '''
+        Decrease the player's speed.
+        '''
+        self.speed = (self.speed * 9) / 10
 
     def rotate(self, direction: int):
         '''
@@ -42,7 +47,7 @@ class Player(Base_Game_Object):
         Will automatically clip the position so no need to worry out-of-bound moving.
         '''
         # Modify position of player
-        self.speed += distance * direction * 10
+        self.speed += distance * direction
 
 
     def attack(self):

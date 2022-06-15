@@ -69,9 +69,14 @@ class Controller:
     def ctrl_play(self, key_down_events):
         # handle movement using key pressed state
         keys = pg.key.get_pressed()
+        player_no_move = [(i, True) for i in range(Const.PLAYER_NUMBER)]
         for k, v in Const.PLAYER_MOVE_KEYS.items():
             if keys[k]:
                 self.ev_manager.post(EventPlayerMove(*v))
+                player_no_move[v[0]] = (v[0], False)
+        for index, no_move in player_no_move:
+            if no_move:
+                self.ev_manager.post(EventPlayerNoMove(index))
 
         for k, v in Const.PLAYER_ROTATE_KEYS.items():
             if keys[k]:
