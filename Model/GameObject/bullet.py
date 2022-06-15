@@ -4,6 +4,9 @@ import Const
 from Model.GameObject.base_game_object import *
 
 class Bullet(Base_Game_Object):
+    '''
+    Represent a bullet shot by a player.
+    '''
     def __init__(self, model, player, trace_time, repulsion):
         position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
         super().__init__(model, position, Const.BULLET_RADIUS)
@@ -19,6 +22,9 @@ class Bullet(Base_Game_Object):
         self.lifespam = Const.BULLET_LIFESPAM * Const.FPS
 
     def tick(self):
+        '''
+        Run whenever EventEveryTick() arises.
+        '''
         self.lifespam -= 1
         self.position += self.speed / Const.FPS
         self.bounce()
@@ -33,6 +39,9 @@ class Bullet(Base_Game_Object):
                 self.kill()
 
     def bounce(self):
+        '''
+        Bounce against the arena border.
+        '''
         bounced = False
         if self.x < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.x:
             self.speed.x = -self.speed.x
@@ -46,6 +55,10 @@ class Bullet(Base_Game_Object):
             self.vertices.insert(1, copy.deepcopy(self.position))
 
     def collide_object(self, obj):
+        '''
+        Check if the bullet collides with another object.
+        Touching the trace of the bullet also counts as a collision.
+        '''
         # check vertices
         for pos in self.vertices:
             if (pos - obj.position).length_squared() <= (self.radius + obj.radius) ** 2:
@@ -53,7 +66,7 @@ class Bullet(Base_Game_Object):
 
         # check segments
         for p1, p2 in zip(self.vertices, self.vertices[1:]):
-            x12, y12 =   p1.x - p2.x,   p1.y - p2.y
+            x12, y12 =  p1.x - p2.x,  p1.y - p2.y
             x01, y01 = obj.x - p1.x, obj.y - p1.y
             x02, y02 = obj.x - p2.x, obj.y - p2.y
 
@@ -68,14 +81,20 @@ class Bullet(Base_Game_Object):
             if x12*x02 + y12*y02 < 0 or -x12*x01 + -y12*y01 < 0: continue
             return True
 
-        return False                
+        return False
     
     def kill(self):
+        '''
+        Kill the bullet and its trace tail.
+        '''
         super().kill()
         self.tail.kill()
 
 
 class Bullet_Tail(Base_Game_Object):
+    '''
+    Represent the tail of a bullet's trace.
+    '''
     def __init__(self, model, head, player, trace_time):
         position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
         super().__init__(model, position, Const.BULLET_RADIUS)
@@ -85,6 +104,9 @@ class Bullet_Tail(Base_Game_Object):
         self.trace_time = trace_time * Const.FPS
 
     def tick(self):
+        '''
+        Run whenever EventEveryTick() arises.
+        '''
         if self.trace_time > 0:
             self.trace_time -= 1
             return
@@ -93,6 +115,9 @@ class Bullet_Tail(Base_Game_Object):
         self.bounce()
 
     def bounce(self):
+        '''
+        Bounce against the arena border.
+        '''
         bounced = False
         if self.x < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.x:
             self.speed.x = -self.speed.x

@@ -7,7 +7,6 @@ FPS = 60 # frame per second
 GAME_LENGTH = math.inf * FPS # temporarily set to infinity
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
-PLAYER_INIT_DIRECTION = [pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0), pg.Vector2(1, 0)]
 
 PLAYER_RADIUS = 0.5        # grid unit 
 PLAYER_BASE_SPEED = 10     # grid unit per second

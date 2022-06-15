@@ -26,7 +26,7 @@ class Base_Game_Object:
 
     def tick(self):
         '''
-        Take actions in every tick.
+        Run whenever EventEveryTick() arises.
         '''
         self.lifespam -= 1
         self.position += self.speed / Const.FPS
@@ -34,7 +34,7 @@ class Base_Game_Object:
 
     def collide_object(self, obj):
         '''
-        Check if the object collides with another
+        Check if the object collides with another one.
         '''
         return (self.position - obj.position).length_squared() <= (self.radius + obj.radius) ** 2
     
@@ -45,6 +45,9 @@ class Base_Game_Object:
         self.__death = True
 
     def killed(self):
+        '''
+        Check if the object has been killed.
+        '''
         return self.__death
 
 
