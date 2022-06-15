@@ -26,7 +26,7 @@ class Player(Base_Game_Object):
         '''
         super().tick()
         if self.in_cd():
-            self.cd_time -= 1 / Const.FPS
+            self.cd_time -= 1
 
     def move_direction(self, direction: int):
         '''
@@ -61,7 +61,7 @@ class Player(Base_Game_Object):
         '''
         if self.in_cd():
             return
-        self.cd_time = self.attack_cd
+        self.cd_time = self.attack_cd * Const.FPS
         self.knock_back(self.attack_kick, -self.direction)
         self.model.items.append(Bullet(self.model, self, self.bullet_trace_time, self.bullet_repulsion))
     
