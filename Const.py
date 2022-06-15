@@ -14,13 +14,13 @@ PLAYER_BASE_SPEED = 10     # grid unit per second
 PLAYER_ROTATION_SPEED = 3  # rad per second
 
 PLAYER_ATTACK_CD = 2       # second
-PLAYER_ATTACK_KICK = 15    # grid unit per second
+PLAYER_ATTACK_KICK = 10    # grid unit per second
 
 BULLET_RADIUS = 0.2        # grid unit
-BULLET_REPULSION = 25      # grid unit per second
+BULLET_REPULSION = 30      # grid unit per second
 BULLET_SPEED = 15          # grid unit per second
 BULLET_LIFESPAM = 6        # second
-BULLET_TRACE_TIME = 0.2    # second
+BULLET_TRACE_TIME = 0.1    # second
 BULLET_HIT_SCORE = 10
 
 
