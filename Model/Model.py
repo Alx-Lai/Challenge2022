@@ -135,7 +135,8 @@ class GameEngine:
         For example: obstacles, items, special effects
         '''
         for player in self.players:
-            player.tick()
+            if player.killed(): self.players.remove(player)
+            else: player.tick()
 
         for bullet in self.bullets:
             if bullet.killed(): self.bullets.remove(bullet)

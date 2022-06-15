@@ -1,13 +1,12 @@
-from Model.GameObject.bullet import *
 import Const
+from Model.GameObject.bullet import *
+from Model.GameObject.base_game_object import *
 
-class Player:
+class Player(Base_Game_Object):
     def __init__(self, model, player_id: int):
-        self.model = model
+        super().__init__(model, Const.PLAYER_INIT_POSITION[player_id], Const.PLAYER_RADIUS)
+
         self.player_id = player_id
-        self.position = Const.PLAYER_INIT_POSITION[player_id] # is a pg.Vector2
-        self.direction = Const.PLAYER_INIT_DIRECTION[player_id] # is a pg.Vector2
-        self.speed = Const.PLAYER_SPEED
         self.score = 0
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
@@ -19,20 +18,17 @@ class Player:
         self.bullet_repulsion = Const.BULLET_REPULSION
     
     def tick(self):
+        super().tick()
         if self.in_cd():
             self.cd_time -= 1 / Const.FPS
 
     def move_direction(self, direction: int):
         '''
-        Move the player along the direction by its speed.
-        Will automatically clip the position so no need to worry out-of-bound moving.
+        Adjust the player's speed.
         '''
         # Modify position of player
-        self.position += self.speed * Const.ARENA_GRID_SIZE / Const.FPS * self.direction * direction
-
-        # clipping
-        self.position.x = max(0, min(Const.ARENA_SIZE[0], self.position.x))
-        self.position.y = max(0, min(Const.ARENA_SIZE[1], self.position.y))
+        new_speed = Const.PLAYER_BASE_SPEED / Const.FPS * self.direction * direction
+        self.speed = (self.speed * 4 + new_speed) / 5
 
     def rotate(self, direction: int):
         '''
@@ -46,11 +42,7 @@ class Player:
         Will automatically clip the position so no need to worry out-of-bound moving.
         '''
         # Modify position of player
-        self.position += Const.ARENA_GRID_SIZE * distance * direction
-
-        # clipping
-        self.position.x = max(0, min(Const.ARENA_SIZE[0], self.position.x))
-        self.position.y = max(0, min(Const.ARENA_SIZE[1], self.position.y))
+        self.speed += distance * direction * 10
 
 
     def attack(self):
