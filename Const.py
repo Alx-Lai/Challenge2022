@@ -17,10 +17,10 @@ PLAYER_ATTACK_CD = 2       # second
 PLAYER_ATTACK_KICK = 15    # grid unit per second
 
 BULLET_RADIUS = 0.2        # grid unit
-BULLET_LENGTH = 1.5        # grid unit
 BULLET_REPULSION = 25      # grid unit per second
 BULLET_SPEED = 15          # grid unit per second
 BULLET_LIFESPAM = 6        # second
+BULLET_TRACE_TIME = 0.2    # second
 BULLET_HIT_SCORE = 10
 
 

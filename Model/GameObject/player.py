@@ -14,7 +14,7 @@ class Player(Base_Game_Object):
         self.aux_line_length = 1
         self.cd_time = 0
 
-        self.bullet_length = Const.BULLET_LENGTH
+        self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
     
     def tick(self):
@@ -58,7 +58,7 @@ class Player(Base_Game_Object):
             return
         self.cd_time = self.attack_cd
         self.knock_back(self.attack_kick, -self.direction)
-        self.model.bullets.append(Bullet(self.model, self, self.bullet_length, self.bullet_repulsion))
+        self.model.items.append(Bullet(self.model, self, self.bullet_trace_time, self.bullet_repulsion))
     
     def in_cd(self):
         return self.cd_time > 0

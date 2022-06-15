@@ -14,7 +14,6 @@ class Base_Game_Object:
         self.radius = radius
         self.direction = Vector2(1.0, 0.0) # facing rightwards
         self.speed = Vector2(0.0, 0.0)
-        self.bounce = False
         self.__death = False
         self.lifespam = math.inf
 
@@ -31,13 +30,6 @@ class Base_Game_Object:
         '''
         self.lifespam -= 1
         self.position += self.speed / Const.FPS
-
-        if self.bounce:
-            if self.x < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.x:
-                self.speed.x = -self.speed.x
-            if self.y < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.y:
-                self.speed.y = -self.speed.y
-
         self.clip_position()
 
     def collide_object(self, obj):

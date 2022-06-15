@@ -1,24 +1,27 @@
-import Const
 import pygame as pg
+import copy
+import Const
 from Model.GameObject.base_game_object import *
 
 class Bullet(Base_Game_Object):
-    def __init__(self, model, player, length, repulsion):
+    def __init__(self, model, player, trace_time, repulsion):
         position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
         super().__init__(model, position, Const.BULLET_RADIUS)
 
+        self.tail = Bullet_Tail(model, self, player, trace_time)
+        self.model.items.append(self.tail)
+        self.vertices = [self.position, self.tail.position]
+
         self.attacker = player
         self.speed = player.direction * Const.BULLET_SPEED
-        self.length = length
         self.repulsion = repulsion
 
-        self.bounce = True
         self.lifespam = Const.BULLET_LIFESPAM * Const.FPS
 
-        self.__death = False
-
     def tick(self):
-        super().tick()
+        self.lifespam -= 1
+        self.position += self.speed / Const.FPS
+        self.bounce()
 
         if self.lifespam <= 0:
             self.kill()
@@ -29,8 +32,75 @@ class Bullet(Base_Game_Object):
                     self.attacker.score += Const.BULLET_HIT_SCORE
                 self.kill()
 
-    def kill(self):
-        self.__death = True
+    def bounce(self):
+        bounced = False
+        if self.x < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.x:
+            self.speed.x = -self.speed.x
+            bounced = True
+        if self.y < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.y:
+            self.speed.y = -self.speed.y
+            bounced = True
+        
+        if bounced:
+            self.clip_position()
+            self.vertices.insert(1, copy.deepcopy(self.position))
 
-    def killed(self):
-        return self.__death
+    def collide_object(self, obj):
+        # check vertices
+        for pos in self.vertices:
+            if (pos - obj.position).length_squared() <= (self.radius + obj.radius) ** 2:
+                return True
+
+        # check segments
+        for p1, p2 in zip(self.vertices, self.vertices[1:]):
+            x12, y12 =   p1.x - p2.x,   p1.y - p2.y
+            x01, y01 = obj.x - p1.x, obj.y - p1.y
+            x02, y02 = obj.x - p2.x, obj.y - p2.y
+
+            # the line segment degenerates into a point
+            if x12 == 0 and y12 == 0: continue
+
+            # the bullet does not reach the line
+            a, b, c = y12, -x12, x12*p1.y - y12*p1.x
+            if (a*obj.x + b*obj.y + c)**2 > (obj.radius**2) * (a**2 + b**2): continue
+            
+            # the bullet does not reach the line segment
+            if x12*x02 + y12*y02 < 0 or -x12*x01 + -y12*y01 < 0: continue
+            return True
+
+        return False                
+    
+    def kill(self):
+        super().kill()
+        self.tail.kill()
+
+
+class Bullet_Tail(Base_Game_Object):
+    def __init__(self, model, head, player, trace_time):
+        position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
+        super().__init__(model, position, Const.BULLET_RADIUS)
+
+        self.speed = player.direction * Const.BULLET_SPEED
+        self.head = head
+        self.trace_time = trace_time * Const.FPS
+
+    def tick(self):
+        if self.trace_time > 0:
+            self.trace_time -= 1
+            return
+        
+        self.position += self.speed / Const.FPS
+        self.bounce()
+
+    def bounce(self):
+        bounced = False
+        if self.x < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.x:
+            self.speed.x = -self.speed.x
+            bounced = True
+        if self.y < self.radius or Const.ARENA_GRID_COUNT - self.radius < self.y:
+            self.speed.y = -self.speed.y
+            bounced = True
+        
+        if bounced:
+            self.clip_position()
+            self.head.vertices.pop(-2)

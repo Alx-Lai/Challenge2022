@@ -1,6 +1,7 @@
 import pygame as pg
 
 from EventManager.EventManager import *
+from Model.GameObject.bullet import *
 from Model.Model import GameEngine
 import Const
 
@@ -70,9 +71,12 @@ class GraphicalView:
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
         # draw bullets
-        for bullet in self.model.bullets:
-            center = bullet.position * Const.ARENA_GRID_SIZE
-            pg.draw.circle(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], center, Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE)
+        for bullet in self.model.items:
+            if isinstance(bullet, Bullet):
+                center = bullet.position * Const.ARENA_GRID_SIZE
+                points = [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices]
+                pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
+                pg.draw.circle(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], center, Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE)
 
         # draw players
         for player in self.model.players:
