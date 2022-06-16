@@ -73,10 +73,24 @@ class GraphicalView:
         # draw bullets
         for bullet in self.model.items:
             if isinstance(bullet, Bullet):
-                center = bullet.position * Const.ARENA_GRID_SIZE
+                # trace
                 points = [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices]
-                pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
-                pg.draw.circle(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], center, Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE)
+                if len(points) > 1:
+                    pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
+                
+                # bullet
+                color = Const.PLAYER_COLOR[bullet.attacker.player_id]
+                center = bullet.position * Const.ARENA_GRID_SIZE
+                radius = Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE
+                rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
+                if bullet.gun_type == Const.GUN_TYPE_NORMAL_GUN:
+                    pg.draw.circle(self.screen, color, center, radius)
+                if bullet.gun_type == Const.GUN_TYPE_MACHINE_GUN:
+                    pg.draw.circle(self.screen, color, center, radius / 1.5)
+                if bullet.gun_type == Const.GUN_TYPE_SNIPER:
+                    pg.draw.rect(self.screen, color, rect)
+                if bullet.gun_type == Const.GUN_TYPE_SHOTGUN:
+                    pg.draw.circle(self.screen, color, center, radius)
 
         # draw players
         for player in self.model.players:

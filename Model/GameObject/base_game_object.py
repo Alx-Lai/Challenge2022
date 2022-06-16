@@ -10,9 +10,9 @@ class Base_Game_Object:
     '''
     def __init__(self, model, position, radius):
         self.model = model
-        self.position = position
         self.radius = radius
-        self.direction = Vector2(1.0, 0.0) # facing rightwards
+        self.position = position
+        self.direction = Vector2(1.0, 0.0) # facing rightward
         self.speed = Vector2(0.0, 0.0)
         self.__death = False
         self.lifespam = math.inf

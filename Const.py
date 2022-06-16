@@ -14,6 +14,7 @@ PLAYER_ROTATION_SPEED = 3  # rad per second
 
 PLAYER_ATTACK_CD = 2       # second
 PLAYER_ATTACK_KICK = 10    # grid unit per second
+PLAYER_AUX_LINE_LENGTH = 1 # grid unit per second
 
 BULLET_RADIUS = 0.2        # grid unit
 BULLET_REPULSION = 30      # grid unit per second
@@ -22,6 +23,10 @@ BULLET_LIFESPAM = 6        # second
 BULLET_TRACE_TIME = 0.1    # second
 BULLET_HIT_SCORE = 10
 
+GUN_TYPE_NORMAL_GUN = 0
+GUN_TYPE_MACHINE_GUN = 1
+GUN_TYPE_SNIPER = 2
+GUN_TYPE_SHOTGUN = 3
 
 # view
 WINDOW_CAPTION = 'Challenge 2022'

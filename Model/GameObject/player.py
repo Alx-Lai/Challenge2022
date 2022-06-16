@@ -1,6 +1,6 @@
 import Const
-from Model.GameObject.bullet import *
 from Model.GameObject.base_game_object import *
+from Model.Gun.gun import *
 
 class Player(Base_Game_Object):
     '''
@@ -11,22 +11,21 @@ class Player(Base_Game_Object):
 
         self.player_id = player_id
         self.score = 0
+        self.gun = Sniper(model, self)
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
         self.attack_kick = Const.PLAYER_ATTACK_KICK
         self.aux_line_length = 1
-        self.cd_time = 0
 
         self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
-    
+
     def tick(self):
         '''
         Run whenever EventEveryTick() arises.
         '''
         super().tick()
-        if self.in_cd():
-            self.cd_time -= 1
+        self.gun.tick()
 
     def move_direction(self, direction: int):
         '''
@@ -59,14 +58,4 @@ class Player(Base_Game_Object):
         '''
         Fire a bullet towards the player's facing direction.
         '''
-        if self.in_cd():
-            return
-        self.cd_time = self.attack_cd * Const.FPS
-        self.knock_back(self.attack_kick, -self.direction)
-        self.model.items.append(Bullet(self.model, self, self.bullet_trace_time, self.bullet_repulsion))
-    
-    def in_cd(self):
-        '''
-        Check if the player is waiting for the cooldown.
-        '''
-        return self.cd_time > 0
+        self.gun.shoot()

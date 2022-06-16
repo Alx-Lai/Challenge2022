@@ -5,18 +5,19 @@ from Model.GameObject.base_game_object import *
 
 class Bullet(Base_Game_Object):
     '''
-    Represent a bullet shot by a player.
+    Represent a bullet shot by a gun.
     '''
-    def __init__(self, model, player, trace_time, repulsion):
-        position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
+    def __init__(self, model, player, direction, trace_time, repulsion, gun_type):
+        position = player.position + direction * (Const.PLAYER_RADIUS * 2)
         super().__init__(model, position, Const.BULLET_RADIUS)
 
-        self.tail = Bullet_Tail(model, self, player, trace_time)
+        self.tail = Bullet_Tail(model, self, player, direction, trace_time)
         self.model.items.append(self.tail)
         self.vertices = [self.position, self.tail.position]
 
         self.attacker = player
-        self.speed = player.direction * Const.BULLET_SPEED
+        self.gun_type = gun_type
+        self.speed = direction * Const.BULLET_SPEED
         self.repulsion = repulsion
 
         self.lifespam = Const.BULLET_LIFESPAM * Const.FPS
@@ -95,11 +96,11 @@ class Bullet_Tail(Base_Game_Object):
     '''
     Represent the tail of a bullet's trace.
     '''
-    def __init__(self, model, head, player, trace_time):
+    def __init__(self, model, head, player, direction, trace_time):
         position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
         super().__init__(model, position, Const.BULLET_RADIUS)
 
-        self.speed = player.direction * Const.BULLET_SPEED
+        self.speed = direction * Const.BULLET_SPEED
         self.head = head
         self.trace_time = trace_time * Const.FPS
 
