@@ -26,14 +26,15 @@ class Bullet(Base_Game_Object):
         '''
         Run whenever EventEveryTick() arises.
         '''
-        self.lifespam -= 1
         self.position += self.speed / Const.FPS
         self.bounce()
 
+        self.lifespam -= 1
         if self.lifespam <= 0:
             self.kill()
+
         for player in self.model.players:
-            if self.collide_object(player):
+            if self.trace_collide_object(player):
                 player.knock_back(self.repulsion, self.speed.normalize())
                 if player.player_id != self.attacker.player_id:
                     self.attacker.score += Const.BULLET_HIT_SCORE
@@ -55,10 +56,9 @@ class Bullet(Base_Game_Object):
             self.clip_position()
             self.vertices.insert(1, copy.deepcopy(self.position))
 
-    def collide_object(self, obj):
+    def trace_collide_object(self, obj):
         '''
-        Check if the bullet collides with another object.
-        Touching the trace of the bullet also counts as a collision.
+        Check if the bullet and its trace collide with another object.
         '''
         # check vertices
         for pos in self.vertices:

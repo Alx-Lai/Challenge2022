@@ -60,6 +60,9 @@ class Player(Base_Game_Object):
         self.gun.shoot()
     
     def switch_gun(self, gun_type):
+        '''
+        Switch the player's gun.
+        '''
         match gun_type:
             case Const.GUN_TYPE_NORMAL_GUN:
                 self.gun = Normal_Gun(self.model, self)

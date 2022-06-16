@@ -21,6 +21,9 @@ class Gun:
         self.bullet_repulsion_multiplier = Const.GUN_BULLET_REPULSION_MULTIPLIER[gun_type]
     
     def tick(self):
+        '''
+        Run whenever EventEveryTick() arises.
+        '''
         if self.in_cd():
             self.cd_time -= 1
         
@@ -30,6 +33,9 @@ class Gun:
             self.player.switch_gun(Const.GUN_TYPE_NORMAL_GUN)
     
     def shoot(self):
+        '''
+        Fire a bullet.
+        '''
         if self.in_cd():
             return
         
@@ -47,6 +53,9 @@ class Gun:
         return self.cd_time > 0
     
     def in_use(self):
+        '''
+        Check if the gun's using time does not run out.
+        '''
         return self.use_time > 0
 
 
@@ -82,6 +91,9 @@ class Shotgun(Gun):
         super().__init__(model, player, Const.GUN_TYPE_SHOTGUN)
     
     def shoot(self):
+        '''
+        Fire 5 bullets.
+        '''
         if self.in_cd():
             return
         
