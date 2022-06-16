@@ -97,7 +97,7 @@ class Bullet_Tail(Base_Game_Object):
     Represent the tail of a bullet's trace.
     '''
     def __init__(self, model, head, player, direction, trace_time):
-        position = player.position + player.direction * (Const.PLAYER_RADIUS * 2)
+        position = player.position + direction * (Const.PLAYER_RADIUS * 2)
         super().__init__(model, position, Const.BULLET_RADIUS)
 
         self.speed = direction * Const.BULLET_SPEED
