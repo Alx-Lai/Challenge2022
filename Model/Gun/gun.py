@@ -2,23 +2,23 @@ import Const
 import math
 from Model.GameObject.bullet import *
 
-class Normal_Gun:
+class Gun:
     '''
-    Represents a normal gun.
+    An abstract class for guns.
     '''
-    def __init__(self, model, player):
+    def __init__(self, model, player, gun_type):
         self.model = model
         self.player = player
-        self.type = Const.GUN_TYPE_NORMAL_GUN
-        self.use_time = math.inf
+        self.type = gun_type
         self.cd_time = 0
 
-        self.attack_cd_multiplier = 1
-        self.attack_kick_multiplier = 1
-        self.aux_line_length_multiplier = 1
+        self.use_time = Const.GUN_USE_TIME[gun_type] * Const.FPS
+        self.attack_cd_multiplier = Const.GUN_ATTACK_CD_MULTIPLIER[gun_type]
+        self.attack_kick_multiplier = Const.GUN_ATTACK_KICK_MULTIPLIER[gun_type]
+        self.aux_line_length_multiplier = Const.GUN_AUX_LINE_LENGTH_MULTIPLIER[gun_type]
 
-        self.bullet_trace_time_multiplier = 1
-        self.bullet_repulsion_multiplier = 1
+        self.bullet_trace_time_multiplier = Const.GUN_BULLET_TRACE_TIME_MULTIPLIER[gun_type]
+        self.bullet_repulsion_multiplier = Const.GUN_BULLET_REPULSION_MULTIPLIER[gun_type]
     
     def tick(self):
         if self.in_cd():
@@ -50,48 +50,36 @@ class Normal_Gun:
         return self.use_time > 0
 
 
-class Machine_Gun(Normal_Gun):
+class Normal_Gun(Gun):
+    '''
+    Represents a normal gun.
+    '''
+    def __init__(self, model, player):
+        super().__init__(model, player, Const.GUN_TYPE_NORMAL_GUN)
+
+
+class Machine_Gun(Gun):
     '''
     Represents a machine gun.
     '''
     def __init__(self, model, player):
-        super().__init__(model, player)
-        self.type = Const.GUN_TYPE_MACHINE_GUN
-        self.use_time = 10 * Const.FPS
-
-        self.attack_cd_multiplier = 0.25
-        self.attack_kick_multiplier = 0.25
-        self.aux_line_length_multiplier = 1
-
-        self.bullet_trace_time_multiplier = 1
-        self.bullet_repulsion_multiplier = 1/3
+        super().__init__(model, player, Const.GUN_TYPE_MACHINE_GUN)
 
 
-class Sniper(Normal_Gun):
+class Sniper(Gun):
     '''
     Represents a sniper.
     '''
     def __init__(self, model, player):
-        super().__init__(model, player)
-        self.type = Const.GUN_TYPE_SNIPER
-        self.use_time = 20 * Const.FPS
-
-        self.attack_cd_multiplier = 1
-        self.attack_kick_multiplier = 1.5
-        self.aux_line_length_multiplier = 1
-
-        self.bullet_trace_time_multiplier = 2
-        self.bullet_repulsion_multiplier = 2
+        super().__init__(model, player, Const.GUN_TYPE_SNIPER)
 
 
-class Shotgun(Normal_Gun):
+class Shotgun(Gun):
     '''
     Represents a shotgun.
     '''
     def __init__(self, model, player):
-        super().__init__(model, player)
-        self.type = Const.GUN_TYPE_SHOTGUN
-        self.use_time = 20 * Const.FPS
+        super().__init__(model, player, Const.GUN_TYPE_SHOTGUN)
     
     def shoot(self):
         if self.in_cd():
@@ -101,7 +89,7 @@ class Shotgun(Normal_Gun):
         self.cd_time = player.attack_cd * self.attack_cd_multiplier * Const.FPS
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         for delta in range(-2, 3, 1):
-            direction = player.direction.rotate_rad(delta * (math.pi / 36))
+            direction = player.direction.rotate_rad(delta * (math.pi / 72))
             self.model.items.append(Bullet(self.model, player, direction, \
                                            player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                            player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))

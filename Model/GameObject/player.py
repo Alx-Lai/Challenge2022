@@ -15,7 +15,7 @@ class Player(Base_Game_Object):
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
         self.attack_kick = Const.PLAYER_ATTACK_KICK
-        self.aux_line_length = 1
+        self.aux_line_length = Const.PLAYER_AUX_LINE_LENGTH
 
         self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
@@ -53,7 +53,6 @@ class Player(Base_Game_Object):
         '''
         self.speed += distance * direction
 
-
     def attack(self):
         '''
         Fire a bullet towards the player's facing direction.
@@ -63,10 +62,10 @@ class Player(Base_Game_Object):
     def switch_gun(self, gun_type):
         match gun_type:
             case Const.GUN_TYPE_NORMAL_GUN:
-                self.gun = Normal_Gun(self.model)
+                self.gun = Normal_Gun(self.model, self)
             case Const.GUN_TYPE_MACHINE_GUN:
-                self.gun = Machine_Gun(self.model)
+                self.gun = Machine_Gun(self.model, self)
             case Const.GUN_TYPE_SNIPER:
-                self.gun = Sniper(self.model)
+                self.gun = Sniper(self.model, self)
             case Const.GUN_TYPE_SHOTGUN:
-                self.gun = Shotgun(self.model)
+                self.gun = Shotgun(self.model, self)

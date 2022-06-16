@@ -14,7 +14,7 @@ PLAYER_ROTATION_SPEED = 3  # rad per second
 
 PLAYER_ATTACK_CD = 2       # second
 PLAYER_ATTACK_KICK = 10    # grid unit per second
-PLAYER_AUX_LINE_LENGTH = 1 # grid unit per second
+PLAYER_AUX_LINE_LENGTH = 1 # grid unit
 
 BULLET_RADIUS = 0.2        # grid unit
 BULLET_REPULSION = 30      # grid unit per second
@@ -27,6 +27,13 @@ GUN_TYPE_NORMAL_GUN = 0
 GUN_TYPE_MACHINE_GUN = 1
 GUN_TYPE_SNIPER = 2
 GUN_TYPE_SHOTGUN = 3
+
+GUN_USE_TIME = [math.inf, 10, 20, math.inf]
+GUN_ATTACK_CD_MULTIPLIER = [1, 1/4, 1, 1/4]
+GUN_ATTACK_KICK_MULTIPLIER = [1, 1/4, 1.5, 1]
+GUN_AUX_LINE_LENGTH_MULTIPLIER = [1, 1, 1, 1]
+GUN_BULLET_TRACE_TIME_MULTIPLIER = [1, 1, 2, 1]
+GUN_BULLET_REPULSION_MULTIPLIER = [1, 1/3, 2, 1]
 
 # view
 WINDOW_CAPTION = 'Challenge 2022'
