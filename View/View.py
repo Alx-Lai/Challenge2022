@@ -104,7 +104,7 @@ class GraphicalView:
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
 
             # aux_line
-            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_end )
+            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_end)
 
             # player
             pg.draw.circle(self.screen, color, center, radius)

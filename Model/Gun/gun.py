@@ -101,7 +101,7 @@ class Shotgun(Gun):
         self.cd_time = player.attack_cd * self.attack_cd_multiplier * Const.FPS
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         for delta in range(-2, 3, 1):
-            direction = player.direction.rotate_rad(delta * (math.pi / 72))
+            direction = player.direction.rotate_rad(delta * (Const.SHOTGUN_ATTACK_ANGLE / 2))
             self.model.items.append(Bullet(self.model, player, direction, \
                                            player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                            player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))

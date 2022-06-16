@@ -51,13 +51,13 @@ class Controller:
             if cur_state == Const.STATE_ENDGAME: self.ctrl_endgame(key_down_events)
 
     def check_screen_keys(self, key):
-            '''
-            check the keys that should be caught regardless of game state
-            for example: FULL_SCREEN_KEY
-            TODO: change volume
-            '''
-            if key == Const.GAME_FULLSCREEN_KEY:
-                self.ev_manager.post(EventToggleFullScreen())
+        '''
+        check the keys that should be caught regardless of game state
+        for example: FULL_SCREEN_KEY
+        TODO: change volume
+        '''
+        if key == Const.GAME_FULLSCREEN_KEY:
+            self.ev_manager.post(EventToggleFullScreen())
 
     def ctrl_menu(self, key_down_events):
         for event_pg in key_down_events:
