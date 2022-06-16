@@ -27,7 +27,7 @@ class Normal_Gun:
         if self.in_use():
             self.use_time -= 1
         else:
-            self.player.gun = Normal_Gun(self.model, self.player)
+            self.player.switch_gun(Const.GUN_TYPE_NORMAL_GUN)
     
     def shoot(self):
         if self.in_cd():

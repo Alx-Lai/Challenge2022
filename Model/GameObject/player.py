@@ -11,7 +11,7 @@ class Player(Base_Game_Object):
 
         self.player_id = player_id
         self.score = 0
-        self.gun = Sniper(model, self)
+        self.gun = Normal_Gun(model, self)
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
         self.attack_kick = Const.PLAYER_ATTACK_KICK
@@ -59,3 +59,14 @@ class Player(Base_Game_Object):
         Fire a bullet towards the player's facing direction.
         '''
         self.gun.shoot()
+    
+    def switch_gun(self, gun_type):
+        match gun_type:
+            case Const.GUN_TYPE_NORMAL_GUN:
+                self.gun = Normal_Gun(self.model)
+            case Const.GUN_TYPE_MACHINE_GUN:
+                self.gun = Machine_Gun(self.model)
+            case Const.GUN_TYPE_SNIPER:
+                self.gun = Sniper(self.model)
+            case Const.GUN_TYPE_SHOTGUN:
+                self.gun = Shotgun(self.model)

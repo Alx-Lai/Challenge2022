@@ -83,14 +83,15 @@ class GraphicalView:
                 center = bullet.position * Const.ARENA_GRID_SIZE
                 radius = Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE
                 rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
-                if bullet.gun_type == Const.GUN_TYPE_NORMAL_GUN:
-                    pg.draw.circle(self.screen, color, center, radius)
-                if bullet.gun_type == Const.GUN_TYPE_MACHINE_GUN:
-                    pg.draw.circle(self.screen, color, center, radius / 1.5)
-                if bullet.gun_type == Const.GUN_TYPE_SNIPER:
-                    pg.draw.rect(self.screen, color, rect)
-                if bullet.gun_type == Const.GUN_TYPE_SHOTGUN:
-                    pg.draw.circle(self.screen, color, center, radius)
+                match bullet.gun_type:
+                    case Const.GUN_TYPE_NORMAL_GUN:
+                        pg.draw.circle(self.screen, color, center, radius)
+                    case Const.GUN_TYPE_MACHINE_GUN:
+                        pg.draw.circle(self.screen, color, center, radius / 1.5)
+                    case Const.GUN_TYPE_SNIPER:
+                        pg.draw.rect(self.screen, color, rect)
+                    case Const.GUN_TYPE_SHOTGUN:
+                        pg.draw.circle(self.screen, color, center, radius)
 
         # draw players
         for player in self.model.players:
