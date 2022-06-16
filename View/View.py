@@ -1,3 +1,4 @@
+import math
 import pygame as pg
 
 from EventManager.EventManager import *
@@ -73,16 +74,17 @@ class GraphicalView:
         # draw bullets
         for bullet in self.model.items:
             if isinstance(bullet, Bullet):
-                # trace
                 points = [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices]
-                if len(points) > 1:
-                    pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
-                
-                # bullet
                 color = Const.PLAYER_COLOR[bullet.attacker.player_id]
                 center = bullet.position * Const.ARENA_GRID_SIZE
                 radius = Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE
                 rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
+
+                # trace
+                if len(points) > 1:
+                    pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
+                
+                # bullet
                 match bullet.gun_type:
                     case Const.GUN_TYPE_NORMAL_GUN:
                         pg.draw.circle(self.screen, color, center, radius)
@@ -95,12 +97,29 @@ class GraphicalView:
 
         # draw players
         for player in self.model.players:
-            center = player.position
-            aux_line_end = center + player.direction * (player.aux_line_length + 0.5)
+            color = Const.PLAYER_COLOR[player.player_id]
+            center = player.position * Const.ARENA_GRID_SIZE
+            aux_line_end = center + player.direction * (player.aux_line_length + 0.5) * Const.ARENA_GRID_SIZE
+            radius = Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
+            rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
 
-            pg.draw.aaline(self.screen, pg.Color('white'), center * Const.ARENA_GRID_SIZE, aux_line_end * Const.ARENA_GRID_SIZE)
-            pg.draw.circle(self.screen, Const.PLAYER_COLOR[player.player_id], center * Const.ARENA_GRID_SIZE, Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE)
-        
+            # aux_line
+            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_end )
+
+            # player
+            pg.draw.circle(self.screen, color, center, radius)
+
+            # gun using time
+            total_use_time = Const.GUN_USE_TIME[player.gun.type] * Const.FPS
+            stop_angle = (player.gun.use_time / total_use_time) * 2 * math.pi
+            pg.draw.arc(self.screen, pg.Color('white'), rect, 0, stop_angle, 8)
+
+            # gun cd
+            total_cd = player.attack_cd * player.gun.attack_cd_multiplier * Const.FPS
+            stop_angle = (player.gun.cd_time / total_cd) * 2 * math.pi
+            pg.draw.arc(self.screen, pg.Color('red'), rect, 0, stop_angle, 4)
+
+
         pg.display.flip()
 
     def render_stop(self):

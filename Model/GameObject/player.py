@@ -11,7 +11,7 @@ class Player(Base_Game_Object):
 
         self.player_id = player_id
         self.score = 0
-        self.gun = Normal_Gun(model, self)
+        self.gun = Shotgun(model, self)
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
         self.attack_kick = Const.PLAYER_ATTACK_KICK
