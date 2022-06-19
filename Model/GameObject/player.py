@@ -1,4 +1,5 @@
 import Const
+from EventManager.EventManager import *
 from Model.GameObject.base_game_object import *
 from Model.Gun.gun import *
 
@@ -76,6 +77,7 @@ class Player(Base_Circle_Object):
                 self.gun = Sniper(self.model, self)
             case Const.GUN_TYPE_SHOTGUN:
                 self.gun = Shotgun(self.model, self)
+        self.model.ev_manager.post(EventPlayerSwitchGun(self.player_id, gun_type))
 
     def quota_enough(self, buff_type):
         '''
@@ -104,3 +106,4 @@ class Player(Base_Circle_Object):
             case Const.BUFF_TYPE_AUX_LINE_LENGTH:
                 self.aux_line_length += Const.BUFF_VALUE_AUX_LINE_LENGTH
                 self.quota_aux_line_length -= 1
+        self.model.ev_manager.post(EventPlayerBuffed(self.player_id, buff_type))

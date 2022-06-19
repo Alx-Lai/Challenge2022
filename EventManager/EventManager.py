@@ -80,23 +80,26 @@ class EventToggleFullScreen(BaseEvent):
 class EventStop(BaseEvent):
     name = 'GameStop event'
     '''
-    game stop and model stage change to STATE_STOP
+    Game stops and model stage changes to STATE_STOP.
     '''
 
 class EventContinue(BaseEvent):
     name = 'GameContinue event'
     '''
-    game continue and model stage change to STATE_PLAY
+    Game continues and model stage changes to STATE_PLAY
     '''
 
 class EventRestart(BaseEvent):
     name = 'GameContinue event'
     '''
-    game restart and model stage change to STATE_MENU
+    Game restarts and model stage changes to STATE_MENU.
     '''
 
 class EventPlayerMove(BaseEvent):
     name = 'PlayerMove event'
+    '''
+    Player decides to move forward or backward.
+    '''
     def __init__(self, player_id: int, direction):
         self.player_id = player_id # 0, 1, 2, 3
         self.direction = direction # 1 : frontward, -1 : backward
@@ -106,14 +109,17 @@ class EventPlayerMove(BaseEvent):
 
 class EventPlayerNoMove(BaseEvent):
     name = 'PlayerNoMove event'
+    '''
+    Player decides to not move.
+    '''
     def __init__(self, player_id: int):
         self.player_id = player_id # 0, 1, 2, 3
 
-    def __str__(self):
-        return ''
-
 class EventPlayerRotate(BaseEvent):
     name = 'PlayerRotate event'
+    '''
+    Player decides to rotates leftward or rightward.
+    '''
     def __init__(self, player_id: int, direction: int):
         self.player_id = player_id # 0, 1, 2, 3
         self.direction = direction # -1 : rotate_left, 1 : rotate_right
@@ -121,11 +127,61 @@ class EventPlayerRotate(BaseEvent):
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} rotate {self.direction}'
 
-class EventPlayerAttack (BaseEvent):
+class EventPlayerAttack(BaseEvent):
     name = 'PlayerAttack event'
-
+    '''
+    Player decides to attack. This event will emit no matter the attack succeeds or not.
+    '''
     def __init__(self, player_id):
         self.player_id = player_id
 
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} attack'
+
+class EventPlayerAttackSuccess(BaseEvent):
+    name = 'PlayerAttackSuccess event'
+    '''
+    Player decides to attack, and their attack succeeds.
+    '''
+    def __init__(self, player_id, gun_type):
+        self.player_id = player_id
+        self.gun_type = gun_type
+
+    def __str__(self):
+        return f'{self.name} => player_id {self.player_id} attack successfully with gun {self.gun_type}'
+
+class EventPlayerGetHit(BaseEvent):
+    name = 'PlayerGetHit event'
+    '''
+    Player gets hit by another player.
+    '''
+    def __init__(self, victim_id, attacker_id):
+        self.victim = victim_id
+        self.attacker = attacker_id
+    
+    def __str__(self):
+        return f'{self.name} => player_id {self.victim.player_id} get hit by player_id {self.attacker_id}'
+
+class EventPlayerSwitchGun(BaseEvent):
+    name = 'PlayerSwitchGun event'
+    '''
+    Player's gun switches.
+    '''
+    def __init__(self, player_id, gun_type):
+        self.player_id = player_id
+        self.gun_type = gun_type
+
+    def __str__(self):
+        return f'{self.name} => player_id {self.player_id} switch their gun to {self.gun_type}'
+
+class EventPlayerBuffed(BaseEvent):
+    name = 'PlayerBuffed event'
+    '''
+    Player gets buffed.
+    '''
+    def __init__(self, player_id, buff_type):
+        self.player_id = player_id
+        self.buff_type = buff_type
+
+    def __str__(self):
+        return f'{self.name} => player_id {self.player_id} get buffed, buff type: {self.buff_type}'

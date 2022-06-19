@@ -1,5 +1,6 @@
 import Const
 import math
+from EventManager.EventManager import *
 from Model.GameObject.bullet import *
 
 class Gun:
@@ -45,6 +46,7 @@ class Gun:
         self.model.bullets.append(Bullet(self.model, player, player.direction, \
                                          player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                          player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
+        self.model.ev_manager.post(EventPlayerAttackSuccess(player.player_id, self.type))
     
     def in_cd(self):
         '''
@@ -105,3 +107,4 @@ class Shotgun(Gun):
             self.model.bullets.append(Bullet(self.model, player, direction, \
                                              player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                              player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
+        self.model.ev_manager.post(EventPlayerAttackSuccess(player.player_id, self.type))

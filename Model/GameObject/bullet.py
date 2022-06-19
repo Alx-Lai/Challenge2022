@@ -1,6 +1,7 @@
 import pygame as pg
 import copy
 import Const
+from EventManager.EventManager import *
 from Model.GameObject.base_game_object import *
 
 class Bullet(Base_Circle_Object):
@@ -38,6 +39,7 @@ class Bullet(Base_Circle_Object):
                 player.knock_back(self.repulsion, self.speed.normalize())
                 if player.player_id != self.attacker.player_id:
                     self.attacker.score += Const.BULLET_HIT_SCORE
+                self.model.ev_manager.post(EventPlayerGetHit(player.player_id, self.attacker.player_id))
                 self.kill()
 
     def bounce(self):
