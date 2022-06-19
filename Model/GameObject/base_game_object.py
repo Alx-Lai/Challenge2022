@@ -4,9 +4,9 @@ import copy
 import math
 from pygame.math import Vector2
 
-class Base_Game_Object:
+class Base_Circle_Object:
     '''
-    An abstract class for game objects.
+    An abstract class for circle game objects.
     '''
     def __init__(self, model, position, radius):
         self.model = model

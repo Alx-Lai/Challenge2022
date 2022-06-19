@@ -77,7 +77,7 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
-        self.items = []
+        self.bullets = []
 
     def notify(self, event: BaseEvent):
         '''
@@ -141,8 +141,8 @@ class GameEngine:
             if player.killed(): self.players.remove(player)
             else: player.tick()
 
-        for item in self.items:
-            if item.killed(): self.items.remove(item)
+        for item in self.bullets:
+            if item.killed(): self.bullets.remove(item)
             else: item.tick()
 
     def update_endgame(self):

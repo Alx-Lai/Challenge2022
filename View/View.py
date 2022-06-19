@@ -72,7 +72,7 @@ class GraphicalView:
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
         # draw bullets
-        for bullet in self.model.items:
+        for bullet in self.model.bullets:
             if isinstance(bullet, Bullet):
                 points = [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices]
                 color = Const.PLAYER_COLOR[bullet.attacker.player_id]

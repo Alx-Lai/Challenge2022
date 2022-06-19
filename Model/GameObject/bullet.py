@@ -12,7 +12,7 @@ class Bullet(Base_Game_Object):
         super().__init__(model, position, Const.BULLET_RADIUS)
 
         self.tail = Bullet_Tail(model, self, player, direction, trace_time)
-        self.model.items.append(self.tail)
+        self.model.bullets.append(self.tail)
         self.vertices = [self.position, self.tail.position]
 
         self.attacker = player

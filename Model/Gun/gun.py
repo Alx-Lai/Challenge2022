@@ -42,9 +42,9 @@ class Gun:
         player = self.player
         self.cd_time = player.attack_cd * self.attack_cd_multiplier * Const.FPS
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
-        self.model.items.append(Bullet(self.model, player, player.direction, \
-                                       player.bullet_trace_time * self.bullet_trace_time_multiplier, \
-                                       player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
+        self.model.bullets.append(Bullet(self.model, player, player.direction, \
+                                         player.bullet_trace_time * self.bullet_trace_time_multiplier, \
+                                         player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
     
     def in_cd(self):
         '''
@@ -102,6 +102,6 @@ class Shotgun(Gun):
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         for delta in range(-2, 3, 1):
             direction = player.direction.rotate_rad(delta * (Const.SHOTGUN_ATTACK_ANGLE / 2))
-            self.model.items.append(Bullet(self.model, player, direction, \
-                                           player.bullet_trace_time * self.bullet_trace_time_multiplier, \
-                                           player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
+            self.model.bullets.append(Bullet(self.model, player, direction, \
+                                             player.bullet_trace_time * self.bullet_trace_time_multiplier, \
+                                             player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
