@@ -3,6 +3,7 @@ import pygame as pg
 
 from EventManager.EventManager import *
 from Model.GameObject.bullet import *
+from Model.GameObject.item import *
 from Model.Model import GameEngine
 import Const
 
@@ -100,7 +101,10 @@ class GraphicalView:
             center = item.position * Const.ARENA_GRID_SIZE
             radius = item.radius * Const.ARENA_GRID_SIZE
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
-            pg.draw.rect(self.screen, pg.Color('red'), rect)
+            if isinstance(item, Item_Buff):
+                pg.draw.rect(self.screen, pg.Color('red'), rect)
+            elif isinstance(item, Item_Gun):
+                pg.draw.rect(self.screen, pg.Color('orange'), rect)
 
         # draw players
         for player in self.model.players:

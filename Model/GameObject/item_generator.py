@@ -13,9 +13,16 @@ class Item_Generator:
 
     def generate(self):
         while True:
-            px = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_RADIUS) + Const.ITEM_RADIUS
-            py = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_RADIUS) + Const.ITEM_RADIUS
-            generated_item = Item_Gun(self.model, Vector2(px, py), random.randint(1, 3))
+            generated_item = None
+            if random.randint(1, 2) == 1:
+                px = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_BUFF_RADIUS) + Const.ITEM_BUFF_RADIUS
+                py = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_BUFF_RADIUS) + Const.ITEM_BUFF_RADIUS
+                generated_item = Item_Buff(self.model, Vector2(px, py), random.randint(1, 3))
+            else:
+                px = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_GUN_RADIUS) + Const.ITEM_GUN_RADIUS
+                py = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_GUN_RADIUS) + Const.ITEM_GUN_RADIUS
+                generated_item = Item_Gun(self.model, Vector2(px, py), random.randint(1, 3))
+
             collided = False
             for bullet in self.model.bullets:
                 if isinstance(bullet, Bullet) and bullet.trace_collide_object(generated_item):

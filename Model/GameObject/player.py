@@ -20,6 +20,10 @@ class Player(Base_Circle_Object):
         self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
 
+        self.quota_attack_cd = Const.PLAYER_QUOTA_ATTACK_CD
+        self.quota_repulsion = Const.PLAYER_QUOTA_REPULSION
+        self.quota_aux_line_length = Const.PLAYER_QUOTA_AUX_LINE_LENGTH
+
     def tick(self):
         '''
         Run whenever EventEveryTick() arises.
@@ -72,3 +76,31 @@ class Player(Base_Circle_Object):
                 self.gun = Sniper(self.model, self)
             case Const.GUN_TYPE_SHOTGUN:
                 self.gun = Shotgun(self.model, self)
+
+    def quota_enough(self, buff_type):
+        '''
+        Check if the quota of a buff is enough
+        '''
+        match buff_type:
+            case Const.BUFF_TYPE_ATTACK_CD:
+                return self.quota_attack_cd > 0
+            case Const.BUFF_TYPE_REPULSION:
+                return self.quota_repulsion > 0
+            case Const.BUFF_TYPE_AUX_LINE_LENGTH:
+                return self.quota_aux_line_length > 0
+
+
+    def buff(self, buff_type):
+        '''
+        Add permanent buff to the player.
+        '''
+        match buff_type:
+            case Const.BUFF_TYPE_ATTACK_CD:
+                self.attack_cd += Const.BUFF_VALUE_ATTACK_CD / Const.FPS
+                self.quota_attack_cd -= 1
+            case Const.BUFF_TYPE_REPULSION:
+                self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
+                self.quota_repulsion -= 1
+            case Const.BUFF_TYPE_AUX_LINE_LENGTH:
+                self.aux_line_length += Const.BUFF_VALUE_AUX_LINE_LENGTH
+                self.quota_aux_line_length -= 1
