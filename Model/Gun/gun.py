@@ -40,7 +40,7 @@ class Gun:
             return
         
         player = self.player
-        self.cd_time = player.attack_cd * self.attack_cd_multiplier * Const.FPS
+        self.cd_time = round(player.attack_cd * self.attack_cd_multiplier * Const.FPS)
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         self.model.bullets.append(Bullet(self.model, player, player.direction, \
                                          player.bullet_trace_time * self.bullet_trace_time_multiplier, \

@@ -96,7 +96,7 @@ class Player(Base_Circle_Object):
         '''
         match buff_type:
             case Const.BUFF_TYPE_ATTACK_CD:
-                self.attack_cd += Const.BUFF_VALUE_ATTACK_CD / Const.FPS
+                self.attack_cd += Const.BUFF_VALUE_ATTACK_CD
                 self.quota_attack_cd -= 1
             case Const.BUFF_TYPE_REPULSION:
                 self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
