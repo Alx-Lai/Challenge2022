@@ -37,6 +37,10 @@ GUN_BULLET_REPULSION_MULTIPLIER = [1, 1/3, 2, 1]
 
 SHOTGUN_ATTACK_ANGLE = math.pi / 36
 
+ITEM_MAX = 10
+ITEM_RADIUS = 0.5           # grid unit
+ITEM_GENERATOR_COOLDOWN = 2 # second
+
 # view
 WINDOW_CAPTION = 'Challenge 2022'
 WINDOW_SIZE = (800, 800)

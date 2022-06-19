@@ -2,6 +2,7 @@ import random
 import pygame as pg
 
 from EventManager.EventManager import *
+from Model.GameObject.item_generator import *
 from Model.GameObject.player import *
 import Const
 
@@ -78,6 +79,8 @@ class GameEngine:
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
         self.bullets = []
+        self.items = []
+        self.item_generator = Item_Generator(self)
 
     def notify(self, event: BaseEvent):
         '''
@@ -137,12 +140,18 @@ class GameEngine:
         Update the objects not controlled by user.
         For example: obstacles, items, special effects
         '''
+        self.item_generator.tick()
+
         for player in self.players:
             if player.killed(): self.players.remove(player)
             else: player.tick()
 
-        for item in self.bullets:
-            if item.killed(): self.bullets.remove(item)
+        for bullet in self.bullets:
+            if bullet.killed(): self.bullets.remove(bullet)
+            else: bullet.tick()
+
+        for item in self.items:
+            if item.killed(): self.items.remove(item)
             else: item.tick()
 
     def update_endgame(self):

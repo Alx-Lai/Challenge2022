@@ -3,7 +3,7 @@ import copy
 import Const
 from Model.GameObject.base_game_object import *
 
-class Bullet(Base_Game_Object):
+class Bullet(Base_Circle_Object):
     '''
     Represent a bullet shot by a gun.
     '''
@@ -92,7 +92,7 @@ class Bullet(Base_Game_Object):
         self.tail.kill()
 
 
-class Bullet_Tail(Base_Game_Object):
+class Bullet_Tail(Base_Circle_Object):
     '''
     Represent the tail of a bullet's trace.
     '''

@@ -95,6 +95,13 @@ class GraphicalView:
                     case Const.GUN_TYPE_SHOTGUN:
                         pg.draw.circle(self.screen, color, center, radius)
 
+        # draw items
+        for item in self.model.items:
+            center = item.position * Const.ARENA_GRID_SIZE
+            radius = item.radius * Const.ARENA_GRID_SIZE
+            rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
+            pg.draw.rect(self.screen, pg.Color('red'), rect)
+
         # draw players
         for player in self.model.players:
             color = Const.PLAYER_COLOR[player.player_id]

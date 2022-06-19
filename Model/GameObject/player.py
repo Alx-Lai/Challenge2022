@@ -2,7 +2,7 @@ import Const
 from Model.GameObject.base_game_object import *
 from Model.Gun.gun import *
 
-class Player(Base_Game_Object):
+class Player(Base_Circle_Object):
     '''
     Represent a player.
     '''
@@ -11,7 +11,7 @@ class Player(Base_Game_Object):
 
         self.player_id = player_id
         self.score = 0
-        self.gun = Shotgun(model, self)
+        self.gun = Normal_Gun(model, self)
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
         self.attack_kick = Const.PLAYER_ATTACK_KICK
