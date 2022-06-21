@@ -45,5 +45,5 @@ class Item_Generator:
         if self.generate_cd <= 0:
             while len(self.model.items) < Const.ITEM_MAX:
                 self.generate()
-                self.generate_cd = Const.ITEM_GENERATOR_COOLDOWN * Const.FPS
+                self.generate_cd = Const.ITEM_GENERATOR_COOLDOWN
                 break

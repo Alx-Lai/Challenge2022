@@ -29,7 +29,7 @@ class Base_Object:
         Run whenever EventEveryTick() arises.
         '''
         self.lifespam -= 1
-        self.position += self.speed / Const.FPS
+        self.position += self.speed
         self.clip_position()
     
     def kill(self):

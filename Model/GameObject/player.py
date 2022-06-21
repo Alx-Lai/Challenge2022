@@ -50,7 +50,7 @@ class Player(Base_Circle_Object):
         '''
         Rotate the player leftward or rightward.
         '''
-        self.direction = self.direction.rotate_rad(Const.PLAYER_ROTATION_SPEED / Const.FPS * direction)
+        self.direction = self.direction.rotate_rad(Const.PLAYER_ROTATION_SPEED * direction)
 
     def knock_back(self, distance, direction):
         '''

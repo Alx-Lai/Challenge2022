@@ -13,7 +13,7 @@ class Gun:
         self.type = gun_type
         self.cd_time = 0
 
-        self.use_time = Const.GUN_USE_TIME[gun_type] * Const.FPS
+        self.use_time = Const.GUN_USE_TIME[gun_type]
         self.attack_cd_multiplier = Const.GUN_ATTACK_CD_MULTIPLIER[gun_type]
         self.attack_kick_multiplier = Const.GUN_ATTACK_KICK_MULTIPLIER[gun_type]
         self.aux_line_length_multiplier = Const.GUN_AUX_LINE_LENGTH_MULTIPLIER[gun_type]
@@ -41,7 +41,7 @@ class Gun:
             return
         
         player = self.player
-        self.cd_time = round(player.attack_cd * self.attack_cd_multiplier * Const.FPS)
+        self.cd_time = round(player.attack_cd * self.attack_cd_multiplier)
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         self.model.bullets.append(Bullet(self.model, player, player.direction, \
                                          player.bullet_trace_time * self.bullet_trace_time_multiplier, \
@@ -100,10 +100,10 @@ class Shotgun(Gun):
             return
         
         player = self.player
-        self.cd_time = player.attack_cd * self.attack_cd_multiplier * Const.FPS
+        self.cd_time = player.attack_cd * self.attack_cd_multiplier
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         for delta in range(-2, 3, 1):
-            direction = player.direction.rotate_rad(delta * (Const.SHOTGUN_ATTACK_ANGLE / 2))
+            direction = player.direction.rotate_rad(delta * (Const.SHOTGUN_SPREAD_ANGLE / 2))
             self.model.bullets.append(Bullet(self.model, player, direction, \
                                              player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                              player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))

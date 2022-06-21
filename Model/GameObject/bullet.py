@@ -21,13 +21,13 @@ class Bullet(Base_Circle_Object):
         self.speed = direction * Const.BULLET_SPEED
         self.repulsion = repulsion
 
-        self.lifespam = Const.BULLET_LIFESPAM * Const.FPS
+        self.lifespam = Const.BULLET_LIFESPAM
 
     def tick(self):
         '''
         Run whenever EventEveryTick() arises.
         '''
-        self.position += self.speed / Const.FPS
+        self.position += self.speed
         self.bounce()
 
         self.lifespam -= 1
@@ -104,7 +104,7 @@ class Bullet_Tail(Base_Circle_Object):
 
         self.speed = direction * Const.BULLET_SPEED
         self.head = head
-        self.trace_time = trace_time * Const.FPS
+        self.trace_time = trace_time
 
     def tick(self):
         '''
@@ -114,7 +114,7 @@ class Bullet_Tail(Base_Circle_Object):
             self.trace_time -= 1
             return
         
-        self.position += self.speed / Const.FPS
+        self.position += self.speed
         self.bounce()
 
     def bounce(self):
