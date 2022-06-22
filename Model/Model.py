@@ -4,6 +4,7 @@ import pygame as pg
 from EventManager.EventManager import *
 from Model.GameObject.item_generator import *
 from Model.GameObject.player import *
+from Model.GameObject.obstacle import *
 import Const
 
 
@@ -78,6 +79,7 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
+        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i]) for i in range(len(Const.OBSTACLE_POSITION))]
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
@@ -145,6 +147,10 @@ class GameEngine:
         for player in self.players:
             if player.killed(): self.players.remove(player)
             else: player.tick()
+
+        for obstacle in self.obstacles:
+            if obstacle.killed(): self.obstacles.remove(player)
+            else: obstacle.tick()
 
         for bullet in self.bullets:
             if bullet.killed(): self.bullets.remove(bullet)

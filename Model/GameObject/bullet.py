@@ -9,12 +9,12 @@ class Bullet(Base_Circle_Object):
     Represent a bullet shot by a gun.
     '''
     def __init__(self, model, player, direction, trace_time, repulsion, gun_type):
-        position = player.position + direction * (Const.PLAYER_RADIUS * 2)
+        position = player.position + direction * (Const.PLAYER_RADIUS + Const.BULLET_RADIUS)
         super().__init__(model, position, Const.BULLET_RADIUS)
 
         self.tail = Bullet_Tail(model, self, player, direction, trace_time)
         self.model.bullets.append(self.tail)
-        self.vertices = [self.position, self.tail.position]
+        self.vertices = []
 
         self.attacker = player
         self.gun_type = gun_type
@@ -41,6 +41,22 @@ class Bullet(Base_Circle_Object):
                     self.attacker.score += Const.BULLET_HIT_SCORE
                 self.model.ev_manager.post(EventPlayerGetHit(player.player_id, self.attacker.player_id))
                 self.kill()
+        
+        collide_edge = False # whether the bullet collides the edges of the obstacles (instead of the corners)
+        collided_obstacle = None
+        for obstacle in self.model.obstacles:
+            if self.collide_object(obstacle):
+                dx = (self.position - obstacle.position).x
+                dy = (self.position - obstacle.position).y
+                if abs(dx) < obstacle.radius or abs(dy) < obstacle.radius:
+                    collide_edge = True
+                    collided_obstacle = obstacle
+                elif not collide_edge:
+                    collided_obstacle = obstacle
+        if collided_obstacle:
+            normal_vector = collided_obstacle.clip_object_position(self)
+            self.speed = self.speed.reflect(normal_vector)
+            self.vertices.insert(0, copy.deepcopy(self.position))
 
     def bounce(self):
         '''
@@ -56,19 +72,20 @@ class Bullet(Base_Circle_Object):
         
         if bounced:
             self.clip_position()
-            self.vertices.insert(1, copy.deepcopy(self.position))
+            self.vertices.insert(0, copy.deepcopy(self.position))
 
     def trace_collide_object(self, obj):
         '''
         Check if the bullet and its trace collide with another object.
         '''
+        vertices = [self.position] + self.vertices + [self.tail.position]
         # check vertices
-        for pos in self.vertices:
+        for pos in vertices:
             if (pos - obj.position).length_squared() <= (self.radius + obj.radius) ** 2:
                 return True
 
         # check segments
-        for p1, p2 in zip(self.vertices, self.vertices[1:]):
+        for p1, p2 in zip(vertices, vertices[1:]):
             x12, y12 =  p1.x - p2.x,  p1.y - p2.y
             x01, y01 = obj.x - p1.x, obj.y - p1.y
             x02, y02 = obj.x - p2.x, obj.y - p2.y
@@ -99,7 +116,7 @@ class Bullet_Tail(Base_Circle_Object):
     Represent the tail of a bullet's trace.
     '''
     def __init__(self, model, head, player, direction, trace_time):
-        position = player.position + direction * (Const.PLAYER_RADIUS * 2)
+        position = player.position + direction * (Const.PLAYER_RADIUS + Const.BULLET_RADIUS)
         super().__init__(model, position, Const.BULLET_RADIUS)
 
         self.speed = direction * Const.BULLET_SPEED
@@ -117,6 +134,22 @@ class Bullet_Tail(Base_Circle_Object):
         self.position += self.speed
         self.bounce()
 
+        collide_edge = False # whether the bullet collides the edges of the obstacles (instead of the corners)
+        collided_obstacle = None
+        for obstacle in self.model.obstacles:
+            if self.collide_object(obstacle):
+                dx = (self.position - obstacle.position).x
+                dy = (self.position - obstacle.position).y
+                if abs(dx) < obstacle.radius or abs(dy) < obstacle.radius:
+                    collide_edge = True
+                    collided_obstacle = obstacle
+                elif not collide_edge:
+                    collided_obstacle = obstacle
+        if collided_obstacle:
+            normal_vector = collided_obstacle.clip_object_position(self)
+            self.speed = self.speed.reflect(normal_vector)
+            self.head.vertices.pop(-1)
+
     def bounce(self):
         '''
         Bounce against the arena border.
@@ -131,4 +164,4 @@ class Bullet_Tail(Base_Circle_Object):
         
         if bounced:
             self.clip_position()
-            self.head.vertices.pop(-2)
+            self.head.vertices.pop(-1)

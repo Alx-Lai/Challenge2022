@@ -28,6 +28,10 @@ class Item_Generator:
                 if isinstance(bullet, Bullet) and bullet.trace_collide_object(generated_item):
                     collided = True
                     break
+            for obstacle in self.model.obstacles:
+                if generated_item.collide_object(obstacle):
+                    collided = True
+                    break
             for item in self.model.items:
                 if generated_item.collide_object(item):
                     collided = True

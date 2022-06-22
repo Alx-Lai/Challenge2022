@@ -72,12 +72,21 @@ class GraphicalView:
     def render_play(self):
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
+
+        # draw obstacles
+        for obstacle in self.model.obstacles:
+            center = obstacle.position * Const.ARENA_GRID_SIZE
+            radius = obstacle.radius * Const.ARENA_GRID_SIZE
+            rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
+            pg.draw.rect(self.screen, pg.Color('white'), rect)
+        
         # draw bullets
         for bullet in self.model.bullets:
             if isinstance(bullet, Bullet):
-                points = [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices]
-                color = Const.PLAYER_COLOR[bullet.attacker.player_id]
                 center = bullet.position * Const.ARENA_GRID_SIZE
+                center_tail = bullet.tail.position * Const.ARENA_GRID_SIZE
+                points = [center] + [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices] + [center_tail]
+                color = Const.PLAYER_COLOR[bullet.attacker.player_id]
                 radius = Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE
                 rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
 
@@ -129,8 +138,7 @@ class GraphicalView:
             total_cd = round(player.attack_cd * player.gun.attack_cd_multiplier)
             stop_angle = (player.gun.cd_time / total_cd) * 2 * math.pi
             pg.draw.arc(self.screen, pg.Color('red'), rect, 0, stop_angle, 4)
-
-
+        
         pg.display.flip()
 
     def render_stop(self):
