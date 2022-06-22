@@ -162,10 +162,6 @@ class GameEngine:
             if obstacle.killed(): self.obstacles.remove(player)
             else: obstacle.tick()
 
-        for obstacle in self.obstacles:
-            if obstacle.killed(): self.obstacles.remove(player)
-            else: obstacle.tick()
-
         for bullet in self.bullets:
             if bullet.killed(): self.bullets.remove(bullet)
             else: bullet.tick()
