@@ -58,10 +58,13 @@ ITEM_MAX = 10
 ITEM_GUN_RADIUS = 0.5                     # L
 ITEM_BUFF_RADIUS = 0.5                    # L
 
+OBSTACLE_RADIUS = 0.5                     # L
+OBSTACLE_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(13, 17)]
+
 # view
 WINDOW_CAPTION = 'Challenge 2022'
-WINDOW_SIZE = (800, 800)
-ARENA_SIZE = (800, 800)
+WINDOW_SIZE = (900, 900)
+ARENA_SIZE = (900, 900)
 ARENA_GRID_COUNT = 30
 ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')

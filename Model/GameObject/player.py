@@ -31,6 +31,21 @@ class Player(Base_Circle_Object):
         '''
         super().tick()
         self.gun.tick()
+        
+        collide_edge = False # whether the bullet collides the edges of the obstacles (instead of the corners)
+        collided_obstacle = None
+        for obstacle in self.model.obstacles:
+            if self.collide_object(obstacle):
+                dx = (self.position - obstacle.position).x
+                dy = (self.position - obstacle.position).y
+                if abs(dx) < obstacle.radius or abs(dy) < obstacle.radius:
+                    collide_edge = True
+                    collided_obstacle = obstacle
+                elif not collide_edge:
+                    collided_obstacle = obstacle
+        if collided_obstacle:
+            normal_vector = collided_obstacle.clip_object_position(self)
+            self.speed = self.speed.reflect(normal_vector)
 
     def move_direction(self, direction: int):
         '''
