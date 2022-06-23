@@ -146,19 +146,15 @@ class GraphicalView:
 
     def render_play(self):
         # draw background
-        self.rand_backgroud_color(Const.BACKGROUND_COLOR_SPEED)
-        self.screen.fill(self.background_color)
-        self.print_obj(self.background_top, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
+        self.screen.fill(Const.BACKGROUND_COLOR)
 
         # draw obstacles
         for obstacle in self.model.obstacles:
             center = obstacle.position * Const.ARENA_GRID_SIZE
             radius = obstacle.radius * Const.ARENA_GRID_SIZE
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
-            self.print_obj(self.RE_field if isinstance(obstacle, RE_Field) else self.normal_field, Vector2(center[0] - radius, center[1] - radius),
-                           Vector2(center[0] + radius, center[1] + radius))
-            #pg.draw.rect(self.screen, pg.Color('pink') if isinstance(obstacle, RE_Field) else pg.Color('white'), rect)
-
+            pg.draw.rect(self.screen, pg.Color('pink') if isinstance(obstacle, RE_Field) else pg.Color('white'), rect)
+        
         # draw bullets
         for bullet in self.model.bullets:
             if isinstance(bullet, Bullet):
@@ -200,9 +196,8 @@ class GraphicalView:
         # draw players
         for player in self.model.players:
             if player.killed(): continue
-            #print(player.position)
-            color = Const.PLAYER_COLOR_RESPAWN[player.player_id] if player.respawning() else Const.PLAYER_COLOR[
-                player.player_id]
+
+            color = Const.PLAYER_COLOR_RESPAWN[player.player_id] if player.respawning() else Const.PLAYER_COLOR[player.player_id]
             center = player.position * Const.ARENA_GRID_SIZE
             aux_line_end = center + player.direction * (player.aux_line_length + 0.5) * Const.ARENA_GRID_SIZE
             radius = Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
@@ -232,7 +227,6 @@ class GraphicalView:
             stop_angle = (player.respawn_timer / total_respawging_time) * 2 * math.pi
             pg.draw.arc(self.screen, Const.PLAYER_COLOR[player.player_id], rect, 0, stop_angle, 4)
         
-
         pg.display.flip()
 
     def render_stop(self):

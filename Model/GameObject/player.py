@@ -155,9 +155,8 @@ class Player(Base_Circle_Object):
         Kill the player.
         '''
         if self.respawn_count <= 0:
-            self.score += Const.PLAYER_ALIVE_SCORE[self.model.death_cnt]
-            self.model.ev_manager.post(EventPlayerRemove(self.player_id))
             super().kill()
+            return
         
         self.respawn_count -= 1
         self.respawn_timer = Const.PLAYER_RESPAWN_TIME
@@ -167,13 +166,7 @@ class Player(Base_Circle_Object):
         self.gun = Normal_Gun(self.model, self)
     
     def respawning(self):
-        '''
-        Check if the player is respawning.
-        '''
         return self.respawn_timer > 0
     
     def invisible(self):
-        '''
-        Check if the player is invisible (cannot be seen/hit).
-        '''
         return self.respawning() or self.killed()
