@@ -19,6 +19,13 @@ PLAYER_ATTACK_CD = 2 * FPS                # T
 PLAYER_ATTACK_KICK = 10 / FPS             # L / T
 PLAYER_AUX_LINE_LENGTH = 1                # L
 
+PLAYER_QUOTA_ATTACK_CD = 5
+PLAYER_QUOTA_REPULSION = 5
+PLAYER_QUOTA_AUX_LINE_LENGTH = math.inf
+
+PLAYER_RESPAWN_TIME = 5 * FPS             # T
+PLAYER_MAX_RESPAWN_COUNT = [2, 2, 2, 2]
+
 BULLET_RADIUS = 0.2                       # L
 BULLET_REPULSION = 30 / FPS               # L / T
 BULLET_SPEED = 15 / FPS                   # L / T
@@ -49,17 +56,15 @@ BUFF_VALUE_REPULSION = 4 / FPS            # L / T
 BUFF_VALUE_BULLET_TRACE_TIME = 0.01 * FPS # T
 BUFF_VALUE_AUX_LINE_LENGTH = 1            # L
 
-PLAYER_QUOTA_ATTACK_CD = 5
-PLAYER_QUOTA_REPULSION = 5
-PLAYER_QUOTA_AUX_LINE_LENGTH = math.inf
-
 ITEM_GENERATOR_COOLDOWN = 1 * FPS         # T
 ITEM_MAX = 10
 ITEM_GUN_RADIUS = 0.5                     # L
 ITEM_BUFF_RADIUS = 0.5                    # L
 
 OBSTACLE_RADIUS = 0.5                     # L
+RE_FIELD_RADIUS = 0.5                     # L
 OBSTACLE_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(13, 17)]
+RE_FIELD_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(17, 19)]
 
 # view
 WINDOW_CAPTION = 'Challenge 2022'
@@ -68,7 +73,8 @@ ARENA_SIZE = (900, 900)
 ARENA_GRID_COUNT = 30
 ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')
-PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.Color('blue')]
+PLAYER_COLOR = [pg.Color(0, 255, 0), pg.Color(255, 0, 255), pg.Color(255, 255, 0), pg.Color(0, 0, 255)]
+PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
 
 
 # State machine constants

@@ -35,7 +35,7 @@ class Bullet(Base_Circle_Object):
             self.kill()
 
         for player in self.model.players:
-            if self.trace_collide_object(player):
+            if not player.invisible() and self.trace_collide_object(player):
                 player.knock_back(self.repulsion, self.speed.normalize())
                 if player.player_id != self.attacker.player_id:
                     self.attacker.score += Const.BULLET_HIT_SCORE

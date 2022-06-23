@@ -1,4 +1,5 @@
 import Const
+import copy
 from EventManager.EventManager import *
 from Model.GameObject.base_game_object import *
 from Model.Gun.gun import *
@@ -8,7 +9,7 @@ class Player(Base_Circle_Object):
     Represent a player.
     '''
     def __init__(self, model, player_id: int):
-        super().__init__(model, Const.PLAYER_INIT_POSITION[player_id], Const.PLAYER_RADIUS)
+        super().__init__(model, copy.deepcopy(Const.PLAYER_INIT_POSITION[player_id]), Const.PLAYER_RADIUS)
 
         self.player_id = player_id
         self.score = 0
@@ -25,10 +26,17 @@ class Player(Base_Circle_Object):
         self.quota_repulsion = Const.PLAYER_QUOTA_REPULSION
         self.quota_aux_line_length = Const.PLAYER_QUOTA_AUX_LINE_LENGTH
 
+        self.death_count = 0
+        self.respawn_count = Const.PLAYER_MAX_RESPAWN_COUNT[player_id]
+        self.respawn_timer = 0
+
     def tick(self):
         '''
         Run whenever EventEveryTick() arises.
         '''
+        if self.respawning():
+            self.respawn_timer -= 1
+        
         super().tick()
         self.gun.tick()
         
@@ -122,3 +130,25 @@ class Player(Base_Circle_Object):
                 self.aux_line_length += Const.BUFF_VALUE_AUX_LINE_LENGTH
                 self.quota_aux_line_length -= 1
         self.model.ev_manager.post(EventPlayerBuffed(self.player_id, buff_type))
+
+    
+    def kill(self):
+        '''
+        Kill the player.
+        '''
+        if self.respawn_count <= 0:
+            super().kill()
+            return
+        
+        self.respawn_count -= 1
+        self.respawn_timer = Const.PLAYER_RESPAWN_TIME
+        self.death_count += 1
+        self.position = copy.deepcopy(Const.PLAYER_INIT_POSITION[self.player_id])
+        self.speed = Vector2(0, 0)
+        self.gun = Normal_Gun(self.model, self)
+    
+    def respawning(self):
+        return self.respawn_timer > 0
+    
+    def invisible(self):
+        return self.respawning() or self.killed()
