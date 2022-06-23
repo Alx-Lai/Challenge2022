@@ -22,10 +22,10 @@ class Obstacle(Base_Square_Object):
         if abs(dx) < self.radius or abs(dy) < self.radius:
             if abs(dx) > abs(dy):
                 obj.x = self.x + (self.radius + obj.radius) * ((dx>0)-(dx<0))
-                return Vector2(1, 0)
+                return Vector2((dx>0)-(dx<0), 0)
             else:
                 obj.y = self.y + (self.radius + obj.radius) * ((dy>0)-(dy<0))
-                return Vector2(0, 1)
+                return Vector2(0, (dy>0)-(dy<0))
         else:
             corner = self.position + self.radius * Vector2((dx>0)-(dx<0), (dy>0)-(dy<0))
             direction = obj.position - corner
