@@ -149,6 +149,25 @@ PLAYER_PIC = {
     'B_SHOTGUN':'blue_shotgun.png'
 }
 
+# controller
+
+PLAYER_MOVE_FORWARD = 1
+PLAYER_MOVE_BACKWARD = -1
+
+PLAYER_ROTATE_LEFT = -1
+PLAYER_ROTATE_RIGHT = 1
+
+PLAYER_MOVE_KEYS = {
+    pg.K_w: (0, PLAYER_MOVE_FORWARD),
+    pg.K_s: (0, PLAYER_MOVE_BACKWARD),
+    pg.K_t: (1, PLAYER_MOVE_FORWARD),
+    pg.K_g: (1, PLAYER_MOVE_BACKWARD),
+    pg.K_i: (2, PLAYER_MOVE_FORWARD),
+    pg.K_k: (2, PLAYER_MOVE_BACKWARD),
+    pg.K_UP: (3, PLAYER_MOVE_FORWARD),
+    pg.K_DOWN: (3, PLAYER_MOVE_BACKWARD)
+}
+
 BACKGROUND_PIC = 'Background.png'
 
 WEAPON_PIC = {
