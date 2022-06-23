@@ -59,8 +59,9 @@ class Bullet(Base_Circle_Object):
                     collided_obstacle = obstacle
         if collided_obstacle:
             normal_vector = collided_obstacle.clip_object_position(self)
-            self.speed = self.speed.reflect(normal_vector)
-            self.vertices.insert(0, copy.deepcopy(self.position))
+            if (normal_vector.dot(self.speed) < 0): # handle only realistic collides
+                self.speed = self.speed.reflect(normal_vector)
+                self.vertices.insert(0, copy.deepcopy(self.position))
 
     def bounce(self):
         '''
@@ -150,8 +151,9 @@ class Bullet_Tail(Base_Circle_Object):
                     collided_obstacle = obstacle
         if collided_obstacle:
             normal_vector = collided_obstacle.clip_object_position(self)
-            self.speed = self.speed.reflect(normal_vector)
-            self.head.vertices.pop(-1)
+            if (normal_vector.dot(self.speed) < 0): # handle only realistic collides
+                self.speed = self.speed.reflect(normal_vector)
+                self.head.vertices.pop(-1)
 
     def bounce(self):
         '''
