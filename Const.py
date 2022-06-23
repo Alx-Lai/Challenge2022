@@ -139,6 +139,8 @@ PLAYER_PIC = {
     'B_SHOTGUN':'blue_shotgun.png'
 }
 
+BACKGROUND_PIC = 'Background.png'
+
 WEAPON_PIC = {
     'SNIPER':'Sniper.png',
     'SHOTGUN':'Shotgun.png',
