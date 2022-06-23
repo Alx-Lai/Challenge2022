@@ -2,6 +2,7 @@ import Const
 import copy
 from EventManager.EventManager import *
 from Model.GameObject.base_game_object import *
+from Model.GameObject.obstacle import *
 from Model.Gun.gun import *
 
 class Player(Base_Circle_Object):
@@ -41,20 +42,30 @@ class Player(Base_Circle_Object):
         self.gun.tick()
         
         collide_edge = False # whether the bullet collides the edges of the obstacles (instead of the corners)
-        collided_obstacle = None
+        collided_obstacles = []
         for obstacle in self.model.obstacles:
             if self.collide_object(obstacle):
+                if isinstance(obstacle, RE_Field) and not self.invisible():
+                    self.model.ev_manager.post(EventPlayerDead(self.player_id))
+                    self.kill()
+                    return
+
                 dx = (self.position - obstacle.position).x
                 dy = (self.position - obstacle.position).y
                 if abs(dx) < obstacle.radius or abs(dy) < obstacle.radius:
                     collide_edge = True
-                    collided_obstacle = obstacle
-                elif not collide_edge:
-                    collided_obstacle = obstacle
-        if collided_obstacle:
-            normal_vector = collided_obstacle.clip_object_position(self)
-            self.speed = self.speed.reflect(normal_vector)
-
+                    collided_obstacles.append((True, obstacle))
+                else:
+                    collided_obstacles.append((False, obstacle))
+        if len(collided_obstacles):
+            if collide_edge:
+                for obstacle in collided_obstacles:
+                    if not obstacle[0]:
+                        collided_obstacles.remove(obstacle)
+            for obstacle in collided_obstacles:
+                normal_vector = obstacle[1].clip_object_position(self)
+                self.speed = self.speed.reflect(normal_vector)
+                
     def move_direction(self, direction: int):
         '''
         Increase the player's speed along it's facing direction.

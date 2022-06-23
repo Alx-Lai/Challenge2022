@@ -41,13 +41,3 @@ class RE_Field(Obstacle):
     '''
     def __init__(self, model, position, radius):
         super().__init__(model, position, radius)
-    
-    def tick(self):
-        '''
-        Run whenever EventEveryTick() arises.
-        '''
-        super().tick()
-        for player in self.model.players:
-            if not player.invisible() and self.collide_object(player):
-                player.kill()
-                self.model.ev_manager.post(EventPlayerDead(player.player_id))

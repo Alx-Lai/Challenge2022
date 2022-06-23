@@ -63,7 +63,7 @@ ITEM_BUFF_RADIUS = 0.5                    # L
 
 OBSTACLE_RADIUS = 0.5                     # L
 RE_FIELD_RADIUS = 0.5                     # L
-OBSTACLE_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(13, 17)]
+OBSTACLE_POSITION = [pg.Vector2(13, 13), pg.Vector2(14, 13), pg.Vector2(14, 14), pg.Vector2(14, 15), pg.Vector2(13, 15)]
 RE_FIELD_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(17, 19)]
 
 # view
