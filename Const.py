@@ -139,6 +139,18 @@ PLAYER_PIC = {
     'B_SHOTGUN':'blue_shotgun.png'
 }
 
+WEAPON_PIC = {
+    'SNIPER':'Sniper.png',
+    'SHOTGUN':'Shotgun.png',
+    'MACHINE_GUN':'Machine_Gun.png'
+}
+
+BUFF_PIC = {
+    'ATTACK_CD':'Attack_CD.png',
+    'AUX_LINE':'Aux_Line_Length.png',
+    'REPULSION':'Repulsion.png'
+}
+
 # controller
 
 PLAYER_MOVE_FORWARD = 1
