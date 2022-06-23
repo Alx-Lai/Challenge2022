@@ -15,7 +15,6 @@ class Obstacle(Base_Square_Object):
         Clip an collided object's position to avoid overlapping
         '''
         if not isinstance(obj, Base_Circle_Object): return None
-        if not self.collide_object(obj): return None
 
         dx = (obj.position - self.position).x
         dy = (obj.position - self.position).y
