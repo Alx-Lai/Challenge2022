@@ -1,15 +1,15 @@
 # python
-*.pyc
+**/*.pyc
 .python-version
-__pycache__/
+**/__pycache__/
 
 # VScode
 .vscode/
 
 # MacOS
-.DS_Store
-.DS_Store?
+**/.DS_Store
+**/.DS_Store?
 
 # caches
-.cache
-*.swp
+**/.cache
+**/*.swp
