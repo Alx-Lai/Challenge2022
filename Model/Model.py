@@ -1,4 +1,5 @@
 import random
+import time
 import pygame as pg
 
 from EventManager.EventManager import *
@@ -166,7 +167,27 @@ class GameEngine:
         Update the objects in endgame scene.
         For example: scoreboard
         '''
-        pass
+        for i in range(Const.PLAYER_NUMBER):
+            if self.players[i].respawn_count >= 0:
+                self.players[i].score += Const.ALIVE_SCORE
+        scoreboard = pg.display.set_mode(Const.WINDOW_SIZE)
+        scoreboard.fill((0,0,0))
+        font = pg.font.SysFont('Comic Sans MS', 20)
+        player0_score = font.render(f"Score:{self.players[0].score}", True, (255, 255, 255))
+        player0_score_text = (10,30)
+        player1_score = font.render(f"Score:{self.players[1].score}", True, (255, 255, 255))
+        player1_score_text = (Const.ARENA_SIZE[0]-110,30)
+        player2_score = font.render(f"Score:{self.players[2].score}", True, (255, 255, 255))
+        player2_score_text = (10,Const.ARENA_SIZE[0]-40)
+        player3_score = font.render(f"Score:{self.players[3].score}", True, (255, 255, 255))
+        player3_score_text = (Const.ARENA_SIZE[0]-110,Const.ARENA_SIZE[0]-40)
+        scoreboard.blit(player0_score, player0_score_text)
+        scoreboard.blit(player1_score, player1_score_text)
+        scoreboard.blit(player2_score, player2_score_text)
+        scoreboard.blit(player3_score, player3_score_text)
+        pg.display.flip() 
+        time.sleep(10)
+        return
 
     def run(self):
         '''
@@ -177,8 +198,42 @@ class GameEngine:
         # Tell every one to start
         self.ev_manager.post(EventInitialize())
         self.timer = Const.GAME_LENGTH
+        screen = pg.display.set_mode(Const.WINDOW_SIZE)
+        font = pg.font.SysFont('Comic Sans MS', 20)
         while self.running:
+            player0_score = font.render(f"Score:{self.players[0].score}", True, (255, 255, 255))
+            player0_score_text = (10,30)
+            player1_score = font.render(f"Score:{self.players[1].score}", True, (255, 255, 255))
+            player1_score_text = (Const.ARENA_SIZE[0]-110,30)
+            player2_score = font.render(f"Score:{self.players[2].score}", True, (255, 255, 255))
+            player2_score_text = (10,Const.ARENA_SIZE[0]-40)
+            player3_score = font.render(f"Score:{self.players[3].score}", True, (255, 255, 255))
+            player3_score_text = (Const.ARENA_SIZE[0]-110,Const.ARENA_SIZE[0]-40)
+            player0_lifespan = font.render(f"Lifespan:{1+self.players[0].respawn_count}", True, (255, 255, 255))
+            player0_lifespan_text = (10,10)
+            player1_lifespan = font.render(f"Lifespan:{1+self.players[1].respawn_count}", True, (255, 255, 255))
+            player1_lifespan_text = (Const.ARENA_SIZE[0]-110,10)
+            player2_lifespan = font.render(f"Lifespan:{1+self.players[2].respawn_count}", True, (255, 255, 255))
+            player2_lifespan_text = (10,Const.ARENA_SIZE[0]-60)
+            player3_lifespan = font.render(f"Lifespan:{1+self.players[3].respawn_count}", True, (255, 255, 255))
+            player3_lifespan_text = (Const.ARENA_SIZE[0]-110,Const.ARENA_SIZE[0]-60)
+            countdown = font.render(f"{int(self.timer/Const.FPS)}", True, (255, 255, 255))
+            countdown_text = (Const.ARENA_SIZE[0] // 2 - 20,0)
             self.ev_manager.post(EventEveryTick())
-            self.clock.tick(Const.FPS)
+            screen.blit(player0_score, player0_score_text)
+            screen.blit(player1_score, player1_score_text)
+            screen.blit(player2_score, player2_score_text)
+            screen.blit(player3_score, player3_score_text)
+            screen.blit(player0_lifespan, player0_lifespan_text)
+            screen.blit(player1_lifespan, player1_lifespan_text)
+            screen.blit(player2_lifespan, player2_lifespan_text)
+            screen.blit(player3_lifespan, player3_lifespan_text)
+            screen.blit(countdown, countdown_text)
+            pg.display.flip() 
+            self.clock.tick(Const.FPS)           
+            if Const.ALIVE_PLAYER_NUMBER <= 1:
+                self.state_machine.push(Const.STATE_ENDGAME)
+                self.update_endgame()
+                return
 
 

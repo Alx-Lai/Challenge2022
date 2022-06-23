@@ -7,7 +7,7 @@ import pygame as pg
 # time unit: frame (T)
 
 FPS = 60 # frame per second
-GAME_LENGTH = math.inf * FPS # temporarily set to infinity
+GAME_LENGTH = 600 * FPS # temporarily set to infinity
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
 
@@ -32,6 +32,11 @@ BULLET_SPEED = 15 / FPS                   # L / T
 BULLET_LIFESPAM = 6 * FPS                 # T
 BULLET_TRACE_TIME = 0.1 * FPS             # T
 BULLET_HIT_SCORE = 10
+ALIVE_PLAYER_NUMBER=4
+FIRST_DEATH_SCORE = 0
+SECOND_DEATH_SCORE = 100
+THIRD_DEATH_SCORE = 200
+ALIVE_SCORE = 300
 
 GUN_TYPE_NORMAL_GUN = 0
 GUN_TYPE_MACHINE_GUN = 1

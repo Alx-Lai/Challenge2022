@@ -40,6 +40,12 @@ class Player(Base_Circle_Object):
         
         super().tick()
         self.gun.tick()
+        if self.x <= Const.PLAYER_RADIUS or self.x >= Const.ARENA_GRID_COUNT-Const.PLAYER_RADIUS or \
+           self.y <= Const.PLAYER_RADIUS or self.y >= Const.ARENA_GRID_COUNT-Const.PLAYER_RADIUS :
+            if not self.invisible():
+                self.model.ev_manager.post(EventPlayerDead(self.player_id))
+                self.kill()
+                return
         
         collide_edge = False # whether the bullet collides the edges of the obstacles (instead of the corners)
         collided_obstacles = []
@@ -148,7 +154,16 @@ class Player(Base_Circle_Object):
         Kill the player.
         '''
         if self.respawn_count <= 0:
+            self.respawn_count -= 1
             super().kill()
+            Const.ALIVE_PLAYER_NUMBER -= 1
+            match Const.ALIVE_PLAYER_NUMBER:
+                case 1:
+                    self.score += Const.THIRD_DEATH_SCORE
+                case 2:
+                    self.score += Const.SECOND_DEATH_SCORE
+                case 3:
+                    self.score += Const.FIRST_DEATH_SCORE
             return
         
         self.respawn_count -= 1
