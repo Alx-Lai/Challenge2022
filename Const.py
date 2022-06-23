@@ -109,7 +109,38 @@ STATE_PLAY = 2
 STATE_STOP = 3  # not implemented yet
 STATE_ENDGAME = 4
 
+
+# view
+
+WINDOW_CAPTION = 'Challenge 2022'
+WINDOW_SIZE = (800, 800)
+ARENA_SIZE = (800, 800)
+ARENA_GRID_COUNT = 30
+ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
+BACKGROUND_COLOR = pg.Color('black')
+PLAYER_COLOR = [pg.Color('green'), pg.Color('magenta'), pg.Color('yellow'), pg.Color('blue')]
+
+PLAYER_PIC = {
+    'G_BASIC':'green_basic.png',
+    'G_SNIPER':'green_sniper.png',
+    'G_MACHINE_GUN':'green_machine_gun.png',
+    'G_SHOTGUN':'green_shotgun.png',
+    'R_BASIC':'red_basic.png',
+    'R_SNIPER':'red_sniper.png',
+    'R_MACHINE_GUN':'red_machine_gun.png',
+    'R_SHOTGUN':'red_shotgun.png',
+    'Y_BASIC':'yellow_basic.png',
+    'Y_SNIPER':'yellow_sniper.png',
+    'Y_MACHINE_GUN':'yellow_machine_gun.png',
+    'Y_SHOTGUN':'yellow_shotgun.png',
+    'B_BASIC':'blue_basic.png',
+    'B_SNIPER':'blue_sniper.png',
+    'B_MACHINE_GUN':'blue_machine_gun.png',
+    'B_SHOTGUN':'blue_shotgun.png'
+}
+
 # controller
+
 PLAYER_MOVE_FORWARD = 1
 PLAYER_MOVE_BACKWARD = -1
 
