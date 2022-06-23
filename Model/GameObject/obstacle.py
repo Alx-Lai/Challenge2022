@@ -1,13 +1,14 @@
 import Const
+from EventManager.EventManager import *
 from Model.GameObject.base_game_object import *
 from pygame.math import Vector2
 
 class Obstacle(Base_Square_Object):
     '''
-    Represent a bullet shot by a gun.
+    Represent an obstacle that block every object's movement.
     '''
-    def __init__(self, model, position):
-        super().__init__(model, position, Const.OBSTACLE_RADIUS)
+    def __init__(self, model, position, radius):
+        super().__init__(model, position, radius)
     
     '''
     Clip an collided object's position to avoid overlapping
@@ -31,3 +32,19 @@ class Obstacle(Base_Square_Object):
             direction.scale_to_length(obj.radius)
             obj.position = corner + direction
             return direction.normalize()
+
+
+class RE_Field(Obstacle):
+    '''
+    Represent an obstacle that block every object's movement.
+    If a player rams into it, the player dies.
+    '''
+    def __init__(self, model, position, radius):
+        super().__init__(model, position, radius)
+    
+    def tick(self):
+        super().tick()
+        for player in self.model.players:
+            if not player.invisible() and self.collide_object(player):
+                player.kill()
+                self.model.ev_manager.post(EventPlayerDead(player.player_id))

@@ -185,3 +185,14 @@ class EventPlayerBuffed(BaseEvent):
 
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} get buffed, buff type: {self.buff_type}'
+
+class EventPlayerDead(BaseEvent):
+    name = 'PlayerDead event'
+    '''
+    Player gets killed.
+    '''
+    def __init__(self, player_id):
+        self.player_id = player_id
+
+    def __str__(self):
+        return f'{self.name} => player_id {self.player_id} get killed'

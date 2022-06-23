@@ -79,7 +79,8 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
-        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i]) for i in range(len(Const.OBSTACLE_POSITION))]
+        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in range(len(Const.OBSTACLE_POSITION))] + \
+                         [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in range(len(Const.RE_FIELD_POSITION))]
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
@@ -124,8 +125,9 @@ class GameEngine:
         elif isinstance(event, EventPlayerRotate):
             self.players[event.player_id].rotate(event.direction)
 
-        elif isinstance(event, EventPlayerAttack):
-            self.players[event.player_id].attack()
+        elif isinstance(event, EventPlayerAttack): # invisible players cannot attack
+            if not self.players[event.player_id].invisible():
+                self.players[event.player_id].attack()
 
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
@@ -145,8 +147,7 @@ class GameEngine:
         self.item_generator.tick()
 
         for player in self.players:
-            if player.killed(): self.players.remove(player)
-            else: player.tick()
+            if not player.killed(): player.tick()
 
         for obstacle in self.obstacles:
             if obstacle.killed(): self.obstacles.remove(player)

@@ -14,7 +14,7 @@ class Item_Gun(Base_Square_Object):
         Run whenever EventEveryTick() arises.
         '''
         for player in self.model.players:
-            if self.collide_object(player):
+            if not player.invisible() and self.collide_object(player):
                 player.switch_gun(self.type)
                 self.kill()
                 return
@@ -33,7 +33,7 @@ class Item_Buff(Base_Square_Object):
         Run whenever EventEveryTick() arises.
         '''
         for player in self.model.players:
-            if self.collide_object(player) and player.quota_enough(self.type):
+            if not player.respawning() and self.collide_object(player) and player.quota_enough(self.type):
                 player.buff(self.type)
                 self.kill()
                 return

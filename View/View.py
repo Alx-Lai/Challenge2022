@@ -4,6 +4,7 @@ import pygame as pg
 from EventManager.EventManager import *
 from Model.GameObject.bullet import *
 from Model.GameObject.item import *
+from Model.GameObject.obstacle import *
 from Model.Model import GameEngine
 import Const
 
@@ -78,7 +79,7 @@ class GraphicalView:
             center = obstacle.position * Const.ARENA_GRID_SIZE
             radius = obstacle.radius * Const.ARENA_GRID_SIZE
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
-            pg.draw.rect(self.screen, pg.Color('white'), rect)
+            pg.draw.rect(self.screen, pg.Color('pink') if isinstance(obstacle, RE_Field) else pg.Color('white'), rect)
         
         # draw bullets
         for bullet in self.model.bullets:
@@ -117,7 +118,9 @@ class GraphicalView:
 
         # draw players
         for player in self.model.players:
-            color = Const.PLAYER_COLOR[player.player_id]
+            if player.killed(): continue
+
+            color = Const.PLAYER_COLOR_RESPAWN[player.player_id] if player.respawning() else Const.PLAYER_COLOR[player.player_id]
             center = player.position * Const.ARENA_GRID_SIZE
             aux_line_end = center + player.direction * (player.aux_line_length + 0.5) * Const.ARENA_GRID_SIZE
             radius = Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
@@ -138,6 +141,11 @@ class GraphicalView:
             total_cd = round(player.attack_cd * player.gun.attack_cd_multiplier)
             stop_angle = (player.gun.cd_time / total_cd) * 2 * math.pi
             pg.draw.arc(self.screen, pg.Color('red'), rect, 0, stop_angle, 4)
+
+            # respawning time
+            total_respawging_time = Const.PLAYER_RESPAWN_TIME
+            stop_angle = (player.respawn_timer / total_respawging_time) * 2 * math.pi
+            pg.draw.arc(self.screen, Const.PLAYER_COLOR[player.player_id], rect, 0, stop_angle, 4)
         
         pg.display.flip()
 
