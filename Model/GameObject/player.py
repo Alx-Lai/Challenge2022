@@ -148,7 +148,13 @@ class Player(Base_Circle_Object):
         self.gun = Normal_Gun(self.model, self)
     
     def respawning(self):
+        '''
+        Check if the player is respawning.
+        '''
         return self.respawn_timer > 0
     
     def invisible(self):
+        '''
+        Check if the player is invisible (cannot be seen/hit).
+        '''
         return self.respawning() or self.killed()

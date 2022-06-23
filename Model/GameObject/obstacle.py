@@ -10,10 +10,10 @@ class Obstacle(Base_Square_Object):
     def __init__(self, model, position, radius):
         super().__init__(model, position, radius)
     
-    '''
-    Clip an collided object's position to avoid overlapping
-    '''
     def clip_object_position(self, obj):
+        '''
+        Clip an collided object's position to avoid overlapping
+        '''
         if not isinstance(obj, Base_Circle_Object): return None
         if not self.collide_object(obj): return None
 
@@ -43,6 +43,9 @@ class RE_Field(Obstacle):
         super().__init__(model, position, radius)
     
     def tick(self):
+        '''
+        Run whenever EventEveryTick() arises.
+        '''
         super().tick()
         for player in self.model.players:
             if not player.invisible() and self.collide_object(player):
