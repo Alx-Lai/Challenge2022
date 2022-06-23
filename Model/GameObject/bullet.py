@@ -9,14 +9,14 @@ class Bullet(Base_Circle_Object):
     Represent a bullet shot by a gun.
     '''
     def __init__(self, model, player, direction, trace_time, repulsion, gun_type):
-        position = player.position + direction * (Const.PLAYER_RADIUS + Const.BULLET_RADIUS)
-        super().__init__(model, position, Const.BULLET_RADIUS)
+        super().__init__(model, copy.deepcopy(player.position), Const.BULLET_RADIUS)
 
         self.tail = Bullet_Tail(model, self, player, direction, trace_time)
         self.model.bullets.append(self.tail)
         self.vertices = []
 
         self.attacker = player
+        self.attacker_proof = True
         self.gun_type = gun_type
         self.speed = direction * Const.BULLET_SPEED
         self.repulsion = repulsion
@@ -33,9 +33,13 @@ class Bullet(Base_Circle_Object):
         self.lifespam -= 1
         if self.lifespam <= 0:
             self.kill()
+        
+        if self.attacker_proof and not self.trace_collide_object(self.attacker):
+            self.attacker_proof = False
 
         for player in self.model.players:
-            if not player.invisible() and self.trace_collide_object(player):
+            if not player.invisible() and self.trace_collide_object(player) \
+                    and not (self.attacker_proof and player.player_id == self.attacker.player_id):
                 player.knock_back(self.repulsion, self.speed.normalize())
                 if player.player_id != self.attacker.player_id:
                     self.attacker.score += Const.BULLET_HIT_SCORE
@@ -116,8 +120,7 @@ class Bullet_Tail(Base_Circle_Object):
     Represent the tail of a bullet's trace.
     '''
     def __init__(self, model, head, player, direction, trace_time):
-        position = player.position + direction * (Const.PLAYER_RADIUS + Const.BULLET_RADIUS)
-        super().__init__(model, position, Const.BULLET_RADIUS)
+        super().__init__(model, copy.deepcopy(player.position), Const.BULLET_RADIUS)
 
         self.speed = direction * Const.BULLET_SPEED
         self.head = head
