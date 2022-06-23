@@ -77,10 +77,18 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
+<<<<<<< HEAD
         self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in
                           range(len(Const.OBSTACLE_POSITION))] + \
                          [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in
                           range(len(Const.RE_FIELD_POSITION))]
+=======
+<<<<<<< HEAD
+=======
+        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in range(len(Const.OBSTACLE_POSITION))] + \
+                         [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in range(len(Const.RE_FIELD_POSITION))]
+>>>>>>> 811508c (add: re field and respawning mechanism)
+>>>>>>> 030ae11 (add: re field and respawning mechanism)
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
@@ -125,7 +133,11 @@ class GameEngine:
         elif isinstance(event, EventPlayerRotate):
             self.players[event.player_id].rotate(event.direction)
 
+<<<<<<< HEAD
         elif isinstance(event, EventPlayerAttack):  # invisible players cannot attack
+=======
+        elif isinstance(event, EventPlayerAttack): # invisible players cannot attack
+>>>>>>> 030ae11 (add: re field and respawning mechanism)
             if not self.players[event.player_id].invisible():
                 self.players[event.player_id].attack()
 
@@ -148,12 +160,15 @@ class GameEngine:
 
         for player in self.players:
             if not player.killed(): player.tick()
+<<<<<<< HEAD
 
         for obstacle in self.obstacles:
             if obstacle.killed():
                 self.obstacles.remove(obstacle)
             else:
                 obstacle.tick()
+=======
+>>>>>>> 030ae11 (add: re field and respawning mechanism)
 
         for bullet in self.bullets:
             if bullet.killed():
