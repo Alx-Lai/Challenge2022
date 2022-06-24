@@ -1,6 +1,6 @@
 import math
 import pygame as pg
-
+import os.path
 
 # model
 # length unit: a unit grid's size (L)
@@ -66,6 +66,9 @@ RE_FIELD_RADIUS = 0.5                     # L
 OBSTACLE_POSITION = [pg.Vector2(13, 13), pg.Vector2(14, 13), pg.Vector2(14, 14), pg.Vector2(14, 15), pg.Vector2(13, 15)]
 RE_FIELD_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(17, 19)]
 
+# Path
+IMAGE_PATH = os.path.join('View', 'assets')
+
 # view
 WINDOW_CAPTION = 'Challenge 2022'
 WINDOW_SIZE = (900, 900)
@@ -76,7 +79,7 @@ BACKGROUND_COLOR = pg.Color('black')
 PLAYER_COLOR = [pg.Color(0, 255, 0), pg.Color(255, 0, 255), pg.Color(255, 255, 0), pg.Color(0, 0, 255)]
 PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
 
-
+# Images
 PLAYER_PIC = {
     'G_BASIC':'green_basic.png',
     'G_SNIPER':'green_sniper.png',
@@ -99,15 +102,15 @@ PLAYER_PIC = {
 BACKGROUND_PIC = 'Background.png'
 
 WEAPON_PIC = {
-    'SNIPER':'Sniper.png',
-    'SHOTGUN':'Shotgun.png',
-    'MACHINE_GUN':'Machine_Gun.png'
+    1:'Machine_Gun.png',
+    2:'Sniper.png',
+    3:'Shotgun.png'
 }
 
 BUFF_PIC = {
-    'ATTACK_CD':'Attack_CD.png',
-    'AUX_LINE':'Aux_Line_Length.png',
-    'REPULSION':'Repulsion.png'
+    1:'Attack_CD.png',
+    2:'Repulsion.png',
+    3:'Aux_Line_Length.png'
 }
 
 # State machine constants
