@@ -119,30 +119,30 @@ class GraphicalView:
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
             pg.draw.rect(self.screen, pg.Color('pink') if isinstance(obstacle, RE_Field) else pg.Color('white'), rect)
 
-            # draw bullets
-            for bullet in self.model.bullets:
-                if isinstance(bullet, Bullet):
-                    center = bullet.position * Const.ARENA_GRID_SIZE
-                    center_tail = bullet.tail.position * Const.ARENA_GRID_SIZE
-                    points = [center] + [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices] + [center_tail]
-                    color = Const.PLAYER_COLOR[bullet.attacker.player_id]
-                    radius = Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE
-                    rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
+        # draw bullets
+        for bullet in self.model.bullets:
+            if isinstance(bullet, Bullet):
+                center = bullet.position * Const.ARENA_GRID_SIZE
+                center_tail = bullet.tail.position * Const.ARENA_GRID_SIZE
+                points = [center] + [vec * Const.ARENA_GRID_SIZE for vec in bullet.vertices] + [center_tail]
+                color = Const.PLAYER_COLOR[bullet.attacker.player_id]
+                radius = Const.BULLET_RADIUS * Const.ARENA_GRID_SIZE
+                rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
 
-                    # trace
-                    if len(points) > 1:
-                        pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
+                # trace
+                if len(points) > 1:
+                    pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
 
-                    # bullet
-                    match bullet.gun_type:
-                        case Const.GUN_TYPE_NORMAL_GUN:
-                            pg.draw.circle(self.screen, color, center, radius)
-                        case Const.GUN_TYPE_MACHINE_GUN:
-                            pg.draw.circle(self.screen, color, center, radius / 1.5)
-                        case Const.GUN_TYPE_SNIPER:
-                            pg.draw.rect(self.screen, color, rect)
-                        case Const.GUN_TYPE_SHOTGUN:
-                            pg.draw.circle(self.screen, color, center, radius)
+                # bullet
+                match bullet.gun_type:
+                    case Const.GUN_TYPE_NORMAL_GUN:
+                        pg.draw.circle(self.screen, color, center, radius)
+                    case Const.GUN_TYPE_MACHINE_GUN:
+                        pg.draw.circle(self.screen, color, center, radius / 1.5)
+                    case Const.GUN_TYPE_SNIPER:
+                        pg.draw.rect(self.screen, color, rect)
+                    case Const.GUN_TYPE_SHOTGUN:
+                        pg.draw.circle(self.screen, color, center, radius)
 
         # draw items
         for item in self.model.items:
@@ -193,11 +193,10 @@ class GraphicalView:
 
         pg.display.flip()
 
-def render_stop(self):
-    pass
+    def render_stop(self):
+        pass
 
-def render_endgame(self):
-    # draw background
-    self.screen.fill(Const.BACKGROUND_COLOR)
-
-    pg.display.flip()
+    def render_endgame(self):
+        # draw background
+        self.screen.fill(Const.BACKGROUND_COLOR)
+        pg.display.flip()
