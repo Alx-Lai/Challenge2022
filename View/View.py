@@ -52,6 +52,7 @@ class GraphicalView:
                          self.load_img("./View/source/Sniper.png"),
                          self.load_img("./View/source/Shotgun.png")]
         self.background = self.load_img("./View/source/Background.png")
+        self.menu = self.load_img("./View/source/Menu.png")
 
         #music
         self.background_music = pg.mixer.music
@@ -93,12 +94,7 @@ class GraphicalView:
     def render_menu(self):
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
-
-        # draw text
-        font = pg.font.Font(None, 36)
-        text_surface = font.render("Press [space] to start ...", 1, pg.Color('gray88'))
-        text_center = (Const.ARENA_SIZE[0] / 2, Const.ARENA_SIZE[1] / 2)
-        self.screen.blit(text_surface, text_surface.get_rect(center=text_center))
+        self.print_obj(self.menu, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
 
         pg.display.flip()
 
