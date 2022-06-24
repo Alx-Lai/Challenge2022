@@ -7,7 +7,6 @@ from Model.GameObject.player import *
 from Model.GameObject.obstacle import *
 import Const
 
-
 class StateMachine(object):
     '''
     Manages a stack based state machine.
@@ -16,6 +15,7 @@ class StateMachine(object):
 
     TL;DR. Just for game state recording.
     '''
+
     def __init__(self):
         self.statestack = []
 
@@ -41,7 +41,7 @@ class StateMachine(object):
             # empty stack
             return None
 
-    def push(self, state):
+    def push(self, state: int):
         '''
         Push a new state onto the stack.
         Returns the pushed value.
@@ -69,7 +69,6 @@ class GameEngine:
         '''
         self.ev_manager = ev_manager
         ev_manager.register_listener(self)
-
         self.state_machine = StateMachine()
 
     def initialize(self):
@@ -79,8 +78,10 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
-        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in range(len(Const.OBSTACLE_POSITION))] + \
-                         [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in range(len(Const.RE_FIELD_POSITION))]
+        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in
+                          range(len(Const.OBSTACLE_POSITION))] + \
+                         [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in
+                          range(len(Const.RE_FIELD_POSITION))]
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
@@ -125,7 +126,7 @@ class GameEngine:
         elif isinstance(event, EventPlayerRotate):
             self.players[event.player_id].rotate(event.direction)
 
-        elif isinstance(event, EventPlayerAttack): # invisible players cannot attack
+        elif isinstance(event, EventPlayerAttack):  # invisible players cannot attack
             if not self.players[event.player_id].invisible():
                 self.players[event.player_id].attack()
 
@@ -150,20 +151,22 @@ class GameEngine:
             if not player.killed(): player.tick()
 
         for obstacle in self.obstacles:
-            if obstacle.killed(): self.obstacles.remove(player)
-            else: obstacle.tick()
-
-        for obstacle in self.obstacles:
-            if obstacle.killed(): self.obstacles.remove(player)
-            else: obstacle.tick()
+            if obstacle.killed():
+                self.obstacles.remove(obstacle)
+            else:
+                obstacle.tick()
 
         for bullet in self.bullets:
-            if bullet.killed(): self.bullets.remove(bullet)
-            else: bullet.tick()
+            if bullet.killed():
+                self.bullets.remove(bullet)
+            else:
+                bullet.tick()
 
         for item in self.items:
-            if item.killed(): self.items.remove(item)
-            else: item.tick()
+            if item.killed():
+                self.items.remove(item)
+            else:
+                item.tick()
 
     def update_endgame(self):
         '''
@@ -184,5 +187,3 @@ class GameEngine:
         while self.running:
             self.ev_manager.post(EventEveryTick())
             self.clock.tick(Const.FPS)
-
-
