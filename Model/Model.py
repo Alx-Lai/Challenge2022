@@ -1,11 +1,9 @@
 import random
-import time
 import pygame as pg
 
 from EventManager.EventManager import *
 from Model.GameObject.item_generator import *
 from Model.GameObject.player import *
-from Model.GameObject.obstacle import *
 import Const
 
 
@@ -80,7 +78,6 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
-        self.death_cnt = Const.PLAYER_INIT_DEATH_CNT
         self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in range(len(Const.OBSTACLE_POSITION))] + \
                          [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in range(len(Const.RE_FIELD_POSITION))]
         self.bullets = []
@@ -134,9 +131,6 @@ class GameEngine:
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
 
-        elif isinstance(event, EventPlayerRemove):
-            self.death_cnt += 1
-
     def update_menu(self):
         '''
         Update the objects in welcome scene.
@@ -154,14 +148,6 @@ class GameEngine:
         for player in self.players:
             if not player.killed(): player.tick()
 
-        for obstacle in self.obstacles:
-            if obstacle.killed(): self.obstacles.remove(player)
-            else: obstacle.tick()
-
-        for obstacle in self.obstacles:
-            if obstacle.killed(): self.obstacles.remove(player)
-            else: obstacle.tick()
-
         for bullet in self.bullets:
             if bullet.killed(): self.bullets.remove(bullet)
             else: bullet.tick()
@@ -175,48 +161,7 @@ class GameEngine:
         Update the objects in endgame scene.
         For example: scoreboard
         '''
-        for i in range(Const.PLAYER_NUMBER):
-            if self.players[i].respawn_count >= 0:
-                self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
-                print(i, self.players[i].score)
-        scoreboard = pg.display.set_mode(Const.WINDOW_SIZE)
-        scoreboard.fill((0,0,0))
-        font = pg.font.SysFont('Comic Sans MS', 20)
-        player0_score = font.render(f"Score:{self.players[0].score}", True, (255, 255, 255))
-        player1_score = font.render(f"Score:{self.players[1].score}", True, (255, 255, 255))
-        player2_score = font.render(f"Score:{self.players[2].score}", True, (255, 255, 255))
-        player3_score = font.render(f"Score:{self.players[3].score}", True, (255, 255, 255))
-        scoreboard.blit(player0_score, (10, 30))
-        scoreboard.blit(player1_score, (Const.ARENA_SIZE[0]-110, 30))
-        scoreboard.blit(player2_score, (10, Const.ARENA_SIZE[0]-40))
-        scoreboard.blit(player3_score, (Const.ARENA_SIZE[0]-110, Const.ARENA_SIZE[0]-40))
-        pg.display.flip()
-        time.sleep(10)
-        self.running = False
-        self.state_machine.push(EventQuit())
-
-    def print_information(self):
-        player0_score = self.font.render(f"Score:{self.players[0].score}", True, (255, 255, 255))
-        player1_score = self.font.render(f"Score:{self.players[1].score}", True, (255, 255, 255))
-        player2_score = self.font.render(f"Score:{self.players[2].score}", True, (255, 255, 255))
-        player3_score = self.font.render(f"Score:{self.players[3].score}", True, (255, 255, 255))
-        player0_lifespan = self.font.render(f"Lifespan:{1+self.players[0].respawn_count}", True, (255, 255, 255))
-        player1_lifespan = self.font.render(f"Lifespan:{1+self.players[1].respawn_count}", True, (255, 255, 255))
-        player2_lifespan = self.font.render(f"Lifespan:{1+self.players[2].respawn_count}", True, (255, 255, 255))
-        player3_lifespan = self.font.render(f"Lifespan:{1+self.players[3].respawn_count}", True, (255, 255, 255))
-        countdown = self.font.render(f"{int(self.timer/Const.FPS)}", True, (255, 255, 255))
-        self.screen.blit(player0_score, (10,30))
-        self.screen.blit(player1_score, (Const.ARENA_SIZE[0]-110, 30))
-        self.screen.blit(player2_score, (10, Const.ARENA_SIZE[0]-40))
-        self.screen.blit(player3_score, (Const.ARENA_SIZE[0]-110, Const.ARENA_SIZE[0]-40))
-        self.screen.blit(player0_lifespan, (10, 10))
-        self.screen.blit(player1_lifespan, (Const.ARENA_SIZE[0]-110, 10))
-        self.screen.blit(player2_lifespan, (10, Const.ARENA_SIZE[0]-60))
-        self.screen.blit(player3_lifespan, (Const.ARENA_SIZE[0]-110, Const.ARENA_SIZE[0]-60))
-        self.screen.blit(countdown, (Const.ARENA_SIZE[0]//2 - 20, 0))
-        pg.display.flip()
-        return
-        
+        pass
 
     def run(self):
         '''
@@ -227,15 +172,8 @@ class GameEngine:
         # Tell every one to start
         self.ev_manager.post(EventInitialize())
         self.timer = Const.GAME_LENGTH
-        self.screen = pg.display.set_mode(Const.WINDOW_SIZE)
-        self.font = pg.font.SysFont('Comic Sans MS', 20)
         while self.running:
             self.ev_manager.post(EventEveryTick())
-            self.print_information()
-            self.clock.tick(Const.FPS)           
-            if self.death_cnt >= 3:
-                self.state_machine.push(Const.STATE_ENDGAME)
-                self.update_endgame()
-                return
+            self.clock.tick(Const.FPS)
 
 

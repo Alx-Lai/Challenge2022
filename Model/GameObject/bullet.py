@@ -115,7 +115,6 @@ class Bullet(Base_Circle_Object):
         super().kill()
         self.tail.kill()
 
-
 class Bullet_Tail(Base_Circle_Object):
     '''
     Represent the tail of a bullet's trace.
