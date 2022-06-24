@@ -54,8 +54,8 @@ class GraphicalView:
         self.background = self.load_img("./View/source/Background.png")
 
         #music
-        #self.background_music = pg.mixer.music
-        #self.background_music.load("./View/source/background_beta.mp3")
+        self.background_music = pg.mixer.music
+        self.background_music.load("./View/source/background_beta.mp3")
         pass
 
     def notify(self, event):
@@ -105,8 +105,8 @@ class GraphicalView:
     def render_play(self):
 
         #music
-        #if not self.background_music.get_busy():
-        #    self.background_music.play()
+        if not self.background_music.get_busy():
+            self.background_music.play()
 
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
