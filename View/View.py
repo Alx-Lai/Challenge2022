@@ -51,6 +51,8 @@ class GraphicalView:
         self.item_gun = [0, self.load_img("./View/source/Machine_Gun.png"),
                          self.load_img("./View/source/Sniper.png"),
                          self.load_img("./View/source/Shotgun.png")]
+        self.normal_field = self.load_img("./View/source/normal_field.png")
+        self.RE_field = self.load_img("./View/source/RE_field.png")                
         self.background = self.load_img("./View/source/Background.png")
         self.menu = self.load_img("./View/source/Menu.png")
 
@@ -113,7 +115,9 @@ class GraphicalView:
             center = obstacle.position * Const.ARENA_GRID_SIZE
             radius = obstacle.radius * Const.ARENA_GRID_SIZE
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
-            pg.draw.rect(self.screen, pg.Color('pink') if isinstance(obstacle, RE_Field) else pg.Color('white'), rect)
+            self.print_obj(self.RE_field if isinstance(obstacle, RE_Field) else self.normal_field, Vector2(center[0] - radius, center[1] - radius),
+                           Vector2(center[0] + radius, center[1] + radius))
+            #pg.draw.rect(self.screen, pg.Color('pink') if isinstance(obstacle, RE_Field) else pg.Color('white'), rect)
 
         # draw bullets
         for bullet in self.model.bullets:
@@ -156,7 +160,7 @@ class GraphicalView:
         # draw players
         for player in self.model.players:
             if player.killed(): continue
-            print(player.position)
+            #print(player.position)
             color = Const.PLAYER_COLOR_RESPAWN[player.player_id] if player.respawning() else Const.PLAYER_COLOR[
                 player.player_id]
             center = player.position * Const.ARENA_GRID_SIZE
