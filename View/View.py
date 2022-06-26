@@ -1,3 +1,4 @@
+from cmath import cos
 import math
 import pygame as pg
 
@@ -88,10 +89,16 @@ class GraphicalView:
         pg.display.set_caption(f'{Const.WINDOW_CAPTION} - FPS: {self.model.clock.get_fps():.2f}')
 
     def print_obj(self, img, TL: Vector2, DR: Vector2, direction: Vector2 = Vector2(1, 0)):
-        angel = -direction.as_polar()[1]
-        tmp_img = pg.transform.rotate(img, angel)
-        tmp_img = pg.transform.scale(tmp_img, (DR.x - TL.x, DR.y - TL.y))
-        self.screen.blit(tmp_img, (TL.x, TL.y))
+        angle = -direction.as_polar()[1]
+        scale = abs(math.cos(math.radians(angle))) + abs(math.sin(math.radians(angle)))
+        new_x = int(scale * (DR.x - TL.x))
+        new_y = int(scale * (DR.y - TL.y))
+        diff_x = new_x - (DR.x - TL.x)
+        diff_y = new_y - (DR.y - TL.y)
+        tmp_img = pg.transform.rotate(img, angle)
+        #tmp_img = pg.transform.scale(tmp_img, (DR.x - TL.x, DR.y - TL.y))
+        tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
+        self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
 
     def render_menu(self):
         # draw background
