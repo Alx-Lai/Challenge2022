@@ -71,6 +71,7 @@ class GraphicalView:
         self.sniper_sound = pg.mixer.music.load("./View/source/sniper.mp3")
         self.shotgun_sound = pg.mixer.music.load("./View/source/shotgun.mp3")
         self.machine_gun_sound = pg.mixer.music.load("./View/source/machine_gun.mp3")
+        self.player_killed_sound = pg.mixer.music.load("./View/source/player_killed.mp3")
         '''
         pass
 
