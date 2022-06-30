@@ -1,5 +1,6 @@
 from cmath import cos
 import math
+from random import randint
 import pygame as pg
 
 from EventManager.EventManager import *
@@ -54,7 +55,10 @@ class GraphicalView:
                          self.load_img("./View/source/Shotgun.png")]
         self.normal_field = self.load_img("./View/source/normal_field.png")
         self.RE_field = self.load_img("./View/source/RE_field.png")                
-        self.background = self.load_img("./View/source/Background.png")
+        #self.background = self.load_img("./View/source/Background.png")
+        self.background_count = 0
+        self.background_color = Const.BACKGROUND_COLOR
+        self.background_top = self.load_img("./View/source/Background_top.png")
         self.menu = self.load_img("./View/source/Menu.png")
 
         #music
@@ -100,6 +104,13 @@ class GraphicalView:
         tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
         self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
 
+    def rand_backgroud_color(self, times):
+        if self.background_count == times:
+            self.background_color = Const.PLAYER_COLOR[randint(0, 3)]
+            self.background_count = 0
+        else:
+            self.background_count += 1
+
     def render_menu(self):
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
@@ -114,8 +125,9 @@ class GraphicalView:
             self.background_music.play()
 
         # draw background
-        self.screen.fill(Const.BACKGROUND_COLOR)
-        self.print_obj(self.background, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
+        self.rand_backgroud_color(Const.BACKGROUND_COLOR_SPEED)
+        self.screen.fill(self.background_color)
+        self.print_obj(self.background_top, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
 
         # draw obstacles
         for obstacle in self.model.obstacles:
@@ -181,6 +193,7 @@ class GraphicalView:
             # player
             self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(center[0] - radius, center[1] - radius),
                            Vector2(center[0] + radius, center[1] + radius), player.direction)
+
             # pg.draw.circle(self.screen, color, center, radius)
 
             # gun using time
