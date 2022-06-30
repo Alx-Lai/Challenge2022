@@ -64,6 +64,14 @@ class GraphicalView:
         #music
         self.background_music = pg.mixer.music
         self.background_music.load("./View/source/background_beta.mp3")
+        
+        '''
+        #sound
+        self.normal_gun_sound = pg.mixer.music.load("./View/source/normal_gun.mp3")
+        self.sniper_sound = pg.mixer.music.load("./View/source/sniper.mp3")
+        self.shotgun_sound = pg.mixer.music.load("./View/source/shotgun.mp3")
+        self.machine_gun_sound = pg.mixer.music.load("./View/source/machine_gun.mp3")
+        '''
         pass
 
     def notify(self, event):
@@ -210,6 +218,7 @@ class GraphicalView:
             total_respawging_time = Const.PLAYER_RESPAWN_TIME
             stop_angle = (player.respawn_timer / total_respawging_time) * 2 * math.pi
             pg.draw.arc(self.screen, Const.PLAYER_COLOR[player.player_id], rect, 0, stop_angle, 4)
+        
 
         pg.display.flip()
 
