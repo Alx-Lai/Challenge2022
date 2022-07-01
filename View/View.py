@@ -133,13 +133,13 @@ class GraphicalView:
             score_text.blit(self.screen, topleft=(self.text_start + i*self.text_interval, self.text_top))
             #draw player
             radius = player_size * Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
-            TL = (self.text_start + i*self.text_interval, self.text_top - radius)
-            self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(TL[0] - radius, TL[1] - radius),
-                           Vector2(TL[0] + radius, TL[1] + radius))
+            center = (self.text_start + i*self.text_interval, self.text_top - radius)
+            self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(center[0] - radius, center[1] - radius),
+                           Vector2(center[0] + radius, center[1] + radius))
             #draw crown
             if draw_crown == True:
                 if player_score[i] == max(player_score):
-                    self.screen.blit(self.crown, (self.text_start + i*self.text_interval, TL[1] - radius))
+                    self.screen.blit(self.crown, (self.text_start + i*self.text_interval, center[1] - radius))
             i += 1
             
 
