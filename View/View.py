@@ -44,8 +44,8 @@ class GraphicalView:
         This method is called when a new game is instantiated.
         '''
         #text position
-        self.text_interval = Const.ARENA_SIZE[0]/8.35
-        self.text_start = Const.ARENA_SIZE[0]/2 - self.text_interval*1.75
+        self.text_interval = Const.ARENA_SIZE[0]/7
+        self.text_start = Const.ARENA_SIZE[0]/2 - self.text_interval*2
         self.text_top = Const.ARENA_SIZE[1]/1.75
 
         #images
@@ -68,6 +68,7 @@ class GraphicalView:
         self.menu = self.load_img("./View/source/Menu.png")
         self.score_background = self.load_img("./View/source/score_background.png")
         self.crown = self.load_img("./View/source/crown.png")
+        self.gold_light = self.load_img("./View/source/crown.png")
 
         #music
         self.background_music = pg.mixer.music
@@ -133,13 +134,13 @@ class GraphicalView:
             score_text.blit(self.screen, topleft=(self.text_start + i*self.text_interval, self.text_top))
             #draw player
             radius = player_size * Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
-            center = (self.text_start + i*self.text_interval, self.text_top - radius)
+            center = (self.text_start + (i+0.3)*self.text_interval, self.text_top - radius)
             self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(center[0] - radius, center[1] - radius),
                            Vector2(center[0] + radius, center[1] + radius))
             #draw crown
             if draw_crown == True:
                 if player_score[i] == max(player_score):
-                    self.screen.blit(self.crown, (self.text_start + i*self.text_interval, center[1] - radius))
+                    self.screen.blit(self.crown, (self.text_start + (i+0.3)*self.text_interval, center[1] - radius))
             i += 1
             
 
