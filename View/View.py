@@ -43,6 +43,12 @@ class GraphicalView:
         '''
         This method is called when a new game is instantiated.
         '''
+        #text position
+        self.text_interval = Const.ARENA_SIZE[0]/8.35
+        self.text_start = Const.ARENA_SIZE[0]/2 - self.text_interval*1.75
+        self.text_top = Const.ARENA_SIZE[1]/1.75
+
+        #images
         self.player_images = [[self.load_img("./View/source/blue_basic.png"),self.load_img("./View/source/blue_machine_gun.png"),self.load_img("./View/source/blue_sniper.png"),self.load_img("./View/source/blue_shotgun.png")],
                               [self.load_img("./View/source/green_basic.png"),self.load_img("./View/source/green_machine_gun.png"),self.load_img("./View/source/green_sniper.png"),self.load_img("./View/source/green_shotgun.png")],
                               [self.load_img("./View/source/red_basic.png"),self.load_img("./View/source/red_machine_gun.png"),self.load_img("./View/source/red_sniper.png"),self.load_img("./View/source/red_shotgun.png")],
@@ -55,11 +61,13 @@ class GraphicalView:
                          self.load_img("./View/source/Shotgun.png")]
         self.normal_field = self.load_img("./View/source/normal_field.png")
         self.RE_field = self.load_img("./View/source/RE_field.png")                
-        #self.background = self.load_img("./View/source/Background.png")
+        self.background = self.load_img("./View/source/Background.png")
         self.background_count = 0
         self.background_color = Const.BACKGROUND_COLOR
         self.background_top = self.load_img("./View/source/Background_top.png")
         self.menu = self.load_img("./View/source/Menu.png")
+        self.score_background = self.load_img("./View/source/score_background.png")
+        self.crown = self.load_img("./View/source/crown.png")
 
         #music
         self.background_music = pg.mixer.music
@@ -109,9 +117,31 @@ class GraphicalView:
         diff_x = new_x - (DR.x - TL.x)
         diff_y = new_y - (DR.y - TL.y)
         tmp_img = pg.transform.rotate(img, angle)
-        #tmp_img = pg.transform.scale(tmp_img, (DR.x - TL.x, DR.y - TL.y))
         tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
         self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
+
+    def draw_score(self, text_size = 72, player_size = 4,draw_crown = False):
+        player_score = []
+        i = 0
+        #init score array
+        for player in self.model.players:
+            player_score.append(player.score)
+
+        for player in self.model.players:
+            #draw score
+            score_text = Text(str(int(player.score)), text_size, Const.PLAYER_COLOR[player.player_id])
+            score_text.blit(self.screen, topleft=(self.text_start + i*self.text_interval, self.text_top))
+            #draw player
+            radius = player_size * Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
+            TL = (self.text_start + i*self.text_interval, self.text_top - radius)
+            self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(TL[0] - radius, TL[1] - radius),
+                           Vector2(TL[0] + radius, TL[1] + radius))
+            #draw crown
+            if draw_crown == True:
+                if player_score[i] == max(player_score):
+                    self.screen.blit(self.crown, (self.text_start + i*self.text_interval, TL[1] - radius))
+            i += 1
+            
 
     def rand_backgroud_color(self, times):
         if self.background_count == times:
@@ -224,9 +254,22 @@ class GraphicalView:
         pg.display.flip()
 
     def render_stop(self):
-        pass
+        # draw background
+        self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
+        self.draw_score(draw_crown=True)
+        pg.display.flip()
 
     def render_endgame(self):
         # draw background
-        self.screen.fill(Const.BACKGROUND_COLOR)
+        self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
+        self.draw_score(draw_crown=True)
         pg.display.flip()
+
+class Text:
+    def __init__(self, text, size, color, font = None, antialias = True, bg = None):
+        self.font = pg.font.Font(font, size)
+        self.surface = self.font.render(text, antialias, color, bg)
+    
+    def blit(self, screen, **pos):
+        self.pos = self.surface.get_rect(**pos)
+        screen.blit(self.surface, self.pos)
