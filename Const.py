@@ -73,7 +73,7 @@ ARENA_GRID_COUNT = 30
 ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')
 BACKGROUND_COLOR_SPEED = 20
-PLAYER_COLOR = [pg.Color(0, 255, 0), pg.Color(255, 0, 255), pg.Color(255, 255, 0), pg.Color(0, 0, 255)]
+PLAYER_COLOR = [pg.Color(0, 0, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0), pg.Color(255, 255, 0)]
 PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
 
 # State machine constants
