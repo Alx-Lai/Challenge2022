@@ -156,7 +156,6 @@ class Player(Base_Circle_Object):
         if self.respawn_count <= 0:
             self.score += Const.PLAYER_ALIVE_SCORE[self.model.death_cnt]
             self.model.ev_manager.post(EventPlayerRemove(self.player_id))
-            print(self.player_id, self.score)
             super().kill()
         
         self.respawn_count -= 1
