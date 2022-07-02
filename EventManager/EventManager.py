@@ -196,3 +196,14 @@ class EventPlayerDead(BaseEvent):
 
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} get killed'
+
+class EventPlayerRemove(BaseEvent):
+    name = 'PlayerRemove event'
+    '''
+    Player gets killed.
+    '''
+    def __init__(self, player_id):
+        self.player_id = player_id
+
+    def __str__(self):
+        return f'{self.name} => player_id {self.player_id} is out of life'

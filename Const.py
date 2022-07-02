@@ -7,7 +7,7 @@ import pygame as pg
 # time unit: frame (T)
 
 FPS = 60 # frame per second
-GAME_LENGTH = 600 * FPS # temporarily set to infinity
+GAME_LENGTH = 100 * FPS # temporarily set to infinity
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
 
@@ -25,6 +25,8 @@ PLAYER_QUOTA_AUX_LINE_LENGTH = math.inf
 
 PLAYER_RESPAWN_TIME = 5 * FPS             # T
 PLAYER_MAX_RESPAWN_COUNT = [2, 2, 2, 2]
+PLAYER_INIT_DEATH_CNT = 0
+PLAYER_ALIVE_SCORE = [0, 100, 200, 300]
 
 BULLET_RADIUS = 0.2                       # L
 BULLET_REPULSION = 30 / FPS               # L / T
@@ -32,11 +34,6 @@ BULLET_SPEED = 15 / FPS                   # L / T
 BULLET_LIFESPAM = 6 * FPS                 # T
 BULLET_TRACE_TIME = 0.1 * FPS             # T
 BULLET_HIT_SCORE = 10
-ALIVE_PLAYER_NUMBER=4
-FIRST_DEATH_SCORE = 0
-SECOND_DEATH_SCORE = 100
-THIRD_DEATH_SCORE = 200
-ALIVE_SCORE = 300
 
 GUN_TYPE_NORMAL_GUN = 0
 GUN_TYPE_MACHINE_GUN = 1
@@ -80,7 +77,6 @@ ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')
 PLAYER_COLOR = [pg.Color(0, 255, 0), pg.Color(255, 0, 255), pg.Color(255, 255, 0), pg.Color(0, 0, 255)]
 PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
-
 
 # State machine constants
 STATE_POP = 0 # for convenience, not really a state which we can be in
