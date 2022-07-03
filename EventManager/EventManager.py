@@ -195,8 +195,6 @@ class EventPlayerDead(BaseEvent):
         self.player_id = player_id
 
     def __str__(self):
-<<<<<<< HEAD
-<<<<<<< HEAD
         return f'{self.name} => player_id {self.player_id} get killed'
 
 class EventPlayerRemove(BaseEvent):
@@ -209,9 +207,3 @@ class EventPlayerRemove(BaseEvent):
 
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} is out of life'
-=======
-        return f'{self.name} => player_id {self.player_id} get killed'
->>>>>>> 030ae11 (add: re field and respawning mechanism)
-=======
-        return f'{self.name} => player_id {self.player_id} get killed'
->>>>>>> 76a45f42bdaaeeb73412bc6f0d82583fed64d6fc
