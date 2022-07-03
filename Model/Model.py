@@ -78,6 +78,7 @@ class GameEngine:
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in
                           range(len(Const.OBSTACLE_POSITION))] + \
                          [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in
@@ -85,10 +86,15 @@ class GameEngine:
 =======
 <<<<<<< HEAD
 =======
+>>>>>>> 76a45f42bdaaeeb73412bc6f0d82583fed64d6fc
+=======
         self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in range(len(Const.OBSTACLE_POSITION))] + \
                          [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in range(len(Const.RE_FIELD_POSITION))]
 >>>>>>> 811508c (add: re field and respawning mechanism)
+<<<<<<< HEAD
 >>>>>>> 030ae11 (add: re field and respawning mechanism)
+=======
+>>>>>>> 76a45f42bdaaeeb73412bc6f0d82583fed64d6fc
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
@@ -134,10 +140,14 @@ class GameEngine:
             self.players[event.player_id].rotate(event.direction)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         elif isinstance(event, EventPlayerAttack):  # invisible players cannot attack
 =======
         elif isinstance(event, EventPlayerAttack): # invisible players cannot attack
 >>>>>>> 030ae11 (add: re field and respawning mechanism)
+=======
+        elif isinstance(event, EventPlayerAttack): # invisible players cannot attack
+>>>>>>> 76a45f42bdaaeeb73412bc6f0d82583fed64d6fc
             if not self.players[event.player_id].invisible():
                 self.players[event.player_id].attack()
 
@@ -161,6 +171,7 @@ class GameEngine:
         for player in self.players:
             if not player.killed(): player.tick()
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         for obstacle in self.obstacles:
             if obstacle.killed():
@@ -169,6 +180,8 @@ class GameEngine:
                 obstacle.tick()
 =======
 >>>>>>> 030ae11 (add: re field and respawning mechanism)
+=======
+>>>>>>> 76a45f42bdaaeeb73412bc6f0d82583fed64d6fc
 
         for bullet in self.bullets:
             if bullet.killed():
