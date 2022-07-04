@@ -7,71 +7,71 @@ class Helper(object):
         self.player_id = index
 
     # get game data
-
-    # get personal data
-    
-    # general
-    def get_players_id(self):
+    def get_game_remaining_time(self):
         pass
-
-    def get_players_hp(self):
-        pass
-
-    def get_players_score(self):
-        pass
-
-    # movement
-    def get_players_pos(self):
-        pass
-
-    # attack
-    def get_players_kick(self):
-        pass
-
-    def get_players_repulsion(self):
-        pass
-
-    def get_players_len(self):
-        pass
-
-    def get_players_shoot_cd(self):
-        pass
-
-    def get_players_shoot_len(self):
-        pass
-
-    # status
-
-    # get all player data
 
     # general
-    def get_allplayers_pos(self):
+    def get_self_id(self):
         pass
 
-    def get_allplayers_score(self):
+    def get_player_id(self):
+        pass
+
+    def get_player_life(self):
+        pass
+
+    def get_player_score(self):
+        pass
+
+    def get_player_respawn_time(self):
         pass
 
     # movement
+    def get_player_position(self):
+        pass
+
+    def get_player_direction(self):
+        pass
 
     # attack
+    def get_player_kick(self):
+        pass
 
-    # status
+    def get_player_repulsion(self):
+        pass
 
-    # get specific player data
+    def get_player_attack_cd(self):
+        pass
 
-    # movement
+    def get_player_next_attack(self):
+        pass
 
-    # attack
+    def get_players_attack_range(self):
+        pass
 
-    # status
+    def get_player_attack_accuracy(self):
+        pass
+
+    def get_player_aux_length(self):
+        pass
+
+    def get_player_gun_type(self):
+        pass
+
+    def get_player_gun_remaining_time(self):
+        pass
+
+    def get_bullet_info(self):
+        pass
+
 
     # get item data
-    def get_items_pos(self):
+    def get_item_info(self):
         pass
 
     # get field data
-    def get_wall_pos(self):
+    def get_wall_position(self):
         pass
 
-    def get_RE_field_pos(self):
+    def get_RE_field_position(self):
         pass
