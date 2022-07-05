@@ -30,7 +30,7 @@ class Helper(object):
 
     def get_player_respawn_time(self) -> list:
         """return all player's remaining respawn time, use id as index"""
-        return [player.respawn_timer for player in self.model.players]
+        return [player.respawn_timer // Const.FPS for player in self.model.players]
 
     # movement
     def get_player_position(self) -> list:
