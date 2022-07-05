@@ -6,8 +6,8 @@ import pygame as pg
 # length unit: a unit grid's size (L)
 # time unit: frame (T)
 
-FPS = 10 # frame per second
-GAME_LENGTH = 10 * FPS # temporarily set to infinity
+FPS = 60 # frame per second
+GAME_LENGTH = 100 * FPS # temporarily set to infinity
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
 
