@@ -20,8 +20,8 @@ class Helper(object):
         """return all player's id, use id as index"""
         return [player.player_id for player in self.model.players]
 
-    def get_player_life(self) -> list:
-        """return all player's life, use id as index"""
+    def get_player_respawn_count(self) -> list:
+        """return all player's remaining respawn count, use id as index"""
         return [player.respawn_count for player in self.model.players]
 
     def get_player_score(self) -> list:
