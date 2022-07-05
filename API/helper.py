@@ -7,31 +7,39 @@ class Helper(object):
         self.player_id = index
 
     # get game data
-    def get_game_remaining_time(self):
-        pass
+    def get_game_remaining_time(self) -> int:
+        '''return game remaining time'''
+        return self.model.timer // Const.FPS
 
     # general
-    def get_self_id(self):
-        pass
+    def get_self_id(self) -> int:
+        '''return your id '''
+        return self.player_id
 
-    def get_player_id(self):
-        pass
+    def get_player_id(self) -> list:
+        """return all player's id, use id as index"""
+        return [player.player_id for player in self.model.players]
 
-    def get_player_life(self):
-        pass
+    def get_player_life(self) -> list:
+        """return all player's life, use id as index"""
+        return [player.respawn_count for player in self.model.players]
 
-    def get_player_score(self):
-        pass
+    def get_player_score(self) -> list:
+        """return all player's score, use id as index"""
+        return [player.score for player in self.model.players]
 
-    def get_player_respawn_time(self):
-        pass
+    def get_player_respawn_time(self) -> list:
+        """return all player's remaining respawn time, use id as index"""
+        return [player.respawn_timer for player in self.model.players]
 
     # movement
-    def get_player_position(self):
-        pass
+    def get_player_position(self) -> list:
+        """return all player's position, use id as index"""
+        return [player.position for player in self.model.players]
 
-    def get_player_direction(self):
-        pass
+    def get_player_direction(self) -> list:
+        """return all player's direction, use id as index"""
+        return [player.direction for player in self.model.players]
 
     # attack
     def get_player_kick(self):
