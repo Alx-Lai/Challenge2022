@@ -1,19 +1,21 @@
 import pygame as pg
+from Model.Model import GameEngine
 import Const
 
+
 class Helper(object):
-    def __init__(self, model, index):
+    def __init__(self, model: GameEngine, index):
         self.model = model
         self.player_id = index
 
     # get game data
     def get_game_remaining_time(self) -> int:
-        '''return game remaining time'''
+        """return game remaining time"""
         return self.model.timer // Const.FPS
 
     # general
     def get_self_id(self) -> int:
-        '''return your id '''
+        """return your id"""
         return self.player_id
 
     def get_player_id(self) -> list:
@@ -42,14 +44,22 @@ class Helper(object):
         return [player.direction for player in self.model.players]
 
     # attack
-    def get_player_kick(self):
-        pass
+    def get_player_kick(self) -> list:
+        """
+        return the kick recoil of the player
+        but not include kick multiplier
+        """
+        return [player.attack_kick for player in self.model.players]
 
-    def get_player_repulsion(self):
-        pass
+    def get_player_repulsion(self) -> list:
+        """
+        return the repulsion of player's attack
+        but not include repulsion multiplier
+        """
+        return [player.bullet_repulsion for player in self.model.players]
 
     def get_player_attack_cd(self):
-        pass
+        return [player.attack_cd for player in self.model.players]
 
     def get_player_next_attack(self) -> list:
         """return the remaining time until every player's next attack in frames, use id as index."""
@@ -79,14 +89,11 @@ class Helper(object):
         """return the basic attack accuracy without multiplier from gun of every player in radian, use id as index."""
         return [player.attack_accuracy for player in self.model.players]
 
-    def get_player_gun_type(self):
-        pass
+    def get_player_gun_type(self) -> list:
+        return [player.gun.type for player in self.model.players]
 
-    def get_player_gun_remaining_time(self):
-        pass
-
-    def get_bullet_info(self):
-        pass
+    def get_player_gun_remaining_time(self) -> list:
+        return [player.gun.cd_time for player in self.model.players]
 
     # get buff info
     def get_player_buff_count(self) -> list:
@@ -120,6 +127,15 @@ class Helper(object):
             return []
         else:
             return self.get_player_buff_count()[player_id]
+
+    def get_bullet_info(self) -> list:
+        """
+        get the poisition and speed of the bullet
+        """
+        return [
+            {"speed": bullet.speed, "position": bullet.position}
+            for bullet in self.model.bullets
+        ]
 
     # get item data
     def get_item_info(self):
