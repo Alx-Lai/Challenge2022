@@ -176,22 +176,12 @@ class GameEngine:
         Update the objects in endgame scene.
         For example: scoreboard
         '''
-<<<<<<< HEAD
         if not self.alive_score_add:
             self.alive_score_add = True
             for i in range(Const.PLAYER_NUMBER):
                 if self.players[i].respawn_count >= 0:
                     self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
-                    print(i, self.players[i].score)
         # TODO: show scoreboard
-=======
-        for i in range(Const.PLAYER_NUMBER):
-            if self.players[i].respawn_count >= 0:
-                self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
-                print(i, self.players[i].score)
-        self.running = False
-        self.state_machine.push(EventQuit())
->>>>>>> remove:print_information
         
 
     def run(self):
