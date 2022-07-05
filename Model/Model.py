@@ -86,6 +86,7 @@ class GameEngine:
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
+        self.alive_score_add = False
 
     def notify(self, event: BaseEvent):
         '''
@@ -175,12 +176,13 @@ class GameEngine:
         Update the objects in endgame scene.
         For example: scoreboard
         '''
-        for i in range(Const.PLAYER_NUMBER):
-            if self.players[i].respawn_count >= 0:
-                self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
-                print(i, self.players[i].score)
-        self.running = False
-        self.state_machine.push(EventQuit())
+        if not self.alive_score_add:
+            self.alive_score_add = True
+            for i in range(Const.PLAYER_NUMBER):
+                if self.players[i].respawn_count >= 0:
+                    self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
+                    print(i, self.players[i].score)
+        # TODO: show scoreboard
         
 
     def run(self):
