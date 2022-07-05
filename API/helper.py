@@ -1,11 +1,10 @@
 import pygame as pg
-from Model.Model import GameEngine
 import Const
 from Model.GameObject.bullet import *
 
 
 class Helper(object):
-    def __init__(self, model: GameEngine, index):
+    def __init__(self, model, index):
         self.model = model
         self.player_id = index
 
@@ -146,12 +145,13 @@ class Helper(object):
         get the poisition and speed of the bullet
         """
         return [
-            {"speed": bullet.speed, "position": bullet.position}
-            for bullet in self.model.bullets
+            {
+                "speed": bullet.speed, "position": bullet.position,
+                "repulsion": bullet.repulsion, "lifespam": bullet.lifespam,
+                "attacker": bullet.attacker.player_id
+            }
+            for bullet in self.model.bullets if isinstance(bullet, Bullet)
         ]
-
-    def get_player_gun_remaining_time(self):
-        pass
 
     # get bullet data
     def get_bullet_position(self) -> list:
@@ -176,7 +176,7 @@ class Helper(object):
 
     def get_bullet_attacker(self) -> list:
         """return all bullet's attacker's id"""
-        return [bullet.attacker.id for bullet in self.model.bullets \
+        return [bullet.attacker.player_id for bullet in self.model.bullets \
                 if isinstance(bullet, Bullet)]
 
     # get item data
