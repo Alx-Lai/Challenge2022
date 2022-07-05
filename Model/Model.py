@@ -6,6 +6,7 @@ from EventManager.EventManager import *
 from Model.GameObject.item_generator import *
 from Model.GameObject.player import *
 from Model.GameObject.obstacle import *
+from API.helper import *
 import Const
 
 
@@ -193,9 +194,34 @@ class GameEngine:
         # Tell every one to start
         self.ev_manager.post(EventInitialize())
         self.timer = Const.GAME_LENGTH
+        self.screen = pg.display.set_mode(Const.WINDOW_SIZE)
+        self.font = pg.font.SysFont('Comic Sans MS', 20)
+        # test start
+        tester = Helper(self, 0)
+        # test end
         while self.running:
             self.ev_manager.post(EventEveryTick())
             self.clock.tick(Const.FPS)           
+            # test start
+            print("game clock:", tester.get_game_remaining_time())
+            print("my id:", tester.get_self_id())
+            print("players' id:", tester.get_player_id())
+            print("players' hp:", tester.get_player_respawn_time())
+            print("players' score:", tester.get_player_score())
+            print("players' pos:", tester.get_player_position())
+            print("players' respawn time:", tester.get_player_respawn_time())
+            print("players' direction:", tester.get_player_direction())
+            print("players' kick:", tester.get_player_kick())
+            print("players' repulsion:", tester.get_player_repulsion())
+            print("players' attack cd:", tester.get_player_attack_cd())
+            print("players' gun type:", tester.get_player_gun_type())
+            print("-----------------")
+            print("bullet pos:", tester.get_bullet_position())
+            print("bullet speed:", tester.get_bullet_speed())
+            print("bullet repulsion:", tester.get_bullet_repulsion())
+            print("bullet lifespame:", tester.get_bullet_lifespam())
+            print("bullet attacker:", tester.get_bullet_attacker())
+            # test end
             if self.death_cnt >= 3:
                 self.state_machine.push(Const.STATE_ENDGAME)
 
