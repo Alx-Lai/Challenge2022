@@ -1,37 +1,42 @@
 import pygame as pg
+from Model.Model import *
 import Const
 
 class Helper(object):
-    def __init__(self, model, index):
+    def __init__(self, model: GameEngine, index):
         self.model = model
         self.player_id = index
 
     # get game data
     def get_game_remaining_time(self):
-        pass
+        return self.model.timer
 
     # general
     def get_self_id(self):
-        pass
+        return self.player_id
 
     def get_player_id(self):
-        pass
+        return [player.player_id for player in self.model.players]
 
     def get_player_life(self):
-        pass
+        return [player.respawn_count for player in self.model.players]
 
     def get_player_score(self):
-        pass
+        return [player.score for player in self.model.players]
 
     def get_player_respawn_time(self):
-        pass
+        """
+        If the player is respawning, return how many remaining time for
+        that player need to respawn
+        """
+        return [player.respawn_timer for player in self.model.players if player.respawning()]
 
     # movement
     def get_player_position(self):
-        pass
+        return [player.position for player in self.model.players]
 
     def get_player_direction(self):
-        pass
+        return [player.direction for player in self.model.players]
 
     # attack
     def get_player_kick(self):
