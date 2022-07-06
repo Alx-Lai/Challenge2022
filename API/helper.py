@@ -54,7 +54,7 @@ class Helper(object):
         return [player.attack_kick * player.gun.attack_kick_multiplier \
                 * Const.FPS for player in self.model.players]
 
-    def get_player_repulsion(self):
+    def get_player_repulsion(self) -> list:
         """return all player's repulsion, 
         id as index, 0.1 block as unit.
         """
@@ -62,7 +62,7 @@ class Helper(object):
                 player.gun.bullet_repulsion_multiplier * Const.FPS \
                 for player in self.model.players]
 
-    def get_player_attack_cd(self):
+    def get_player_attack_cd(self) -> list:
         """return all player's attack cd, id as index,
         1 frame as unit
         """
@@ -152,32 +152,6 @@ class Helper(object):
             }
             for bullet in self.model.bullets if isinstance(bullet, Bullet)
         ]
-
-    # get bullet data
-    def get_bullet_position(self) -> list:
-        """return all bullet's position"""
-        return [bullet.position for bullet in self.model.bullets \
-                if isinstance(bullet, Bullet)]
-
-    def get_bullet_speed(self) -> list:
-        """return all bullet's position"""
-        return [bullet.speed for bullet in self.model.bullets \
-                if isinstance(bullet, Bullet)]
-
-    def get_bullet_repulsion(self) -> list:
-        """return all bullet's repulsion"""
-        return [bullet.repulsion for bullet in self.model.bullets \
-                if isinstance(bullet, Bullet)]
-
-    def get_bullet_lifespam(self) -> list:
-        """return all bullet's lifespam, 1 frame as unit"""
-        return [bullet.lifespam for bullet in self.model.bullets \
-                if isinstance(bullet, Bullet)]
-
-    def get_bullet_attacker(self) -> list:
-        """return all bullet's attacker's id"""
-        return [bullet.attacker.player_id for bullet in self.model.bullets \
-                if isinstance(bullet, Bullet)]
 
     # get item data
     def get_item_info(self):
