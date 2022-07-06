@@ -18,6 +18,7 @@ class Gun:
         self.attack_kick_multiplier = Const.GUN_ATTACK_KICK_MULTIPLIER[gun_type]
         self.aux_line_length_multiplier = Const.GUN_AUX_LINE_LENGTH_MULTIPLIER[gun_type]
 
+        self.bullet_lifespan_multiplier = Const.GUN_BULLET_LIFESPAN_MULTIPLIER[gun_type]
         self.bullet_trace_time_multiplier = Const.GUN_BULLET_TRACE_TIME_MULTIPLIER[gun_type]
         self.bullet_repulsion_multiplier = Const.GUN_BULLET_REPULSION_MULTIPLIER[gun_type]
     
@@ -44,6 +45,7 @@ class Gun:
         self.cd_time = round(player.attack_cd * self.attack_cd_multiplier)
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         self.model.bullets.append(Bullet(self.model, player, player.direction, \
+                                         player.bullet_lifespan * self.bullet_lifespan_multiplier, \
                                          player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                          player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
         self.model.ev_manager.post(EventPlayerAttackSuccess(player.player_id, self.type))
@@ -105,6 +107,7 @@ class Shotgun(Gun):
         for delta in range(-2, 3, 1):
             direction = player.direction.rotate_rad(delta * (Const.SHOTGUN_SPREAD_ANGLE / 2))
             self.model.bullets.append(Bullet(self.model, player, direction, \
+                                             player.bullet_lifespan * self.bullet_lifespan_multiplier, \
                                              player.bullet_trace_time * self.bullet_trace_time_multiplier, \
                                              player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
         self.model.ev_manager.post(EventPlayerAttackSuccess(player.player_id, self.type))

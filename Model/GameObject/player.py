@@ -20,6 +20,7 @@ class Player(Base_Circle_Object):
         self.attack_kick = Const.PLAYER_ATTACK_KICK
         self.aux_line_length = Const.PLAYER_AUX_LINE_LENGTH
 
+        self.bullet_lifespan = Const.BULLET_LIFESPAN
         self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
 
