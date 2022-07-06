@@ -1,5 +1,5 @@
 import Const
-import math
+import random
 from EventManager.EventManager import *
 from Model.GameObject.bullet import *
 
@@ -14,12 +14,15 @@ class Gun:
         self.cd_time = 0
 
         self.use_time = Const.GUN_USE_TIME[gun_type]
-        self.attack_cd_multiplier = Const.GUN_ATTACK_CD_MULTIPLIER[gun_type]
+        self.attack_speed_multiplier = Const.GUN_ATTACK_SPEED_MULTIPLIER[gun_type]
         self.attack_kick_multiplier = Const.GUN_ATTACK_KICK_MULTIPLIER[gun_type]
+        self.attack_ammo_multiplier = Const.GUN_ATTACK_AMMO_MULTIPLIER[gun_type]
         self.aux_line_length_multiplier = Const.GUN_AUX_LINE_LENGTH_MULTIPLIER[gun_type]
 
+        self.bullet_lifespan_multiplier = Const.GUN_BULLET_LIFESPAN_MULTIPLIER[gun_type]
         self.bullet_trace_time_multiplier = Const.GUN_BULLET_TRACE_TIME_MULTIPLIER[gun_type]
         self.bullet_repulsion_multiplier = Const.GUN_BULLET_REPULSION_MULTIPLIER[gun_type]
+        self.bullet_accuracy_multiplier = Const.GUN_BULLET_ACCURACY_MULTIPLIER[gun_type]
     
     def tick(self):
         '''
@@ -41,13 +44,18 @@ class Gun:
             return
         
         player = self.player
-        self.cd_time = round(player.attack_cd * self.attack_cd_multiplier)
+        self.cd_time = round(1 / (player.attack_speed * self.attack_speed_multiplier) * Const.FPS)
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
-        self.model.bullets.append(Bullet(self.model, player, player.direction, \
-                                         player.bullet_trace_time * self.bullet_trace_time_multiplier, \
-                                         player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
+        attack_range = player.attack_accuracy * self.bullet_accuracy_multiplier
+        attack_ammo = player.attack_ammo * self.attack_ammo_multiplier
+        for i in range(attack_ammo):
+            direction = player.direction.rotate_rad(random.uniform(-attack_range, attack_range))
+            self.model.bullets.append(Bullet(self.model, player, direction, \
+                                            player.bullet_lifespan * self.bullet_lifespan_multiplier, \
+                                            player.bullet_trace_time * self.bullet_trace_time_multiplier, \
+                                            player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
         self.model.ev_manager.post(EventPlayerAttackSuccess(player.player_id, self.type))
-    
+
     def in_cd(self):
         '''
         Check if the gun is still in cooldown.
@@ -92,19 +100,3 @@ class Shotgun(Gun):
     def __init__(self, model, player):
         super().__init__(model, player, Const.GUN_TYPE_SHOTGUN)
     
-    def shoot(self):
-        '''
-        Fire 5 bullets.
-        '''
-        if self.in_cd():
-            return
-        
-        player = self.player
-        self.cd_time = player.attack_cd * self.attack_cd_multiplier
-        player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
-        for delta in range(-2, 3, 1):
-            direction = player.direction.rotate_rad(delta * (Const.SHOTGUN_SPREAD_ANGLE / 2))
-            self.model.bullets.append(Bullet(self.model, player, direction, \
-                                             player.bullet_trace_time * self.bullet_trace_time_multiplier, \
-                                             player.bullet_repulsion * self.bullet_repulsion_multiplier, self.type))
-        self.model.ev_manager.post(EventPlayerAttackSuccess(player.player_id, self.type))

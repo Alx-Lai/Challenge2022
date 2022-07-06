@@ -122,12 +122,16 @@ class GraphicalView:
 
             color = Const.PLAYER_COLOR_RESPAWN[player.player_id] if player.respawning() else Const.PLAYER_COLOR[player.player_id]
             center = player.position * Const.ARENA_GRID_SIZE
-            aux_line_end = center + player.direction * (player.aux_line_length + 0.5) * Const.ARENA_GRID_SIZE
             radius = Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
 
             # aux_line
-            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_end)
+            aux_line_length = (player.aux_line_length + 0.5) * Const.ARENA_GRID_SIZE
+            attack_accuracy = player.attack_accuracy * player.gun.bullet_accuracy_multiplier
+            aux_line_left_end = center + player.direction.rotate_rad(-attack_accuracy) * aux_line_length
+            aux_line_right_end = center + player.direction.rotate_rad(attack_accuracy) * aux_line_length
+            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_left_end)
+            pg.draw.aaline(self.screen, pg.Color('white'), center, aux_line_right_end)
 
             # player
             pg.draw.circle(self.screen, color, center, radius)
@@ -138,7 +142,7 @@ class GraphicalView:
             pg.draw.arc(self.screen, pg.Color('white'), rect, 0, stop_angle, 8)
 
             # gun cd
-            total_cd = round(player.attack_cd * player.gun.attack_cd_multiplier)
+            total_cd = round(1 / (player.attack_speed * player.gun.attack_speed_multiplier) * Const.FPS)
             stop_angle = (player.gun.cd_time / total_cd) * 2 * math.pi
             pg.draw.arc(self.screen, pg.Color('red'), rect, 0, stop_angle, 4)
 

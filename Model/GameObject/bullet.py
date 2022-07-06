@@ -8,7 +8,7 @@ class Bullet(Base_Circle_Object):
     '''
     Represent a bullet shot by a gun.
     '''
-    def __init__(self, model, player, direction, trace_time, repulsion, gun_type):
+    def __init__(self, model, player, direction, lifespan, trace_time, repulsion, gun_type):
         super().__init__(model, copy.deepcopy(player.position), Const.BULLET_RADIUS)
 
         self.tail = Bullet_Tail(model, self, player, direction, trace_time)
@@ -21,7 +21,7 @@ class Bullet(Base_Circle_Object):
         self.speed = direction * Const.BULLET_SPEED
         self.repulsion = repulsion
 
-        self.lifespam = Const.BULLET_LIFESPAM
+        self.lifespan = lifespan
 
     def tick(self):
         '''
@@ -30,8 +30,8 @@ class Bullet(Base_Circle_Object):
         self.position += self.speed
         self.bounce()
 
-        self.lifespam -= 1
-        if self.lifespam <= 0:
+        self.lifespan -= 1
+        if self.lifespan <= 0:
             self.kill()
         
         if self.attacker_proof and not self.trace_collide_object(self.attacker):
