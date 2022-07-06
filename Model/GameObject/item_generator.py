@@ -17,7 +17,7 @@ class Item_Generator:
             if random.randint(1, 2) == 1:
                 px = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_BUFF_RADIUS) + Const.ITEM_BUFF_RADIUS
                 py = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_BUFF_RADIUS) + Const.ITEM_BUFF_RADIUS
-                generated_item = Item_Buff(self.model, Vector2(px, py), random.randint(1, 3))
+                generated_item = Item_Buff(self.model, Vector2(px, py), random.randint(1, 4))
             else:
                 px = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_GUN_RADIUS) + Const.ITEM_GUN_RADIUS
                 py = random.random() * (Const.ARENA_GRID_COUNT - 2 * Const.ITEM_GUN_RADIUS) + Const.ITEM_GUN_RADIUS

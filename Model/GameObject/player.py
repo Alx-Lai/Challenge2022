@@ -18,6 +18,8 @@ class Player(Base_Circle_Object):
 
         self.attack_cd = Const.PLAYER_ATTACK_CD
         self.attack_kick = Const.PLAYER_ATTACK_KICK
+        self.attack_accuracy = Const.PLAYER_ATTACK_ACCURACY
+        self.attack_ammo = Const.PLAYER_ATTACK_AMMO
         self.aux_line_length = Const.PLAYER_AUX_LINE_LENGTH
 
         self.bullet_lifespan = Const.BULLET_LIFESPAN
@@ -25,6 +27,7 @@ class Player(Base_Circle_Object):
         self.bullet_repulsion = Const.BULLET_REPULSION
 
         self.quota_attack_cd = Const.PLAYER_QUOTA_ATTACK_CD
+        self.quota_attack_accuracy = Const.PLAYER_QUOTA_ATTACK_ACCURACY
         self.quota_repulsion = Const.PLAYER_QUOTA_REPULSION
         self.quota_aux_line_length = Const.PLAYER_QUOTA_AUX_LINE_LENGTH
 
@@ -127,6 +130,8 @@ class Player(Base_Circle_Object):
         match buff_type:
             case Const.BUFF_TYPE_ATTACK_CD:
                 return self.quota_attack_cd > 0
+            case Const.BUFF_TYPE_ATTACK_ACCURACY:
+                return self.quota_attack_accuracy > 0
             case Const.BUFF_TYPE_REPULSION:
                 return self.quota_repulsion > 0
             case Const.BUFF_TYPE_AUX_LINE_LENGTH:
@@ -141,6 +146,9 @@ class Player(Base_Circle_Object):
             case Const.BUFF_TYPE_ATTACK_CD:
                 self.attack_cd += Const.BUFF_VALUE_ATTACK_CD
                 self.quota_attack_cd -= 1
+            case Const.BUFF_TYPE_ATTACK_ACCURACY:
+                self.attack_accuracy += Const.BUFF_VALUE_ATTACK_ACCURACY
+                self.quota_attack_accuracy -= 1
             case Const.BUFF_TYPE_REPULSION:
                 self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
                 self.quota_repulsion -= 1
