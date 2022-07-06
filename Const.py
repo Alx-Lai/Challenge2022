@@ -16,7 +16,7 @@ PLAYER_BASE_SPEED = 10 / FPS              # L / T
 PLAYER_ROTATION_SPEED = 3 / FPS           # radian / T
 
 PLAYER_ATTACK_SPEED = 0.5                 # bullet / T
-PLAYER_ATTACK_KICK = 10 / FPS             # L / T
+PLAYER_ATTACK_KICK = 1 / 10               # speed 
 PLAYER_ATTACK_ACCURACY = 0.25             # radian
 PLAYER_ATTACK_AMMO = 1                    # bullet
 PLAYER_AUX_LINE_LENGTH = 1                # L
@@ -31,7 +31,7 @@ PLAYER_INIT_DEATH_CNT = 0
 PLAYER_ALIVE_SCORE = [0, 100, 200, 300]
 
 BULLET_RADIUS = 0.2                       # L
-BULLET_REPULSION = 30 / FPS               # L / T
+BULLET_REPULSION = 3 / 10                 # speed
 BULLET_SPEED = 15 / FPS                   # L / T
 BULLET_LIFESPAN = 6 * FPS                 # T
 BULLET_TRACE_TIME = 0.1 * FPS             # T
