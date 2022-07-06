@@ -16,7 +16,7 @@ class Player(Base_Circle_Object):
         self.score = 0
         self.gun = Normal_Gun(model, self)
 
-        self.attack_cd = Const.PLAYER_ATTACK_CD
+        self.attack_speed = Const.PLAYER_ATTACK_SPEED
         self.attack_kick = Const.PLAYER_ATTACK_KICK
         self.attack_accuracy = Const.PLAYER_ATTACK_ACCURACY
         self.attack_ammo = Const.PLAYER_ATTACK_AMMO
@@ -26,7 +26,7 @@ class Player(Base_Circle_Object):
         self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
 
-        self.quota_attack_cd = Const.PLAYER_QUOTA_ATTACK_CD
+        self.quota_attack_speed = Const.PLAYER_QUOTA_ATTACK_SPEED
         self.quota_repulsion = Const.PLAYER_QUOTA_REPULSION
         self.quota_attack_accuracy = Const.PLAYER_QUOTA_ATTACK_ACCURACY
 
@@ -127,8 +127,8 @@ class Player(Base_Circle_Object):
         Check if the quota of a buff is enough
         '''
         match buff_type:
-            case Const.BUFF_TYPE_ATTACK_CD:
-                return self.quota_attack_cd > 0
+            case Const.BUFF_TYPE_ATTACK_SPEED:
+                return self.quota_attack_speed > 0
             case Const.BUFF_TYPE_REPULSION:
                 return self.quota_repulsion > 0
             case Const.BUFF_TYPE_ATTACK_ACCURACY:
@@ -140,9 +140,9 @@ class Player(Base_Circle_Object):
         Add permanent buff to the player.
         '''
         match buff_type:
-            case Const.BUFF_TYPE_ATTACK_CD:
-                self.attack_cd += Const.BUFF_VALUE_ATTACK_CD
-                self.quota_attack_cd -= 1
+            case Const.BUFF_TYPE_ATTACK_SPEED:
+                self.attack_speed += Const.BUFF_VALUE_ATTACK_SPEED
+                self.quota_attack_speed -= 1
             case Const.BUFF_TYPE_REPULSION:
                 self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
                 self.quota_repulsion -= 1

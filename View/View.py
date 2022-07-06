@@ -142,7 +142,7 @@ class GraphicalView:
             pg.draw.arc(self.screen, pg.Color('white'), rect, 0, stop_angle, 8)
 
             # gun cd
-            total_cd = round(player.attack_cd * player.gun.attack_cd_multiplier)
+            total_cd = round(1 / (player.attack_speed * player.gun.attack_speed_multiplier) * Const.FPS)
             stop_angle = (player.gun.cd_time / total_cd) * 2 * math.pi
             pg.draw.arc(self.screen, pg.Color('red'), rect, 0, stop_angle, 4)
 

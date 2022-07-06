@@ -14,7 +14,7 @@ class Gun:
         self.cd_time = 0
 
         self.use_time = Const.GUN_USE_TIME[gun_type]
-        self.attack_cd_multiplier = Const.GUN_ATTACK_CD_MULTIPLIER[gun_type]
+        self.attack_speed_multiplier = Const.GUN_ATTACK_SPEED_MULTIPLIER[gun_type]
         self.attack_kick_multiplier = Const.GUN_ATTACK_KICK_MULTIPLIER[gun_type]
         self.attack_ammo_multiplier = Const.GUN_ATTACK_AMMO_MULTIPLIER[gun_type]
         self.aux_line_length_multiplier = Const.GUN_AUX_LINE_LENGTH_MULTIPLIER[gun_type]
@@ -44,7 +44,7 @@ class Gun:
             return
         
         player = self.player
-        self.cd_time = round(player.attack_cd * self.attack_cd_multiplier)
+        self.cd_time = round(1 / (player.attack_speed * self.attack_speed_multiplier) * Const.FPS)
         player.knock_back(player.attack_kick * self.attack_kick_multiplier, -player.direction)
         attack_range = player.attack_accuracy * self.bullet_accuracy_multiplier
         attack_ammo = player.attack_ammo * self.attack_ammo_multiplier
