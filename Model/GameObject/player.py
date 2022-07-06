@@ -27,8 +27,8 @@ class Player(Base_Circle_Object):
         self.bullet_repulsion = Const.BULLET_REPULSION
 
         self.quota_attack_cd = Const.PLAYER_QUOTA_ATTACK_CD
-        self.quota_attack_accuracy = Const.PLAYER_QUOTA_ATTACK_ACCURACY
         self.quota_repulsion = Const.PLAYER_QUOTA_REPULSION
+        self.quota_attack_accuracy = Const.PLAYER_QUOTA_ATTACK_ACCURACY
 
         self.death_count = 0
         self.respawn_count = Const.PLAYER_MAX_RESPAWN_COUNT[player_id]
@@ -129,10 +129,10 @@ class Player(Base_Circle_Object):
         match buff_type:
             case Const.BUFF_TYPE_ATTACK_CD:
                 return self.quota_attack_cd > 0
-            case Const.BUFF_TYPE_ATTACK_ACCURACY:
-                return self.quota_attack_accuracy > 0
             case Const.BUFF_TYPE_REPULSION:
                 return self.quota_repulsion > 0
+            case Const.BUFF_TYPE_ATTACK_ACCURACY:
+                return self.quota_attack_accuracy > 0
 
 
     def buff(self, buff_type):
@@ -143,12 +143,12 @@ class Player(Base_Circle_Object):
             case Const.BUFF_TYPE_ATTACK_CD:
                 self.attack_cd += Const.BUFF_VALUE_ATTACK_CD
                 self.quota_attack_cd -= 1
-            case Const.BUFF_TYPE_ATTACK_ACCURACY:
-                self.attack_accuracy += Const.BUFF_VALUE_ATTACK_ACCURACY
-                self.quota_attack_accuracy -= 1
             case Const.BUFF_TYPE_REPULSION:
                 self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
                 self.quota_repulsion -= 1
+            case Const.BUFF_TYPE_ATTACK_ACCURACY:
+                self.attack_accuracy += Const.BUFF_VALUE_ATTACK_ACCURACY
+                self.quota_attack_accuracy -= 1
         self.model.ev_manager.post(EventPlayerBuffed(self.player_id, buff_type))
 
     
