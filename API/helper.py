@@ -11,8 +11,8 @@ class Helper(object):
 
     # get game data
     def get_game_remaining_time(self) -> int:
-        """return game remaining time"""
-        return self.model.timer // Const.FPS
+        """return game remaining time, use 1 frame as unit"""
+        return self.model.timer
 
     # general
     def get_self_id(self) -> int:
@@ -35,10 +35,9 @@ class Helper(object):
 
     def get_player_respawn_time(self) -> list:
         """return all player's remaining respawn time, 
-        use id as index.
+        use id as index, 1 frame as unit.
         """
-        return [player.respawn_timer // Const.FPS \
-                for player in self.model.players]
+        return [player.respawn_timer for player in self.model.players]
 
     # movement
     def get_player_position(self) -> list:
