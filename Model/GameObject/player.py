@@ -56,6 +56,7 @@ class Player(Base_Circle_Object):
                     self.kill()
                     return
 
+                self.model.ev_manager.post(EventPlayerHitWall())
                 dx = (self.position - obstacle.position).x
                 dy = (self.position - obstacle.position).y
                 if abs(dx) < obstacle.radius or abs(dy) < obstacle.radius:

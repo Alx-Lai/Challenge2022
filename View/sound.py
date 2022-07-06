@@ -14,6 +14,7 @@ class Audio():
     player_died_sound = pg.mixer.Sound("./View/source/player_died.wav")
     player_killed_sound = pg.mixer.Sound("./View/source/player_killed.mp3")
     player_get_hit_sound = pg.mixer.Sound("./View/source/wall_bump.mp3")
+    player_hit_wall_sound = pg.mixer.Sound("./View/source/wall_bump.mp3")
     player_pick_up_item_sound = pg.mixer.Sound("./View/source/pick_up_item.mp3")
     switch_gun_sound = pg.mixer.Sound("./View/source/switch_weapon.mp3")
 
@@ -32,6 +33,7 @@ class Audio():
             self.player_killed_sound.set_volume(0.5)
             self.player_pick_up_item_sound.set_volume(0.4)
             self.player_get_hit_sound.set_volume(0.7)
+            self.player_hit_wall_sound.set_volume(0.2)
             self.switch_gun_sound.set_volume(0.7)
 
     
@@ -62,6 +64,9 @@ class Audio():
         elif isinstance(event, EventPlayerGetHit):
             self.player_get_hit_sound.play()
 
+        elif isinstance(event, EventPlayerHitWall):
+            self.player_hit_wall_sound.play()
+        
         elif isinstance(event, EventInitialize):
             self.menu_music.play(-1)
         
