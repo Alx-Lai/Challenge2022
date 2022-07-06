@@ -50,16 +50,15 @@ class Helper(object):
 
     # attack
     def get_player_kick(self) -> list:
-        """return all player's kick, id as index, 0.1 block as unit."""
-        return [player.attack_kick * player.gun.attack_kick_multiplier \
-                * Const.FPS for player in self.model.players]
+        """return all player's kick, id as index, grid as unit."""
+        return [player.attack_kick * player.gun.attack_kick_multiplier * 10 \
+                for player in self.model.players]
 
     def get_player_repulsion(self) -> list:
         """return all player's repulsion, 
-        id as index, 0.1 block as unit.
+        id as index, grid as unit.
         """
-        return [player.bullet_repulsion * \
-                player.gun.bullet_repulsion_multiplier * Const.FPS \
+        return [player.bullet_repulsion * player.gun.bullet_repulsion_multiplier * 10 \
                 for player in self.model.players]
 
     def get_player_attack_cd(self) -> list:
