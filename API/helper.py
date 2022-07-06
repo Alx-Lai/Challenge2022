@@ -1,6 +1,7 @@
 import pygame as pg
 import Const
 from Model.GameObject.bullet import *
+from Model.GameObject.item import *
 
 
 class Helper(object):
@@ -141,9 +142,7 @@ class Helper(object):
             return self.get_player_buff_count()[player_id]
 
     def get_bullet_info(self) -> list:
-        """
-        get the poisition and speed of the bullet
-        """
+        """get the information of the bullet."""
         return [
             {
                 "speed": bullet.speed, "position": bullet.position,
@@ -154,8 +153,33 @@ class Helper(object):
         ]
 
     # get item data
-    def get_item_info(self):
-        pass
+    def get_gun_item_info(self) -> list:
+        """get the position and type of the gun items."""
+        return [
+            {
+                "position": item.position, "type": item.type
+            }
+            for item in self.model.items if isinstance(item, Item_Gun)
+        ]
+
+    def get_buff_item_info(self) -> list:
+        """get the position and type of the buff items."""
+        return [
+            {
+                "position": item.position, "type": item.type
+            }
+            for item in self.model.items if isinstance(item, Item_Buff)
+        ]
+
+    def get_specific_gun_item_info(self, gun_type: int) -> list:
+        """get the position and type of specific gun items."""
+        return [item_info for item_info in self.get_gun_item_info() \
+                if item_info["type"] == gun_type]
+
+    def get_specific_buff_item_info(self, buff_type: int) -> list:
+        """get the position and type of specific buff items."""
+        return [item_info for item_info in self.get_buff_item_info() \
+                if item_info["type"] == buff_type]
 
     # get field data
     def get_wall_position(self):
