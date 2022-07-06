@@ -71,7 +71,7 @@ class Audio():
             self.menu_music.play(-1)
         
         elif isinstance(event, EventStop):
-            pg.mixer.unpause()
+            pg.mixer.pause()
                 
         elif isinstance(event, EventContinue):
             pg.mixer.unpause()
