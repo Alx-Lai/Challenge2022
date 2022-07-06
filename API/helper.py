@@ -2,7 +2,7 @@ import pygame as pg
 import Const
 from Model.GameObject.bullet import *
 from Model.GameObject.item import *
-
+from Model.GameObject.obstacle import *
 
 class Helper(object):
     def __init__(self, model, index):
@@ -104,7 +104,7 @@ class Helper(object):
         return [player.gun.type for player in self.model.players]
 
     def get_player_gun_remaining_time(self) -> list:
-        return [player.gun.cd_time for player in self.model.players]
+        return [player.gun.use_time for player in self.model.players]
 
     # get buff info
     def get_player_buff_count(self) -> list:
@@ -166,8 +166,11 @@ class Helper(object):
                 if item_info["type"] == item_type]
 
     # get field data
-    def get_wall_position(self):
-        pass
+    def get_wall_position(self) -> list:
+        """return all obstacles"""
+        return [wall.position for wall in self.model.obstacles]
 
-    def get_RE_field_position(self):
-        pass
+    def get_RE_field_position(self) -> list:
+        """return RE_Field obstacles"""
+        return [RE_field.position for RE_field in self.model.obstacles \
+                if isinstance(RE_field,RE_Field)]
