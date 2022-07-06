@@ -70,22 +70,6 @@ class GraphicalView:
         self.crown = self.load_img("./View/source/crown.png")
         self.gold_light = self.load_img("./View/source/crown.png")
 
-        #music
-        self.background_music = pg.mixer.music
-        self.background_music.load("./View/source/background_beta.mp3")
-        
-        '''
-        #sound
-        self.normal_gun_sound = pg.mixer.music.load("./View/source/normal_gun.mp3")
-        self.sniper_sound = pg.mixer.music.load("./View/source/sniper.mp3")
-        self.shotgun_sound = pg.mixer.music.load("./View/source/shotgun.mp3")
-        self.machine_gun_sound = pg.mixer.music.load("./View/source/machine_gun.mp3")
-        self.player_killed_sound = pg.mixer.music.load("./View/source/player_killed.mp3")
-        self.player_wall_bump_sound = pg.mixer.music.load("./View/source/wall_bump.mp3")
-        self.player_pick_up_item_sound = pg.mixer.music.load("./View/source/pick_up_item.mp3")
-        '''
-        pass
-
     def notify(self, event):
         '''
         Called by EventManager when a event occurs.
@@ -161,11 +145,6 @@ class GraphicalView:
         pg.display.flip()
 
     def render_play(self):
-
-        #music
-        if not self.background_music.get_busy():
-            self.background_music.play()
-
         # draw background
         self.rand_backgroud_color(Const.BACKGROUND_COLOR_SPEED)
         self.screen.fill(self.background_color)

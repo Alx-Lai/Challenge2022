@@ -5,6 +5,7 @@ from Model.Model import GameEngine
 
 class Audio():
     pg.mixer.init()
+    background_music = pg.mixer.Sound("./View/source/background_beta.mp3")
     normal_gun_sound = pg.mixer.Sound("./View/source/normal_gun.mp3")
     sniper_sound = pg.mixer.Sound("./View/source/sniper.mp3")
     shotgun_sound = pg.mixer.Sound("./View/source/shotgun.mp3")
@@ -20,6 +21,7 @@ class Audio():
             self.model = model
             ev_manager.register_listener(self)
 
+            self.background_music.set_volume(1)
             self.normal_gun_sound.set_volume(0.2)
             self.sniper_sound.set_volume(0.2)
             self.shotgun_sound.set_volume(0.1)
@@ -57,4 +59,8 @@ class Audio():
 
         elif isinstance(event, EventPlayerGetHit):
             self.player_get_hit_sound.play()
+
+        elif isinstance(event, EventStateChange):
+            if event.state in {Const.STATE_PLAY} and self.background_music.get_num_channels() == 0:
+                self.background_music.play(-1)
         
