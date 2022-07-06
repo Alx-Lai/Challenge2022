@@ -4,6 +4,7 @@ from EventManager.EventManager import EventManager
 from Model.Model import GameEngine
 from Controller.Controller import Controller
 from View.View import GraphicalView
+from View.sound import Audio
 
 def main():
     # Initialization
@@ -14,6 +15,7 @@ def main():
     model      = GameEngine(ev_manager)
     controller = Controller(ev_manager, model)
     view       = GraphicalView(ev_manager, model)
+    sound      = Audio(ev_manager, model)
 
     # Main loop
     model.run()
