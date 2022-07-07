@@ -151,33 +151,19 @@ class Helper(object):
         ]
 
     # get item data
-    def get_gun_item_info(self) -> list:
-        """get the position and type of the gun items."""
+    def get_item_info(self) -> list:
+        """get the position and type of the items."""
         return [
             {
                 "position": item.position, "type": item.type
             }
-            for item in self.model.items if isinstance(item, Item_Gun)
+            for item in self.model.items
         ]
 
-    def get_buff_item_info(self) -> list:
-        """get the position and type of the buff items."""
-        return [
-            {
-                "position": item.position, "type": item.type
-            }
-            for item in self.model.items if isinstance(item, Item_Buff)
-        ]
-
-    def get_specific_gun_item_info(self, gun_type: int) -> list:
-        """get the position and type of specific gun items."""
-        return [item_info for item_info in self.get_gun_item_info() \
-                if item_info["type"] == gun_type]
-
-    def get_specific_buff_item_info(self, buff_type: int) -> list:
-        """get the position and type of specific buff items."""
-        return [item_info for item_info in self.get_buff_item_info() \
-                if item_info["type"] == buff_type]
+    def get_specific_item_info(self, item_type: int) -> list:
+        """get the position and type of specific items."""
+        return [item_info for item_info in self.get_item_info() \
+                if item_info["type"] == item_type]
 
     # get field data
     def get_wall_position(self):
