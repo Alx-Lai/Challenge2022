@@ -208,6 +208,15 @@ class EventPlayerRemove(BaseEvent):
 
     def __str__(self):
         return f'{self.name} => player_id {self.player_id} is out of life'
+<<<<<<< HEAD
 =======
         return f'{self.name} => player_id {self.player_id} get killed'
 >>>>>>> 030ae11 (add: re field and respawning mechanism)
+=======
+
+class EventPlayerHitWall(BaseEvent):
+    name = 'PlayerHitWall event'
+    '''
+    Player Hit wall
+    '''
+>>>>>>> a3ce5159f16dc82d9559568762572c7ca55029f3
