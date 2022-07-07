@@ -9,7 +9,7 @@ class Player(Base_Circle_Object):
     '''
     Represent a player.
     '''
-    def __init__(self, model, player_id: int):
+    def __init__(self, model, player_id: int, name: str, is_AI: bool):
         super().__init__(model, copy.deepcopy(Const.PLAYER_INIT_POSITION[player_id]), Const.PLAYER_RADIUS)
 
         self.player_id = player_id
@@ -33,6 +33,9 @@ class Player(Base_Circle_Object):
         self.death_count = 0
         self.respawn_count = Const.PLAYER_MAX_RESPAWN_COUNT[player_id]
         self.respawn_timer = 0
+
+        self.player_name = name
+        self.is_AI = is_AI
 
     def tick(self):
         '''
