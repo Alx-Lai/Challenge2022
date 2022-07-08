@@ -43,26 +43,28 @@ class GraphicalView:
         This method is called when a new game is instantiated.
         '''
         #images
-        self.player_images = [[self.load_img("./View/source/blue_basic.png"),self.load_img("./View/source/blue_machine_gun.png"),self.load_img("./View/source/blue_sniper.png"),self.load_img("./View/source/blue_shotgun.png")],
-                              [self.load_img("./View/source/green_basic.png"),self.load_img("./View/source/green_machine_gun.png"),self.load_img("./View/source/green_sniper.png"),self.load_img("./View/source/green_shotgun.png")],
-                              [self.load_img("./View/source/red_basic.png"),self.load_img("./View/source/red_machine_gun.png"),self.load_img("./View/source/red_sniper.png"),self.load_img("./View/source/red_shotgun.png")],
-                              [self.load_img("./View/source/yellow_basic.png"),self.load_img("./View/source/yellow_machine_gun.png"),self.load_img("./View/source/yellow_sniper.png"),self.load_img("./View/source/yellow_shotgun.png")]]
-        self.item_buff = [0, self.load_img("./View/source/Attack_CD.png"),
-                          self.load_img("./View/source/Repulsion.png"),
-                          self.load_img("./View/source/Aux_line_Length.png")]
-        self.item_gun = [0, self.load_img("./View/source/Machine_Gun.png"),
-                         self.load_img("./View/source/Sniper.png"),
-                         self.load_img("./View/source/Shotgun.png")]
-        self.normal_field = self.load_img("./View/source/normal_field.png")
-        self.RE_field = self.load_img("./View/source/RE_field.png")                
-        self.background = self.load_img("./View/source/Background.png")
+        self.player_images = []
+        for player_color in Const.PLAYER_IMAGE_PATH:
+            player = []
+            for path in player_color:
+                player.append(self.load_img(path))
+            self.player_images.append(player)
+
+        self.item_buff = [0, self.load_img(Const.BUFF_ATTACK_CD_PATH),
+                          self.load_img(Const.BUFF_REPULSION_PATH),
+                          self.load_img(Const.BUFF_AUX_lINE_PATH)]
+        self.item_gun = [0, self.load_img(Const.MACHINE_GUN_PATH),
+                         self.load_img(Const.SNIPER_PATH),
+                         self.load_img(Const.SHOT_GUN_PATH)]
+        self.normal_field = self.load_img(Const.NORMAL_FIELD_PATH)
+        self.RE_field = self.load_img(Const.RE_FIELD_PATH)                
+        self.background = self.load_img(Const.BACKGROUND_PATH)
+        self.background_top = self.load_img(Const.BACKGROUND_TOP_PATH)
+        self.menu = self.load_img(Const.MENU_PATH)
+        self.score_background = self.load_img(Const.SCORE_BACKGROUND_PATH)
+        self.crown = self.load_img(Const.CROWN_PATH)
         self.background_count = 0
         self.background_color = Const.BACKGROUND_COLOR
-        self.background_top = self.load_img("./View/source/Background_top.png")
-        self.menu = self.load_img("./View/source/Menu.png")
-        self.score_background = self.load_img("./View/source/score_background.png")
-        self.crown = self.load_img("./View/source/crown.png")
-        self.gold_light = self.load_img("./View/source/crown.png")
 
     def notify(self, event):
         '''

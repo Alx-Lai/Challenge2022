@@ -83,6 +83,39 @@ SCORE_COLOR = [pg.Color(47, 141, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0),
 PLAYER_COLOR = [pg.Color(0, 0, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0), pg.Color(255, 255, 0)]
 PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
 
+#IMAGE PATH
+PLAYER_IMAGE_PATH = [["./View/source/blue_basic.png","./View/source/blue_machine_gun.png","./View/source/blue_sniper.png","./View/source/blue_shotgun.png"],
+                    ["./View/source/green_basic.png","./View/source/green_machine_gun.png","./View/source/green_sniper.png","./View/source/green_shotgun.png"],
+                    ["./View/source/red_basic.png","./View/source/red_machine_gun.png","./View/source/red_sniper.png","./View/source/red_shotgun.png"],
+                    ["./View/source/yellow_basic.png","./View/source/yellow_machine_gun.png","./View/source/yellow_sniper.png","./View/source/yellow_shotgun.png"]]
+BUFF_ATTACK_CD_PATH = "./View/source/Attack_CD.png"
+BUFF_REPULSION_PATH = "./View/source/Repulsion.png"
+BUFF_AUX_lINE_PATH = "./View/source/Aux_line_Length.png"
+SHOT_GUN_PATH = "./View/source/Shotgun.png"
+SNIPER_PATH = "./View/source/Sniper.png"
+MACHINE_GUN_PATH = "./View/source/Machine_Gun.png"
+NORMAL_FIELD_PATH = "./View/source/normal_field.png"
+RE_FIELD_PATH = "./View/source/RE_field.png"
+CROWN_PATH = "./View/source/crown.png"
+SCORE_BACKGROUND_PATH = "./View/source/score_background.png"
+BACKGROUND_TOP_PATH = "./View/source/Background_top.png"
+BACKGROUND_PATH = "./View/source/Background.png"
+MENU_PATH = "./View/source/Menu.png"
+
+#SOUND PATH
+MENU_MUSIC_PATH = "./View/source/Everen Maxwell - Hyperphantasia [NCS Release].mp3"
+BACKGROUND_MUSIC_PATH = "./View/source/background_beta.mp3"
+NORMAL_GUN_SOUND_PATH = "./View/source/normal_gun.mp3"
+SNIPER_SOUND_PATH = "./View/source/sniper.mp3"
+SHOT_GUN_SOUND_PATH = "./View/source/shotgun.mp3"
+MACHINE_GUN_SOUND_PATH = "./View/source/machine_gun.mp3"
+PLAYER_DIED_SOUND_PATH = "./View/source/player_died.wav"
+PLAYER_KILLED_SOUND_PATH = "./View/source/player_killed.mp3"
+PLAYER_HIT_SOUND_PATH = "./View/source/wall_bump.mp3"
+PLAYER_HIT_WALL_SOUND_PATH = "./View/source/wall_bump.mp3"
+PLAYER_PICKUP_ITEM_SOUND_PATH = "./View/source/pick_up_item.mp3"
+PLAYER_SWITCH_GUN_SOUND_PATH = "./View/source/switch_weapon.mp3"
+
 # State machine constants
 STATE_POP = 0  # for convenience, not really a state which we can be in
 STATE_MENU = 1
