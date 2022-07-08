@@ -43,11 +43,6 @@ class GraphicalView:
         '''
         This method is called when a new game is instantiated.
         '''
-        #text position
-        self.text_interval = Const.ARENA_SIZE[0]/7
-        self.text_start = Const.ARENA_SIZE[0]/2 - self.text_interval*2
-        self.text_top = Const.ARENA_SIZE[1]/1.75
-
         #images
         self.player_images = [[self.load_img("./View/source/blue_basic.png"),self.load_img("./View/source/blue_machine_gun.png"),self.load_img("./View/source/blue_sniper.png"),self.load_img("./View/source/blue_shotgun.png")],
                               [self.load_img("./View/source/green_basic.png"),self.load_img("./View/source/green_machine_gun.png"),self.load_img("./View/source/green_sniper.png"),self.load_img("./View/source/green_shotgun.png")],
@@ -107,7 +102,11 @@ class GraphicalView:
         tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
         self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
 
-    def draw_score(self, text_size = 72, player_size = 4,draw_crown = False):
+    def draw_leaderboard(self, text_size = 72, player_size = 4,draw_crown = False):
+        #text position
+        text_interval = Const.WINDOW_SIZE[0]/7
+        text_start = Const.WINDOW_SIZE[0]/2 - text_interval*2
+        text_top = Const.WINDOW_SIZE[1]/1.75
         player_score = []
         i = 0
         #init score array
@@ -116,19 +115,43 @@ class GraphicalView:
 
         for player in self.model.players:
             #draw score
-            score_text = Text(str(int(player.score)), text_size, Const.PLAYER_COLOR[player.player_id])
-            score_text.blit(self.screen, topleft=(self.text_start + i*self.text_interval, self.text_top))
+            score_text = Text(str(int(player.score)), text_size, Const.SCORE_COLOR[player.player_id])
+            score_text.blit(self.screen, topleft=(text_start + i*text_interval, text_top))
             #draw player
             radius = player_size * Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
-            center = (self.text_start + (i+0.3)*self.text_interval, self.text_top - radius)
+            center = (text_start + (i+0.3)*text_interval, text_top - radius)
             self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(center[0] - radius, center[1] - radius),
                            Vector2(center[0] + radius, center[1] + radius))
             #draw crown
             if draw_crown == True:
                 if player_score[i] == max(player_score):
-                    self.screen.blit(self.crown, (self.text_start + (i+0.3)*self.text_interval, center[1] - radius))
+                    self.screen.blit(self.crown, (text_start + (i+0.3)*text_interval, center[1] - radius))
             i += 1
             
+
+    def draw_score(self, text_size = 54, draw_crown = True):
+        pg.draw.rect(self.screen, (0,0,0), pg.Rect(Const.ARENA_SIZE[0], 0, Const.WINDOW_SIZE[0] - Const.ARENA_SIZE[0],  Const.WINDOW_SIZE[1]))
+        #text position
+        text_interval = Const.WINDOW_SIZE[1]/7
+        text_start = Const.WINDOW_SIZE[1]/2 - text_interval
+        text_left= Const.ARENA_SIZE[0] + 0.1*(Const.WINDOW_SIZE[0] - Const.ARENA_SIZE[0])
+        #caption
+        caption = Text("SCORE", 32, (255,255,255))
+        caption.blit(self.screen, topleft=(text_left, text_start - text_interval))
+        #init score array
+        player_score = []
+        i = 0
+        for player in self.model.players:
+            player_score.append(player.score)
+
+        for player in self.model.players:
+            #draw score
+            score_text = Text(str(int(player.score)), text_size, Const.SCORE_COLOR[player.player_id])
+            score_text.blit(self.screen, topleft=(text_left, text_start + i*text_interval))
+            if draw_crown == True:
+                if player_score[i] == max(player_score):
+                    self.screen.blit(self.crown, (text_left, text_start + (i-0.5)*text_interval))
+            i+=1
 
     def rand_backgroud_color(self, times):
         if self.background_count == times:
@@ -140,7 +163,7 @@ class GraphicalView:
     def render_menu(self):
         # draw background
         self.screen.fill(Const.BACKGROUND_COLOR)
-        self.print_obj(self.menu, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
+        self.print_obj(self.menu, Vector2(0, 0), Vector2(Const.WINDOW_SIZE))
 
         pg.display.flip()
 
@@ -149,7 +172,7 @@ class GraphicalView:
         self.rand_backgroud_color(Const.BACKGROUND_COLOR_SPEED)
         self.screen.fill(self.background_color)
         self.print_obj(self.background_top, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
-
+        self.draw_score()
         # draw obstacles
         for obstacle in self.model.obstacles:
             center = obstacle.position * Const.ARENA_GRID_SIZE
@@ -237,14 +260,14 @@ class GraphicalView:
 
     def render_stop(self):
         # draw background
-        self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
-        self.draw_score(draw_crown=True)
+        self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.WINDOW_SIZE))
+        self.draw_leaderboard(draw_crown=True)
         pg.display.flip()
 
     def render_endgame(self):
         # draw background
-        self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
-        self.draw_score(draw_crown=True)
+        self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.WINDOW_SIZE))
+        self.draw_leaderboard(draw_crown=True)
         pg.display.flip()
 
 class Text:

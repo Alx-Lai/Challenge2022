@@ -73,12 +73,13 @@ IMAGE_PATH = os.path.join('View', 'assets')
 
 # view
 WINDOW_CAPTION = 'Challenge 2022'
-WINDOW_SIZE = (900, 900)
+WINDOW_SIZE = (1000, 900)
 ARENA_SIZE = (900, 900)
 ARENA_GRID_COUNT = 30
 ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')
 BACKGROUND_COLOR_SPEED = 20
+SCORE_COLOR = [pg.Color(47, 141, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0), pg.Color(255, 255, 0)]
 PLAYER_COLOR = [pg.Color(0, 0, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0), pg.Color(255, 255, 0)]
 PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
 
