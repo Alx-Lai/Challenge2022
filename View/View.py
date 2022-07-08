@@ -36,8 +36,7 @@ class GraphicalView:
 
     def load_img(self, path: str):
         image = pg.image.load(path)
-        image.convert()
-        return image
+        return image.convert_alpha()
 
     def initialize(self):
         '''
