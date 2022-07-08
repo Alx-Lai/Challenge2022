@@ -43,6 +43,8 @@ class GraphicalView:
         This method is called when a new game is instantiated.
         '''
         #images
+        
+        #load player images
         self.player_images = []
         for player_color in Const.PLAYER_IMAGE_PATH:
             player = []
