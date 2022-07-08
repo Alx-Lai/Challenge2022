@@ -102,7 +102,7 @@ class GraphicalView:
         tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
         self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
 
-    def draw_leaderboard(self, text_size = 72, player_size = 4, draw_crown = True, endgame = False):
+    def draw_leaderboard(self, text_size = 72, player_size = 4, draw_crown = True,pause = False, endgame = False):
         #text position
         text_interval = Const.WINDOW_SIZE[0]/7
         text_start = Const.WINDOW_SIZE[0]/2 - text_interval*2
@@ -113,6 +113,9 @@ class GraphicalView:
         if endgame == True:
             caption = Text("CONGRATULATION", 80, (255,255,255))
             caption.blit(self.screen, topleft=(Const.WINDOW_SIZE[0]/4.5, Const.WINDOW_SIZE[1]/4))
+        elif pause == True:
+            caption = Text("PAUSE", 80, (255,255,255))
+            caption.blit(self.screen, topleft=(Const.WINDOW_SIZE[0]/2.6, Const.WINDOW_SIZE[1]/4))
         #init score array
         for player in self.model.players:
             player_score.append(player.score)
@@ -265,7 +268,7 @@ class GraphicalView:
     def render_stop(self):
         # draw background
         self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.WINDOW_SIZE))
-        self.draw_leaderboard(endgame=True)
+        self.draw_leaderboard(pause=True)
         pg.display.flip()
 
     def render_endgame(self):
