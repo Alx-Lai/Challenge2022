@@ -11,7 +11,7 @@ GAME_LENGTH = 100 * FPS # temporarily set to infinity
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
 
-PLAYER_RADIUS = 0.5  # L
+PLAYER_RADIUS = 1  # L
 PLAYER_BASE_SPEED = 10 / FPS  # L / T
 PLAYER_ROTATION_SPEED = 3 / FPS  # radian / T
 
