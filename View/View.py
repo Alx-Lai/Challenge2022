@@ -105,7 +105,7 @@ class GraphicalView:
         tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
         self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
 
-    def draw_leaderboard(self, text_size = 72, player_size = 4, draw_crown = True,pause = False, endgame = False):
+    def draw_leaderboard(self, text_size = 72, player_size = 2, draw_crown = True,pause = False, endgame = False):
         #text position
         text_interval = Const.WINDOW_SIZE[0]/7
         text_start = Const.WINDOW_SIZE[0]/2 - text_interval*2
