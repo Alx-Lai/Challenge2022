@@ -1,6 +1,5 @@
 import math
 import pygame as pg
-import Map.map_1 as mp # Change map HERE
 
 # model
 # length unit: a unit grid's size (L)
@@ -70,8 +69,6 @@ ITEM_BUFF_RADIUS = 0.5                    # L
 
 OBSTACLE_RADIUS = 0.5                     # L
 RE_FIELD_RADIUS = 0.5                     # L
-OBSTACLE_POSITION = mp.OBSTACLE_POSITION
-RE_FIELD_POSITION = mp.RE_FIELD_POSITION
 
 ENHANCEMENT_BASE_SPEED = 0.01
 ENHANCEMENT_ATTACK_SPEED = 0.01

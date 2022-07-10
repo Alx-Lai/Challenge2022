@@ -6,7 +6,9 @@ from EventManager.EventManager import *
 from Model.GameObject.item_generator import *
 from Model.GameObject.player import *
 from Model.GameObject.obstacle import *
+from Map.map_generator import map_gen
 import Const
+
 
 
 class StateMachine(object):
@@ -62,7 +64,7 @@ class GameEngine:
     The main game engine. The main loop of the game is in GameEngine.run()
     '''
 
-    def __init__(self, ev_manager: EventManager, AI_names: list):
+    def __init__(self, ev_manager: EventManager, map_name: str, AI_names: list):
         '''
         This function is called when the GameEngine is created.
         For more specific objects related to a game instance
@@ -72,6 +74,7 @@ class GameEngine:
         ev_manager.register_listener(self)
 
         self.state_machine = StateMachine()
+        self.map_name = map_name
 
         self.AI_names = AI_names
         while len(self.AI_names) < Const.PLAYER_NUMBER:
@@ -85,8 +88,7 @@ class GameEngine:
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i, self.AI_names[i], self.AI_names[i] != 'manual') for i in range(Const.PLAYER_NUMBER)]
         self.death_cnt = Const.PLAYER_INIT_DEATH_CNT
-        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in range(len(Const.OBSTACLE_POSITION))] + \
-                         [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in range(len(Const.RE_FIELD_POSITION))]
+        self.obstacles = map_gen(self, self.map_name)
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)

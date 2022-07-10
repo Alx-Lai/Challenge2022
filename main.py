@@ -13,20 +13,29 @@ def main(argv):
     pg.init()
     
     # EventManager listen to events and notice model, controller, view
-    ev_manager = EventManager()
     AIs = []
     special_modes = []
-    for arg in argv[1:]:
+    map_name = "random"
+    skip_tag = False
+    for idx in range(1, len(argv)):
+        if skip_tag:
+            skip_tag = False
+            continue
+        arg = argv[idx]
         if arg.lower() in ('--nodebug', '-nd'):
             special_modes.append('NODEBUG')
         elif arg.lower() in ('--timeout', '-t'):
             special_modes.append('TIMEOUT')
+        elif arg.lower() in ('--map', '-m'):
+            skip_tag = True
+            map_name = argv[idx+1]
         else:
             AIs.append(arg)
 
     assert len(AIs) <= Const.PLAYER_NUMBER, "too many AIs!"
 
-    model      = GameEngine(ev_manager, AIs)
+    ev_manager = EventManager()
+    model      = GameEngine(ev_manager, map_name, AIs)
     controller = Controller(ev_manager, model)
     view       = GraphicalView(ev_manager, model)
     interface  = Interface(ev_manager, model, special_modes)
