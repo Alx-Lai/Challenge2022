@@ -17,6 +17,7 @@ class GraphicalView:
     Draws the state of GameEngine onto the screen.
     '''
     background = pg.Surface(Const.ARENA_SIZE)
+    fullscreen = False
 
     def __init__(self, ev_manager: EventManager, model: GameEngine):
         '''
@@ -29,10 +30,21 @@ class GraphicalView:
 
         self.model = model
 
-        self.screen = pg.display.set_mode(Const.WINDOW_SIZE)
-        pg.display.set_caption(Const.WINDOW_CAPTION)
-        self.background.fill(Const.BACKGROUND_COLOR)
-        pg.mixer.init()
+        self.is_initialized = False
+
+
+    def _create_screen(self, fullscreen=False):
+        try:
+            self.screen = pg.display.set_mode(Const.WINDOW_SIZE, (pg.FULLSCREEN if fullscreen else 0) | pg.SCALED)
+            self.low_resolution = False
+        except pg.error:
+            # Perhaps the computer's resolution is less than our intended window size.
+            # In this case, we create a smaller screen for pygame screen, and still blit to a window-size surface.
+            # At every tick, we blit the window-size screen to pygame screen.
+            self.low_resolution = True
+            self.real_window_size = (Const.WINDOW_SIZE[0] * 2 // 3, Const.WINDOW_SIZE[1] * 2 // 3)
+            self.real_screen = pg.display.set_mode(self.real_window_size, (pg.FULLSCREEN if fullscreen else 0) | pg.SCALED)
+            self.screen = pg.Surface(Const.WINDOW_SIZE)
 
     def load_img(self, path: str):
         image = pg.image.load(path)
@@ -42,8 +54,14 @@ class GraphicalView:
         '''
         This method is called when a new game is instantiated.
         '''
+        pg.init()
+        pg.font.init()
+        pg.display.set_caption(Const.WINDOW_CAPTION)
+
+        if not self.is_initialized:
+            self._create_screen(self.fullscreen)
+
         #images
-        
         #load player images
         self.player_images = []
         for player_color in Const.PLAYER_IMAGE_PATH:
@@ -68,6 +86,8 @@ class GraphicalView:
         self.background_count = 0
         self.background_color = Const.BACKGROUND_COLOR
 
+        self.is_initialized = True
+
     def notify(self, event):
         '''
         Called by EventManager when a event occurs.
@@ -87,6 +107,16 @@ class GraphicalView:
                 self.render_stop()
             elif cur_state == Const.STATE_ENDGAME:
                 self.render_endgame()
+
+            if self.low_resolution:
+                self.real_screen.blit(pg.transform.smoothscale(self.screen, self.real_window_size), (0, 0))
+                pg.display.flip()
+
+        elif isinstance(event, EventToggleFullScreen):
+            self.toggle_fullscreen()
+
+        elif isinstance(event, EventRestart):
+            self.initialize()
 
     def display_fps(self):
         '''
@@ -279,6 +309,29 @@ class GraphicalView:
         self.print_obj(self.score_background, Vector2(0, 0), Vector2(Const.WINDOW_SIZE))
         self.draw_leaderboard(endgame=True)
         pg.display.flip()
+
+    def toggle_fullscreen(self):
+        self.ev_manager.post(EventStop())
+        # save screen content before toggling
+        old_screen = pg.display.get_surface().copy()
+        caption = pg.display.get_caption()
+        cursor = pg.mouse.get_cursor()
+
+        pg.display.quit()
+        pg.display.init()
+
+        # toggle fullscreen
+        self.fullscreen = not self.fullscreen
+        self._create_screen(self.fullscreen)
+
+        # restore _screen content
+        self.screen.blit(old_screen, (0, 0))
+        pg.display.set_caption(*caption)
+
+        pg.key.set_mods(0)
+        pg.mouse.set_cursor(*cursor)
+
+        self.ev_manager.post(EventContinue())
 
 class Text:
     def __init__(self, text, size, color, font = None, antialias = True, bg = None):
