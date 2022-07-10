@@ -11,7 +11,7 @@ def main(file_name: str, output_name: str):
     sys.stdout = open(F"{output_name}.py", 'w')
     sys.stdout.write("import pygame as pg\n\n")
     
-    with open(F"CSV\{file_name}.csv") as csvfile:
+    with open(F"CSV/{file_name}.csv") as csvfile:
         reader = csv.reader(csvfile, delimiter=',')
         rows = list(reader)
 
