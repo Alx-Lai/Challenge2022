@@ -116,44 +116,41 @@ class Player(Base_Circle_Object):
         '''
         Switch the player's gun.
         '''
-        match gun_type:
-            case Const.GUN_TYPE_NORMAL_GUN:
-                self.gun = Normal_Gun(self.model, self)
-            case Const.GUN_TYPE_MACHINE_GUN:
-                self.gun = Machine_Gun(self.model, self)
-            case Const.GUN_TYPE_SNIPER:
-                self.gun = Sniper(self.model, self)
-            case Const.GUN_TYPE_SHOTGUN:
-                self.gun = Shotgun(self.model, self)
+        if gun_type == Const.GUN_TYPE_NORMAL_GUN:
+            self.gun = Normal_Gun(self.model, self)
+        elif gun_type == Const.GUN_TYPE_MACHINE_GUN:
+            self.gun = Machine_Gun(self.model, self)
+        elif Const.GUN_TYPE_SNIPER:
+            self.gun = Sniper(self.model, self)
+        elif Const.GUN_TYPE_SHOTGUN:
+            self.gun = Shotgun(self.model, self)
         self.model.ev_manager.post(EventPlayerSwitchGun(self.player_id, gun_type))
 
     def quota_enough(self, buff_type):
         '''
         Check if the quota of a buff is enough
         '''
-        match buff_type:
-            case Const.BUFF_TYPE_ATTACK_SPEED:
-                return self.quota_attack_speed > 0
-            case Const.BUFF_TYPE_REPULSION:
-                return self.quota_repulsion > 0
-            case Const.BUFF_TYPE_ATTACK_ACCURACY:
-                return self.quota_attack_accuracy > 0
+        if buff_type == Const.BUFF_TYPE_ATTACK_SPEED:
+            return self.quota_attack_speed > 0
+        if buff_type == Const.BUFF_TYPE_REPULSION:
+            return self.quota_repulsion > 0
+        if buff_type == Const.BUFF_TYPE_ATTACK_ACCURACY:
+            return self.quota_attack_accuracy > 0
 
 
     def buff(self, buff_type):
         '''
         Add permanent buff to the player.
         '''
-        match buff_type:
-            case Const.BUFF_TYPE_ATTACK_SPEED:
-                self.attack_speed += Const.BUFF_VALUE_ATTACK_SPEED
-                self.quota_attack_speed -= 1
-            case Const.BUFF_TYPE_REPULSION:
-                self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
-                self.quota_repulsion -= 1
-            case Const.BUFF_TYPE_ATTACK_ACCURACY:
-                self.attack_accuracy += Const.BUFF_VALUE_ATTACK_ACCURACY
-                self.quota_attack_accuracy -= 1
+        if buff_type == Const.BUFF_TYPE_ATTACK_SPEED:
+            self.attack_speed += Const.BUFF_VALUE_ATTACK_SPEED
+            self.quota_attack_speed -= 1
+        if buff_type == Const.BUFF_TYPE_REPULSION:
+            self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
+            self.quota_repulsion -= 1
+        if buff_type == Const.BUFF_TYPE_ATTACK_ACCURACY:
+            self.attack_accuracy += Const.BUFF_VALUE_ATTACK_ACCURACY
+            self.quota_attack_accuracy -= 1
         self.model.ev_manager.post(EventPlayerBuffed(self.player_id, buff_type))
 
     
