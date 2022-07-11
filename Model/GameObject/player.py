@@ -14,7 +14,9 @@ class Player(Base_Circle_Object):
 
         self.player_id = player_id
         self.score = 0
+        self.base_speed = Const.PLAYER_BASE_SPEED
         self.gun = Normal_Gun(model, self)
+        self.repulsion_resistance = Const.PLAYER_REPULSION_RESISTANCE
 
         self.attack_speed = Const.PLAYER_ATTACK_SPEED
         self.attack_kick = Const.PLAYER_ATTACK_KICK
@@ -83,7 +85,7 @@ class Player(Base_Circle_Object):
         Increase the player's speed along it's facing direction.
         Can move either forward or backward.
         '''
-        new_speed = Const.PLAYER_BASE_SPEED * self.direction * direction
+        new_speed = self.base_speed * self.direction * direction
         self.speed = (self.speed * 9 + new_speed) / 10
 
     def stop_moving(self):
@@ -182,3 +184,16 @@ class Player(Base_Circle_Object):
         Check if the player is invisible (cannot be seen/hit).
         '''
         return self.respawning() or self.killed()
+
+    def enhance(self, enhancement: list):
+        '''
+        apply the bonus enhancement
+        '''
+        self.base_speed *= (1 + Const.ENHANCEMENT_BASE_SPEED * enhancement[0])
+        self.attack_speed *= (1 + Const.ENHANCEMENT_ATTACK_SPEED \
+                * enhancement[1])
+        self.bullet_repulsion *= (1 + Const.ENHANCEMENT_BULLET_REPULSION \
+                * enhancement[2])
+        self.repulsion_resistance *= (1 \
+                + Const.ENHANCEMENT_REPULSION_RESISTANCE \
+                * enhancement[3])
