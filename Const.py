@@ -1,7 +1,6 @@
 import math
 import pygame as pg
 
-
 # model
 # length unit: a unit grid's size (L)
 # time unit: frame (T)
@@ -9,11 +8,12 @@ import pygame as pg
 FPS = 60 # frame per second
 GAME_LENGTH = 100 * FPS # temporarily set to infinity
 PLAYER_NUMBER = 4
-PLAYER_INIT_POSITION = [pg.Vector2(10, 10), pg.Vector2(21, 10), pg.Vector2(10, 21), pg.Vector2(21, 21)]
+PLAYER_INIT_POSITION = [pg.Vector2(9.5, 9.5), pg.Vector2(20.5, 9.5), pg.Vector2(9.5, 20.5), pg.Vector2(20.5, 20.5)]
 
 PLAYER_RADIUS = 0.5                       # L
 PLAYER_BASE_SPEED = 10 / FPS              # L / T
 PLAYER_ROTATION_SPEED = 3 / FPS           # radian / T
+PLAYER_REPULSION_RESISTANCE = 0
 
 PLAYER_ATTACK_SPEED = 0.5                 # bullet / T
 PLAYER_ATTACK_KICK = 1 / 10               # speed 
@@ -69,8 +69,11 @@ ITEM_BUFF_RADIUS = 0.5                    # L
 
 OBSTACLE_RADIUS = 0.5                     # L
 RE_FIELD_RADIUS = 0.5                     # L
-OBSTACLE_POSITION = [pg.Vector2(13, 13), pg.Vector2(14, 13), pg.Vector2(14, 14), pg.Vector2(14, 15), pg.Vector2(13, 15)]
-RE_FIELD_POSITION = [pg.Vector2(i + 0.5, j + 0.5) for i in range(13, 17) for j in range(17, 19)]
+
+ENHANCEMENT_BASE_SPEED = 0.01
+ENHANCEMENT_ATTACK_SPEED = 0.01
+ENHANCEMENT_BULLET_REPULSION = 0.01
+ENHANCEMENT_REPULSION_RESISTANCE = 0.01
 
 # view
 WINDOW_CAPTION = 'Challenge 2022'
