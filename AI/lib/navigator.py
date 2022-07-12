@@ -3,7 +3,7 @@ import numpy as np
 import heapq as hq
 import math 
 import Const
-from AI.lib.brain import Brain
+from API.helper import *
 from AI.lib.utils import *
 
 SCALE = 2
@@ -18,18 +18,30 @@ ROTATE_TOLERANCE = 0.03 # radian
 DIJKSTRA_FREQUENCY = 3 # frames per evaluate
 
 class Navigator():
-    def __init__(self, brain: Brain):
-        self.brain = brain
+    def __init__(self, helper: Helper, action):
+        self.helper = helper 
+        self.action = action
+        self.id = helper.get_self_id()
+        self.walls = helper.get_wall_position()
+        self.RE_field = helper.get_RE_field_position()
 
         self.edges = [[] for i in range(LEN ** 2)] # tuple(node, weight, direc), node indexed by index()
         self.safe_nodes = [True] * (LEN ** 2)
         self.init_graph()
 
+        self.counter = -1
+    
+    def initialize(self):
+        self.pos = toVector2(self.helper.get_player_position()[self.id])
+        self.dir = toVector2(self.helper.get_player_direction()[self.id])
+        self.speed = toVector2(self.helper.get_player_speed()[self.id])
+        self.counter += 1
+
     def in_graph(self, x, y) -> bool:
         return 0 < min(x, y) and max(x, y) < Const.ARENA_GRID_COUNT
 
     def init_graph(self):
-        for pos in self.brain.RE_fields:
+        for pos in self.RE_field:
             self.safe_nodes[self.index(pos)] = False
             for i in range(8):
                 nx = pos.x + WIDTH * dx[i]
@@ -40,7 +52,7 @@ class Navigator():
                     nny = ny + WIDTH * dy[j]
                     self.safe_nodes[self.index(nnx, nny)] = False
         
-        for pos in self.brain.obstacles:
+        for pos in self.walls:
             self.safe_nodes[self.index(pos)] = False
             for i in range(8):
                 nx = pos.x + WIDTH * dx[i]
@@ -116,13 +128,13 @@ class Navigator():
         """
         Return a Vector2 representing the best destination to go to, return (-1,-1) if it decides to stay.
         """
-        items = self.brain.helper.get_item_info()
-        dis, pre = self.dijkstra(self.index(self.brain.position))
+        items = self.helper.get_item_info()
+        dis, pre = self.dijkstra(self.index(self.pos))
 
 
         # if have special gun, neglect gun items
         tmp_items = items
-        if self.brain.helper.get_player_gun_type()[self.brain.id] != Const.GUN_TYPE_NORMAL_GUN:
+        if self.helper.get_player_gun_type()[self.id] != Const.GUN_TYPE_NORMAL_GUN:
             items = [item for item in items if item["type"] >= 4]
 
         # no choice
@@ -139,28 +151,35 @@ class Navigator():
         x, y = self.normalize(best_item["position"])
         dest = pg.Vector2(x, y)
         mem = pre[self.index(x, y)]
+        # print(dest)
         while pre[self.index(x, y)] != -1:
             tmp = pre[self.index(x, y)]
+            # print(x, y, tmp)
             if mem != tmp:
                 dest = pg.Vector2(x, y)
                 mem = tmp
             x -= dx[tmp] * WIDTH
             y -= dy[tmp] * WIDTH
+        # print(best_item["position"], dest, self.pos)
         return dest
 
     def decide(self):
         """
-        Main function of Navigator, will modify action to decide movement.
+        Main function of Navigator.
         """
-        if self.brain.time % DIJKSTRA_FREQUENCY == 0:
+        # print("----- start -----")
+        self.initialize()
+
+        if self.counter % DIJKSTRA_FREQUENCY == 0:
             self.dest = self.destination()
 
-        rotate_radian = angle_between(self.brain.direction, self.dest - self.brain.position) # radian
+        rotate_radian = angle_between(self.dir, self.dest - self.pos) # radian
+        # print(F"seld.dir={self.dir}, dir_vector={dest - self.pos}")
         if abs(rotate_radian) > ROTATE_TOLERANCE:
             if rotate_radian < 0:
-                self.brain.action['left'] = True
+                self.action['left'] = True
             else:
-                self.brain.action['right'] = True
+                self.action['right'] = True
             return
         else:
-            self.brain.action['forward'] = True
+            self.action['forward'] = True

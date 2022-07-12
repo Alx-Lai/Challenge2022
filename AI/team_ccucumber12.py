@@ -5,29 +5,26 @@ AI_DIR_RIGHT        = 3
 AI_DIR_ATTACK       = 4
 AI_DIR_STOP         = 5
 
-ACTION_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
+AI_DIR_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
 
 import random
-from AI.lib.attacker import Attacker
+import math
 from AI.lib.navigator import Navigator
-from AI.lib.brain import Brain
 
 class TeamAI():
-    def __init__(self, helper: Helper):
-        self.brain = Brain(helper)
-        self.navigator = Navigator(self.brain)
-        self.attacker = Attacker(self.brain)
-    
-    def rollAttack(self) -> bool:
-        prob = 1200 - min(1200, self.brain.time)
-        return random.randint(0, prob) == 0
+    def __init__(self, helper):
+        self.helper = helper
+        self.action = AI_DIR_NONE.copy()
+        self.navigator = Navigator(self.helper, self.action)
+        self.id = helper.get_self_id()
+        self.counter = 0
+      
+    def initialize(self):
+        for k in self.action:
+            self.action[k] = False
     
     def decide(self):
-        self.brain.initialize()
+        self.initialize()
+        self.navigator.decide()
 
-        if self.brain.is_attacking or self.rollAttack():
-            self.attacker.decide()
-        if not self.brain.is_attacking:
-            self.navigator.decide()
-        return self.brain.action
-    
+        return self.action
