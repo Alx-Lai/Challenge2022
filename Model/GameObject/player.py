@@ -120,9 +120,9 @@ class Player(Base_Circle_Object):
             self.gun = Normal_Gun(self.model, self)
         elif gun_type == Const.GUN_TYPE_MACHINE_GUN:
             self.gun = Machine_Gun(self.model, self)
-        elif Const.GUN_TYPE_SNIPER:
+        elif gun_type == Const.GUN_TYPE_SNIPER:
             self.gun = Sniper(self.model, self)
-        elif Const.GUN_TYPE_SHOTGUN:
+        elif gun_type == Const.GUN_TYPE_SHOTGUN:
             self.gun = Shotgun(self.model, self)
         self.model.ev_manager.post(EventPlayerSwitchGun(self.player_id, gun_type))
 
