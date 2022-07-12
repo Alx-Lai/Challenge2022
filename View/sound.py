@@ -39,15 +39,14 @@ class Audio():
     
     def notify(self, event):
         if isinstance(event, EventPlayerAttackSuccess):
-            match event.gun_type:
-                case Const.GUN_TYPE_NORMAL_GUN:
-                    self.normal_gun_sound.play()
-                case Const.GUN_TYPE_MACHINE_GUN:
-                    self.machine_gun_sound.play()
-                case Const.GUN_TYPE_SHOTGUN:
-                    self.shotgun_sound.play()
-                case Const.GUN_TYPE_SNIPER:
-                    self.sniper_sound.play()
+            if event.gun_type == Const.GUN_TYPE_NORMAL_GUN:
+                self.normal_gun_sound.play()
+            elif event.gun_type == Const.GUN_TYPE_MACHINE_GUN:
+                self.machine_gun_sound.play()
+            elif event.gun_type == Const.GUN_TYPE_SHOTGUN:
+                self.shotgun_sound.play()
+            elif event.gun_type == Const.GUN_TYPE_SNIPER:
+                self.sniper_sound.play()
         
         elif isinstance(event, EventPlayerBuffed):
             self.player_pick_up_item_sound.play()
