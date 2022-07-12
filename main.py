@@ -1,5 +1,6 @@
 import pygame as pg
 import sys
+import getopt
 
 from EventManager.EventManager import EventManager
 from Model.Model import GameEngine
@@ -16,22 +17,20 @@ def main(argv):
     AIs = []
     special_modes = []
     map_name = "random"
-    skip_tag = False
-    for idx in range(1, len(argv)):
-        if skip_tag:
-            skip_tag = False
-            continue
-        arg = argv[idx]
-        if arg.lower() in ('--nodebug', '-nd'):
+    try:
+        opts, args = getopt.getopt(argv[1:], "ntm:")
+    except:
+        print ("Usage: main.py -m <map_name> <AI_1> <AI_2> ...")
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt.lower() in ('-n', '--nodebug'):
             special_modes.append('NODEBUG')
-        elif arg.lower() in ('--timeout', '-t'):
+        elif opt.lower() in ('-t', '--timeout'):
             special_modes.append('TIMEOUT')
-        elif arg.lower() in ('--map', '-m'):
-            skip_tag = True
-            map_name = argv[idx+1]
-        else:
-            AIs.append(arg)
-
+        elif opt.lower() in ('-m', '--map'):
+            map_name = arg
+    for arg in args:
+        AIs.append(arg)
     assert len(AIs) <= Const.PLAYER_NUMBER, "too many AIs!"
 
     ev_manager = EventManager()
