@@ -97,8 +97,10 @@ class Helper(object):
         """return all player's attack cd, id as index,
         1 frame as unit
         """
-        return [player.attack_cd * player.gun.attack_cd_multiplier \
-                for player in self.model.players]
+        return [round( \
+            1 / (player.attack_speed \
+            * player.gun.attack_speed_multiplier) * Const.FPS) \
+            for player in self.model.players]
 
     def get_player_next_attack(self) -> list:
         """return the remaining time until every player's next attack in frames, use id as index."""
