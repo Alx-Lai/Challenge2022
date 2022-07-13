@@ -60,6 +60,80 @@ class Helper(object):
         """return a int as your base speed value."""
         return self.model.players[self.player_id].base_speed
 
+    # attack
+    def get_self_kick(self) -> float:
+        """return a float as your kick."""
+        return self.model.players[self.player_id].attack_kick \
+            * self.model.players[self.player_id].gun.attack_kick_multiplier \
+            * 10
+
+    def get_self_repulsion(self) -> float:
+        """return a float as your repulsion."""
+        return self.model.players[self.player_id].bullet_repulsion \
+            * self.model.players[self.player_id].gun.bullet_repulsion_multiplier \
+            * 10
+
+    def get_self_attack_cd(self) -> int:
+        """return a int as your attack cd, use frame as unit."""
+        return round( \
+            1 / (self.model.players[self.player_id].attack_speed \
+            * self.model.players[self.player_id].gun.attack_speed_multiplier) \
+            * Const.FPS)
+
+    def get_self_next_attack(self) -> int:
+        """
+        return a int as the remaining time until your next attack, 
+        use frame as unit.
+        """
+        return self.model.players[self.player_id].gun.cd_time
+
+    def get_self_attack_speed(self) -> float:
+        """
+        return a float as your attack speed in shots per second.
+        """
+        return self.model.players[self.player_id].attack_speed * \
+            self.model.players[self.player_id].gun.attack_speed_multiplier
+
+    def get_self_attack_range(self) -> float:
+        """return a float as your attack range"""
+        return self.model.players[self.player_id].bullet_lifespan \
+            * self.model.players[self.player_id].gun.bullet_lifespan_multiplier \
+            * Const.BULLET_SPEED
+
+    def get_self_attack_accuracy(self) -> float:
+        """return a float as your attack accuracy in radian"""
+        return self.model.players[self.player_id].attack_accuracy \
+            * self.model.players[self.player_id].gun.bullet_accuracy_multiplier
+
+    def get_self_basic_attack_speed(self) -> float:
+        """
+        return a float as your attack speed 
+        without multiplier in shot per second
+        """
+        return self.model.players[self.player_id].attack_speed
+
+    def get_self_basic_attack_range(self) -> float:
+        """return a float as your attack range without multiplier"""
+        return self.model.players[self.player_id].bullet_lifespan \
+            * Const.BULLET_SPEED
+
+    def get_self_basic_attack_accuracy(self) -> float:
+        """
+        return a float as your attack accuracy 
+        without multiplier in radian
+        """
+        return self.model.players[self.player_id].attack_accuracy
+
+    def get_self_gun_type(self) -> int:
+        """
+        return a int as your gun type, 0 as normal gun, 
+        1 as machine gun, 2 as sniper, 3 as shot gun
+        """
+        return self.model.players[self.player_id].gun.type
+
+    def get_self_gun_remaining_time(self) -> int:
+        """return a int as your remaining gun using time in frame"""
+        return self.model.players[self.player_id].gun.use_time
     # get all player data
     # general
     def get_player_id(self) -> list:
