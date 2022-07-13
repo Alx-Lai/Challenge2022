@@ -10,6 +10,10 @@ class Helper(object):
         self.player_id = index
 
     # get game data
+    def get_game_time(self) -> int:
+        """return game time, use 1 frame as unit"""
+        return Const.GAME_LENGTH - self.model.timer
+
     def get_game_remaining_time(self) -> int:
         """return game remaining time, use 1 frame as unit"""
         return self.model.timer
@@ -39,6 +43,13 @@ class Helper(object):
         """
         return [player.respawn_timer for player in self.model.players]
 
+    def get_player_is_alive(self) -> list:
+        """
+        return a bool list represent all player is killed or not,
+        use id as index
+        """
+        return [player.killed() for player in self.model.players]
+
     # movement
     def get_player_position(self) -> list:
         """return all player's position, use id as index"""
@@ -47,6 +58,27 @@ class Helper(object):
     def get_player_direction(self) -> list:
         """return all player's direction, use id as index"""
         return [player.direction for player in self.model.players]
+
+    def get_player_speed(self) -> list:
+        """
+        return a Vector2 list represent all player's speed,
+        use id as index.
+        """
+        return [player.speed for player in self.model.players]
+
+    def get_player_base_speed(self) -> list:
+        """
+        return a float list represent all player's base speed,
+        use id as index
+        """
+        return [player.base_speed for player in self.model.players]
+
+    def get_player_rotation_speed(self) -> list:
+        """
+        return a float list represent all player's rotation speed,
+        use id as index, radian as unit.
+        """
+        return [Const.PLAYER_ROTATION_SPEED for player in self.model.players]
 
     # attack
     def get_player_kick(self) -> list:
