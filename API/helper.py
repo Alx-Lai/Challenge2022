@@ -152,7 +152,7 @@ class Helper(object):
             }
         ]
 
-    def get_self_specific_buff_count(self, buff_type: int) -> list:
+    def get_self_specific_buff_count(self, buff_type: int) -> int:
         """return the amount of specific buff on you."""
         for buff_info in self.get_self_buff_count():
             if buff_info["type"] == buff_type:
