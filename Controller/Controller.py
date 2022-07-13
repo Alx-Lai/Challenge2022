@@ -71,15 +71,15 @@ class Controller:
         keys = pg.key.get_pressed()
         player_no_move = [(i, True) for i in range(Const.PLAYER_NUMBER)]
         for k, v in Const.PLAYER_MOVE_KEYS.items():
-            if keys[k]:
+            if keys[k] and self.model.players[v[0]].is_AI == False:
                 self.ev_manager.post(EventPlayerMove(*v))
                 player_no_move[v[0]] = (v[0], False)
         for index, no_move in player_no_move:
-            if no_move:
+            if no_move and self.model.players[index].is_AI == False:
                 self.ev_manager.post(EventPlayerNoMove(index))
 
         for k, v in Const.PLAYER_ROTATE_KEYS.items():
-            if keys[k]:
+            if keys[k] and self.model.players[v[0]].is_AI == False:
                 self.ev_manager.post(EventPlayerRotate(*v))
 
         for event_pg in key_down_events:
@@ -88,7 +88,8 @@ class Controller:
                 key = event_pg.key
                 if key in Const.PLAYER_ATTACK_KEYS:
                     player_id = Const.PLAYER_ATTACK_KEYS[key][0]
-                    self.ev_manager.post(EventPlayerAttack(player_id))
+                    if self.model.players[player_id].is_AI == False:
+                        self.ev_manager.post(EventPlayerAttack(player_id))
                 # detect stop
                 if event_pg.key == Const.GAME_STOP_KEY:
                     self.ev_manager.post(EventStateChange(Const.STATE_STOP))

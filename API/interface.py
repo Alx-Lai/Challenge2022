@@ -1,14 +1,12 @@
 from cgitb import handler
 import imp, traceback, signal
-from xmlrpc.client import Boolean
-import pygame as pg
 import Const
 from API.helper import Helper
 from EventManager.EventManager import *
 import Model.Model
 import os
 
-AI_DIR_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
+ACTION_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
 
 class Interface(object):
     def __init__(self, ev_manager, model : Model.Model, modes : list):
@@ -50,50 +48,50 @@ class Interface(object):
     def API_play(self):
         for player in self.model.players:
             if player.is_AI:
-                AI_dir = None
+                action = None
                 if self.debug_mode:
-                    AI_dir = self.player_AI[player.player_id].decide()
+                    action = self.player_AI[player.player_id].decide()
                 else:
                     try:
                         if self.signal_support: signal.setitimer(signal.ITIMER_REAL, Const.API_TIMEOUT)
-                        AI_dir = self.player_AI[player.player_id].decide()
+                        action = self.player_AI[player.player_id].decide()
                         if self.signal_support: signal.setitimer(signal.ITIMER_REAL, 0)
                     except:
                         pass
 
-                if not isinstance(AI_dir, dict):
-                    temp = AI_dir
-                    AI_dir = AI_DIR_NONE
+                if not isinstance(action, dict):
+                    temp = action
+                    action = ACTION_NONE.copy()
                     if temp == 0:
-                        AI_dir['forward'] = True
+                        action['forward'] = True
                     elif temp == 1:
-                        AI_dir['backward'] = True
+                        action['backward'] = True
                     elif temp == 2:
-                        AI_dir['left'] = True
+                        action['left'] = True
                     elif temp == 3:
-                        AI_dir['right'] = True
+                        action['right'] = True
                     elif temp == 4:
-                        AI_dir['attack'] = True
+                        action['attack'] = True
                 
                 # move
-                no_move = True
-                if 'forward' in AI_dir.keys() and AI_dir['forward']:
+                idle = True
+                if 'forward' in action.keys() and action['forward']:
                     self.ev_manager.post(EventPlayerMove(player.player_id, Const.PLAYER_MOVE_FORWARD))
-                    no_move = False
-                if 'backward' in AI_dir.keys() and AI_dir['backward']:
+                    idle = False
+                if 'backward' in action.keys() and action['backward']:
                     self.ev_manager.post(EventPlayerMove(player.player_id, Const.PLAYER_MOVE_BACKWARD))
-                    no_move = False
-                if no_move:
+                    idle = False
+                if idle:
                     self.ev_manager.post(EventPlayerNoMove(player.player_id))
 
                 # rotate
-                if 'left' in AI_dir.keys() and AI_dir['left']:
+                if 'left' in action.keys() and action['left']:
                     self.ev_manager.post(EventPlayerRotate(player.player_id, Const.PLAYER_ROTATE_LEFT))
-                if 'right' in AI_dir.keys() and AI_dir['right']:
+                if 'right' in action.keys() and action['right']:
                     self.ev_manager.post(EventPlayerRotate(player.player_id, Const.PLAYER_ROTATE_RIGHT))
 
                 # attack
-                if 'attack' in AI_dir.keys() and AI_dir['attack']:
+                if 'attack' in action.keys() and action['attack']:
                     self.ev_manager.post(EventPlayerAttack(player.player_id))
 
     def initialize(self):
