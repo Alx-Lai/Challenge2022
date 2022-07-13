@@ -202,3 +202,17 @@ class Helper(object):
         """return RE_Field obstacles"""
         return [RE_field.position for RE_field in self.model.obstacles \
                 if isinstance(RE_field,RE_Field)]
+
+    def get_nearest_RE_position(self) -> pg.Vector2:
+        """
+        get nearest RE or boundary position
+        """
+        REs_pos = self.get_RE_field_position()
+        self_pos = self.get_player_position()[self.get_self_id()]
+        REs_pos += [Vector2(self_pos.x, 0), Vector2(self_pos.x, 30), \
+            Vector2(0, self_pos.y), Vector2(30, self_pos.y)]
+        nearest_pos = REs_pos[0]
+        for pos in REs_pos:
+            if (nearest_pos - self_pos).length() >= (pos - self_pos).length():
+                nearest_pos = pos
+        return nearest_pos
