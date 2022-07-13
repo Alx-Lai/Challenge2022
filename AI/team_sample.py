@@ -5,29 +5,29 @@ AI_DIR_RIGHT        = 3
 AI_DIR_ATTACK       = 4
 AI_DIR_STOP         = 5
 
-AI_DIR_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
+ACTION_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
 
 import random
-import math
 
 class TeamAI():
     def __init__(self, helper):
         self.helper = helper
+        self.enhancement = [0, 0, 0, 0]
+        self.action = ACTION_NONE
         self.player_id = helper.get_self_id()
-        self.AI = AI_DIR_NONE
         self.counter = 0
         self.rotate = 0
         self.wander = False
     
     def reset(self):
-        self.AI = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
+        self.action = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
     
     def auto_attack(self):
         if self.helper.get_player_next_attack()[self.player_id] == 0:
             self.counter = 10
-            self.AI['attack'] = True
+            self.action['attack'] = True
         if self.counter > 0:
-            self.AI['forward'] = True 
+            self.action['forward'] = True 
             self.counter -= 1
     
     def auto_wander(self):
@@ -35,7 +35,7 @@ class TeamAI():
             if random.randint(0, 1000) == 0:
                 self.wander = random.randint(150, 600)
         if self.wander > 0:
-            self.AI['forward'] = True
+            self.action['forward'] = True
             self.wander -= 1
         
     def decide(self):
@@ -50,10 +50,10 @@ class TeamAI():
             if self.rotate > 0:
                 self.rotate -= 1
                 if self.rotate > 20:
-                    self.AI['left'] = True
+                    self.action['left'] = True
             else:
                 self.rotate += 1
                 if self.rotate < -20:
-                    self.AI['right'] = True
+                    self.action['right'] = True
 
-        return self.AI
+        return self.action
