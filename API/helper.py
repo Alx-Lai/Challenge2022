@@ -36,6 +36,10 @@ class Helper(object):
         """return a int as your remaining respawn time."""
         return self.model.players[self.player_id].respawn_timer
 
+    def get_self_is_respawning(self) -> bool:
+        """return a bool representing whether you are respawning or not."""
+        return self.model.players[self.player_id].respawning()
+
     def get_self_position(self) -> pg.Vector2:
         """return a Vector2 as your position."""
         return self.model.players[self.player_id].position
@@ -179,6 +183,13 @@ class Helper(object):
         use id as index, 1 frame as unit.
         """
         return [player.respawn_timer for player in self.model.players]
+
+    def get_player_is_respawning(self) -> list:
+        """
+        return a bool list represent all player is respawning or not, 
+        use id as index
+        """
+        return [player.respawning() for player in self.model.players]
 
     def get_player_is_alive(self) -> list:
         """
