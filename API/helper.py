@@ -375,6 +375,19 @@ class Helper(object):
         return [item_info for item_info in self.get_item_info() \
                 if item_info["type"] == item_type]
 
+    def get_nearest_item_info(self) -> list:
+        """
+        get nearest RE or boundary position
+        """
+        items_info = self.get_item_info()
+        self_pos = self.get_player_position()[self.player_id]
+        nearest_info = items_info[0]
+        for info in items_info:
+            if (nearest_info['position'] - self_pos).length() \
+                    >= (info['position'] - self_pos).length():
+                nearest_info = info
+        return nearest_info
+
     # get field data
     def get_wall_position(self) -> list:
         """return all obstacles"""
