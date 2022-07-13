@@ -106,6 +106,34 @@ class Helper(object):
     def get_player_gun_remaining_time(self) -> list:
         return [player.gun.use_time for player in self.model.players]
 
+    # get specific player data
+    def get_nearest_player_position(self) -> pg.Vector2:
+        """
+        return the position of the nearest player
+        """
+        players_pos = self.get_player_position()
+        self_pos = players_pos.pop(self.get_self_id())
+        nearest_pos = players_pos[0]
+        for pos in players_pos:
+            if (pos - self_pos).length() < (nearest_pos - self_pos).length():
+                nearest_pos = pos
+        return nearest_pos
+
+    def get_nearest_player_id(self) -> int:
+        """
+        return the id of the nearest player
+        """
+        players_pos = self.get_player_position()
+        self_pos = players_pos[self.get_self_id()]
+        nearest_id = (self.get_self_id() + 1) % Const.PLAYER_NUMBER
+        for i in range(Const.PLAYER_NUMBER):
+            if i == self.get_self_id():
+                continue
+            if (players_pos[i] - self_pos).length() \
+                < (players_pos[nearest_id] - self_pos).length():
+                nearest_id = i
+        return nearest_id
+
     # get buff info
     def get_player_buff_count(self) -> list:
         """return the amount of buffs on every player."""
