@@ -134,6 +134,30 @@ class Helper(object):
     def get_self_gun_remaining_time(self) -> int:
         """return a int as your remaining gun using time in frame"""
         return self.model.players[self.player_id].gun.use_time
+
+    # buff
+    def get_self_buff_count(self) -> dict:
+        """return the amount of buffs on you."""
+        player = self.model.players[self.player_id]
+        return [
+            {
+                "type": Const.BUFF_TYPE_ATTACK_SPEED,
+                "count": Const.PLAYER_QUOTA_ATTACK_SPEED - player.quota_attack_speed
+            }, {
+                "type": Const.BUFF_TYPE_REPULSION,
+                "count": Const.PLAYER_QUOTA_REPULSION - player.quota_repulsion
+            }, {
+                "type": Const.BUFF_TYPE_ATTACK_ACCURACY,
+                "count": Const.PLAYER_QUOTA_ATTACK_ACCURACY - player.quota_attack_accuracy
+            }
+        ]
+
+    def get_self_specific_buff_count(self, buff_type: int) -> list:
+        """return the amount of specific buff on you."""
+        for buff_info in self.get_self_buff_count():
+            if buff_info["type"] == buff_type:
+                return buff_info["count"]
+
     # get all player data
     # general
     def get_player_id(self) -> list:
