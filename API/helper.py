@@ -44,6 +44,22 @@ class Helper(object):
         """return a Vector2 as your direction."""
         return self.model.players[self.player_id].direction
 
+    # movement
+    def get_self_speed(self) -> pg.Vector2:
+        """return a Vector2 as your speed."""
+        return self.model.players[self.player_id].speed
+
+    def get_self_rotation_speed(self) -> int:
+        """
+        return a int as your rotation speed, 
+        use radian per frame as unit.
+        """
+        return Const.PLAYER_ROTATION_SPEED
+
+    def get_self_base_speed(self) -> int:
+        """return a int as your base speed value."""
+        return self.model.players[self.player_id].base_speed
+
     # get all player data
     # general
     def get_player_id(self) -> list:
