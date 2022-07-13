@@ -11,7 +11,7 @@ PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(9.5, 9.5), pg.Vector2(20.5, 9.5), pg.Vector2(9.5, 20.5), pg.Vector2(20.5, 20.5)]
 
 PLAYER_RADIUS = 0.5                       # L
-PLAYER_BASE_SPEED = 10 / FPS              # L / T
+PLAYER_BASE_SPEED = 0.5 / FPS              # L / T
 PLAYER_ROTATION_SPEED = 3 / FPS           # radian / T
 PLAYER_REPULSION_RESISTANCE = 0
 
