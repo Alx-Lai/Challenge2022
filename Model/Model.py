@@ -4,7 +4,11 @@ import pygame as pg
 from EventManager.EventManager import *
 from Model.GameObject.item_generator import *
 from Model.GameObject.player import *
+from Model.GameObject.obstacle import *
+from Map.map_generator import map_gen
 import Const
+
+
 
 class StateMachine(object):
     '''
@@ -60,7 +64,7 @@ class GameEngine:
     The main game engine. The main loop of the game is in GameEngine.run()
     '''
 
-    def __init__(self, ev_manager: EventManager):
+    def __init__(self, ev_manager: EventManager, map_name: str, AI_names: list):
         '''
         This function is called when the GameEngine is created.
         For more specific objects related to a game instance
@@ -69,6 +73,11 @@ class GameEngine:
         self.ev_manager = ev_manager
         ev_manager.register_listener(self)
         self.state_machine = StateMachine()
+        self.map_name = map_name
+
+        self.AI_names = AI_names
+        while len(self.AI_names) < Const.PLAYER_NUMBER:
+            self.AI_names.append('manual')
 
     def initialize(self):
         '''
@@ -76,14 +85,13 @@ class GameEngine:
         '''
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
-        self.players = [Player(self, i) for i in range(Const.PLAYER_NUMBER)]
-        self.obstacles = [Obstacle(self, Const.OBSTACLE_POSITION[i], Const.OBSTACLE_RADIUS) for i in
-                          range(len(Const.OBSTACLE_POSITION))] + \
-                         [RE_Field(self, Const.RE_FIELD_POSITION[i], Const.RE_FIELD_RADIUS) for i in
-                          range(len(Const.RE_FIELD_POSITION))]
+        self.players = [Player(self, i, self.AI_names[i], self.AI_names[i] != 'manual') for i in range(Const.PLAYER_NUMBER)]
+        self.death_cnt = Const.PLAYER_INIT_DEATH_CNT
+        self.obstacles = map_gen(self, self.map_name)
         self.bullets = []
         self.items = []
         self.item_generator = Item_Generator(self)
+        self.alive_score_add = False
 
     def notify(self, event: BaseEvent):
         '''
@@ -172,7 +180,13 @@ class GameEngine:
         Update the objects in endgame scene.
         For example: scoreboard
         '''
-        pass
+        if not self.alive_score_add:
+            self.alive_score_add = True
+            for i in range(Const.PLAYER_NUMBER):
+                if self.players[i].respawn_count >= 0:
+                    self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
+        # TODO: show scoreboard
+        
 
     def run(self):
         '''
@@ -185,4 +199,8 @@ class GameEngine:
         self.timer = Const.GAME_LENGTH
         while self.running:
             self.ev_manager.post(EventEveryTick())
-            self.clock.tick(Const.FPS)
+            self.clock.tick(Const.FPS)           
+            if self.death_cnt >= 3:
+                self.state_machine.push(Const.STATE_ENDGAME)
+
+

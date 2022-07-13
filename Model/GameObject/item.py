@@ -33,7 +33,8 @@ class Item_Buff(Base_Square_Object):
         Run whenever EventEveryTick() arises.
         '''
         for player in self.model.players:
-            if not player.respawning() and self.collide_object(player) and player.quota_enough(self.type):
-                player.buff(self.type)
+            if not player.invisible() and self.collide_object(player):
+                if player.quota_enough(self.type):
+                    player.buff(self.type)
                 self.kill()
                 return

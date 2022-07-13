@@ -9,27 +9,35 @@ class Player(Base_Circle_Object):
     '''
     Represent a player.
     '''
-    def __init__(self, model, player_id: int):
+    def __init__(self, model, player_id: int, name: str, is_AI: bool):
         super().__init__(model, copy.deepcopy(Const.PLAYER_INIT_POSITION[player_id]), Const.PLAYER_RADIUS)
 
         self.player_id = player_id
         self.score = 0
+        self.base_speed = Const.PLAYER_BASE_SPEED
         self.gun = Normal_Gun(model, self)
+        self.repulsion_resistance = Const.PLAYER_REPULSION_RESISTANCE
 
-        self.attack_cd = Const.PLAYER_ATTACK_CD
+        self.attack_speed = Const.PLAYER_ATTACK_SPEED
         self.attack_kick = Const.PLAYER_ATTACK_KICK
+        self.attack_accuracy = Const.PLAYER_ATTACK_ACCURACY
+        self.attack_ammo = Const.PLAYER_ATTACK_AMMO
         self.aux_line_length = Const.PLAYER_AUX_LINE_LENGTH
 
+        self.bullet_lifespan = Const.BULLET_LIFESPAN
         self.bullet_trace_time = Const.BULLET_TRACE_TIME
         self.bullet_repulsion = Const.BULLET_REPULSION
 
-        self.quota_attack_cd = Const.PLAYER_QUOTA_ATTACK_CD
+        self.quota_attack_speed = Const.PLAYER_QUOTA_ATTACK_SPEED
         self.quota_repulsion = Const.PLAYER_QUOTA_REPULSION
-        self.quota_aux_line_length = Const.PLAYER_QUOTA_AUX_LINE_LENGTH
+        self.quota_attack_accuracy = Const.PLAYER_QUOTA_ATTACK_ACCURACY
 
         self.death_count = 0
         self.respawn_count = Const.PLAYER_MAX_RESPAWN_COUNT[player_id]
         self.respawn_timer = 0
+
+        self.player_name = name
+        self.is_AI = is_AI
 
     def tick(self):
         '''
@@ -78,7 +86,7 @@ class Player(Base_Circle_Object):
         Increase the player's speed along it's facing direction.
         Can move either forward or backward.
         '''
-        new_speed = Const.PLAYER_BASE_SPEED * self.direction * direction
+        new_speed = self.base_speed * self.direction * direction
         self.speed = (self.speed * 9 + new_speed) / 10
 
     def stop_moving(self):
@@ -109,44 +117,41 @@ class Player(Base_Circle_Object):
         '''
         Switch the player's gun.
         '''
-        match gun_type:
-            case Const.GUN_TYPE_NORMAL_GUN:
-                self.gun = Normal_Gun(self.model, self)
-            case Const.GUN_TYPE_MACHINE_GUN:
-                self.gun = Machine_Gun(self.model, self)
-            case Const.GUN_TYPE_SNIPER:
-                self.gun = Sniper(self.model, self)
-            case Const.GUN_TYPE_SHOTGUN:
-                self.gun = Shotgun(self.model, self)
+        if gun_type == Const.GUN_TYPE_NORMAL_GUN:
+            self.gun = Normal_Gun(self.model, self)
+        elif gun_type == Const.GUN_TYPE_MACHINE_GUN:
+            self.gun = Machine_Gun(self.model, self)
+        elif gun_type == Const.GUN_TYPE_SNIPER:
+            self.gun = Sniper(self.model, self)
+        elif gun_type == Const.GUN_TYPE_SHOTGUN:
+            self.gun = Shotgun(self.model, self)
         self.model.ev_manager.post(EventPlayerSwitchGun(self.player_id, gun_type))
 
     def quota_enough(self, buff_type):
         '''
         Check if the quota of a buff is enough
         '''
-        match buff_type:
-            case Const.BUFF_TYPE_ATTACK_CD:
-                return self.quota_attack_cd > 0
-            case Const.BUFF_TYPE_REPULSION:
-                return self.quota_repulsion > 0
-            case Const.BUFF_TYPE_AUX_LINE_LENGTH:
-                return self.quota_aux_line_length > 0
+        if buff_type == Const.BUFF_TYPE_ATTACK_SPEED:
+            return self.quota_attack_speed > 0
+        if buff_type == Const.BUFF_TYPE_REPULSION:
+            return self.quota_repulsion > 0
+        if buff_type == Const.BUFF_TYPE_ATTACK_ACCURACY:
+            return self.quota_attack_accuracy > 0
 
 
     def buff(self, buff_type):
         '''
         Add permanent buff to the player.
         '''
-        match buff_type:
-            case Const.BUFF_TYPE_ATTACK_CD:
-                self.attack_cd += Const.BUFF_VALUE_ATTACK_CD
-                self.quota_attack_cd -= 1
-            case Const.BUFF_TYPE_REPULSION:
-                self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
-                self.quota_repulsion -= 1
-            case Const.BUFF_TYPE_AUX_LINE_LENGTH:
-                self.aux_line_length += Const.BUFF_VALUE_AUX_LINE_LENGTH
-                self.quota_aux_line_length -= 1
+        if buff_type == Const.BUFF_TYPE_ATTACK_SPEED:
+            self.attack_speed += Const.BUFF_VALUE_ATTACK_SPEED
+            self.quota_attack_speed -= 1
+        if buff_type == Const.BUFF_TYPE_REPULSION:
+            self.bullet_repulsion += Const.BUFF_VALUE_REPULSION
+            self.quota_repulsion -= 1
+        if buff_type == Const.BUFF_TYPE_ATTACK_ACCURACY:
+            self.attack_accuracy += Const.BUFF_VALUE_ATTACK_ACCURACY
+            self.quota_attack_accuracy -= 1
         self.model.ev_manager.post(EventPlayerBuffed(self.player_id, buff_type))
 
     
@@ -170,3 +175,16 @@ class Player(Base_Circle_Object):
     
     def invisible(self):
         return self.respawning() or self.killed()
+
+    def enhance(self, enhancement: list):
+        '''
+        apply the bonus enhancement
+        '''
+        self.base_speed *= (1 + Const.ENHANCEMENT_BASE_SPEED * enhancement[0])
+        self.attack_speed *= (1 + Const.ENHANCEMENT_ATTACK_SPEED \
+                * enhancement[1])
+        self.bullet_repulsion *= (1 + Const.ENHANCEMENT_BULLET_REPULSION \
+                * enhancement[2])
+        self.repulsion_resistance *= (1 \
+                + Const.ENHANCEMENT_REPULSION_RESISTANCE \
+                * enhancement[3])
