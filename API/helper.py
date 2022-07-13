@@ -18,11 +18,34 @@ class Helper(object):
         """return game remaining time, use 1 frame as unit"""
         return self.model.timer
 
+    # get self data
     # general
     def get_self_id(self) -> int:
         """return your id"""
         return self.player_id
 
+    def get_self_respawn_count(self) -> int:
+        """return a int as your remaining respawn count."""
+        return self.model.players[self.player_id].respawn_count
+
+    def get_self_score(self) -> int:
+        """return a int as your score."""
+        return self.model.players[self.player_id].score
+
+    def get_self_respawn_time(self) -> int:
+        """return a int as your remaining respawn time."""
+        return self.model.players[self.player_id].respawn_timer
+
+    def get_self_position(self) -> pg.Vector2:
+        """return a Vector2 as your position."""
+        return self.model.players[self.player_id].position
+
+    def get_self_direction(self) -> pg.Vector2:
+        """return a Vector2 as your direction."""
+        return self.model.players[self.player_id].direction
+
+    # get all player data
+    # general
     def get_player_id(self) -> list:
         """return all player's id, use id as index."""
         return [player.player_id for player in self.model.players]
