@@ -197,8 +197,8 @@ class GameEngine:
         '''
         self.running = True
         # Tell every one to start
-        self.ev_manager.post(EventInitialize())
         self.timer = Const.GAME_LENGTH
+        self.ev_manager.post(EventInitialize())
         self.screen = pg.display.set_mode(Const.WINDOW_SIZE)
         self.font = pg.font.SysFont('Comic Sans MS', 20)
         while self.running:
