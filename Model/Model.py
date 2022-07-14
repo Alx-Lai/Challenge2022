@@ -84,6 +84,7 @@ class GameEngine:
         This method is called when a new game is instantiated.
         '''
         self.clock = pg.time.Clock()
+        
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i, self.AI_names[i], self.AI_names[i] != 'manual') for i in range(Const.PLAYER_NUMBER)]
         self.death_cnt = 0
