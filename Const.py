@@ -10,7 +10,7 @@ GAME_LENGTH = 120 * FPS                   # T
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(9.5, 9.5), pg.Vector2(20.5, 9.5), pg.Vector2(9.5, 20.5), pg.Vector2(20.5, 20.5)]
 
-PLAYER_RADIUS = 1                         # L
+PLAYER_RADIUS = 0.5                       # L
 PLAYER_BASE_SPEED = 0.5 / FPS             # L / T
 PLAYER_ROTATION_SPEED = 3 / FPS           # radian / T
 PLAYER_REPULSION_RESISTANCE = 0
@@ -83,9 +83,11 @@ ARENA_GRID_COUNT = 30
 ARENA_GRID_SIZE = ARENA_SIZE[0] / ARENA_GRID_COUNT
 BACKGROUND_COLOR = pg.Color('black')
 BACKGROUND_COLOR_SPEED = 20
+BACKGROUND_COLOR_CHANGE = [pg.Color(0, 0, 100), pg.Color(0, 100, 0), pg.Color(100, 0, 0), pg.Color(100, 100, 0)]
 SCORE_COLOR = [pg.Color(47, 141, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0), pg.Color(255, 255, 0)]
 PLAYER_COLOR = [pg.Color(0, 0, 255), pg.Color(0, 255, 0), pg.Color(255, 0, 0), pg.Color(255, 255, 0)]
 PLAYER_COLOR_RESPAWN = [pg.Color(0, 127, 0), pg.Color(127, 0, 127), pg.Color(127, 127, 0), pg.Color(0, 0, 127)]
+PLAYER_IMAGE_ZOOM = 2.0
 
 #IMAGE PATH
 PLAYER_IMAGE_PATH = [["./View/source/blue_basic.png","./View/source/blue_machine_gun.png","./View/source/blue_sniper.png","./View/source/blue_shotgun.png"],
@@ -98,11 +100,11 @@ BUFF_AUX_lINE_PATH = "./View/source/Aux_line_Length.png"
 SHOT_GUN_PATH = "./View/source/Shotgun.png"
 SNIPER_PATH = "./View/source/Sniper.png"
 MACHINE_GUN_PATH = "./View/source/Machine_Gun.png"
-NORMAL_FIELD_PATH = "./View/source/normal_field.png"
-RE_FIELD_PATH = "./View/source/RE_field.png"
+NORMAL_FIELD_PATH = "./View/source/normal_field_1.png"
+RE_FIELD_PATH = "./View/source/RE_field_1.png"
 CROWN_PATH = "./View/source/crown.png"
 SCORE_BACKGROUND_PATH = "./View/source/score_background.png"
-BACKGROUND_TOP_PATH = "./View/source/Background_top.png"
+BACKGROUND_TOP_PATH = "./View/source/Background_top_1.png"
 BACKGROUND_PATH = "./View/source/Background.png"
 MENU_PATH = "./View/source/Menu.png"
 

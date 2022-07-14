@@ -195,7 +195,7 @@ class GraphicalView:
 
     def rand_backgroud_color(self, times):
         if self.background_count == times:
-            self.background_color = Const.PLAYER_COLOR[randint(0, 3)]
+            self.background_color = Const.BACKGROUND_COLOR_CHANGE[randint(0, 3)]
             self.background_count = 0
         else:
             self.background_count += 1
@@ -209,8 +209,8 @@ class GraphicalView:
 
     def render_play(self):
         # draw background
-        self.rand_backgroud_color(Const.BACKGROUND_COLOR_SPEED)
-        self.screen.fill(self.background_color)
+        # self.rand_backgroud_color(Const.BACKGROUND_COLOR_SPEED)
+        # self.screen.fill(self.background_color)
         self.print_obj(self.background_top, Vector2(0, 0), Vector2(Const.ARENA_SIZE))
         self.draw_score()
         # draw obstacles
@@ -267,7 +267,7 @@ class GraphicalView:
             color = Const.PLAYER_COLOR_RESPAWN[player.player_id] if player.respawning() else Const.PLAYER_COLOR[
                 player.player_id]
             center = player.position * Const.ARENA_GRID_SIZE
-            radius = Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE
+            radius = Const.PLAYER_RADIUS * Const.ARENA_GRID_SIZE * Const.PLAYER_IMAGE_ZOOM
             rect = pg.Rect(center.x - radius, center.y - radius, radius * 2, radius * 2)
 
             # aux_line
