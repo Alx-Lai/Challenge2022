@@ -6,7 +6,7 @@ import pygame as pg
 # time unit: frame (T)
 
 FPS = 60 # frame per second
-GAME_LENGTH = 100 * FPS # temporarily set to infinity
+GAME_LENGTH = 120 * FPS                   # T
 PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(9.5, 9.5), pg.Vector2(20.5, 9.5), pg.Vector2(9.5, 20.5), pg.Vector2(20.5, 20.5)]
 
