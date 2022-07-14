@@ -86,7 +86,7 @@ class GameEngine:
         self.clock = pg.time.Clock()
         self.state_machine.push(Const.STATE_MENU)
         self.players = [Player(self, i, self.AI_names[i], self.AI_names[i] != 'manual') for i in range(Const.PLAYER_NUMBER)]
-        self.death_cnt = Const.PLAYER_INIT_DEATH_CNT
+        self.death_cnt = 0
         self.obstacles = map_gen(self, self.map_name)
         self.bullets = []
         self.items = []
@@ -137,6 +137,9 @@ class GameEngine:
             if not self.players[event.player_id].invisible():
                 self.players[event.player_id].attack()
 
+        elif isinstance(event, EventPlayerRemove):
+            self.death_cnt += 1
+
         elif isinstance(event, EventTimesUp):
             self.state_machine.push(Const.STATE_ENDGAME)
 
@@ -185,8 +188,6 @@ class GameEngine:
             for i in range(Const.PLAYER_NUMBER):
                 if self.players[i].respawn_count >= 0:
                     self.players[i].score += Const.PLAYER_ALIVE_SCORE[3]
-        # TODO: show scoreboard
-        
 
     def run(self):
         '''
@@ -202,7 +203,7 @@ class GameEngine:
         while self.running:
             self.ev_manager.post(EventEveryTick())
             self.clock.tick(Const.FPS)           
-            if self.death_cnt >= 3:
+            if self.death_cnt >= Const.PLAYER_NUMBER-1:
                 self.state_machine.push(Const.STATE_ENDGAME)
 
 

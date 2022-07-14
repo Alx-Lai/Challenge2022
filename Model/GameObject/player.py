@@ -161,7 +161,8 @@ class Player(Base_Circle_Object):
         '''
         if self.respawn_count <= 0:
             super().kill()
-            return
+            self.score += Const.PLAYER_ALIVE_SCORE[self.model.death_cnt]
+            self.model.ev_manager.post(EventPlayerRemove(self.player_id))
         
         self.respawn_count -= 1
         self.respawn_timer = Const.PLAYER_RESPAWN_TIME
