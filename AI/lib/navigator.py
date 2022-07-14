@@ -32,10 +32,10 @@ class Navigator():
         self.counter = -1
     
     def initialize(self):
-        self.pos = toVector2(self.helper.get_player_position()[self.id])
-        self.dir = toVector2(self.helper.get_player_direction()[self.id])
-        self.speed = toVector2(self.helper.get_player_speed()[self.id])
         self.counter += 1
+        self.pos = self.helper.get_player_position()[self.id]
+        self.dir = self.helper.get_player_direction()[self.id]
+        self.speed = self.helper.get_player_speed()[self.id]
 
     def in_graph(self, x, y) -> bool:
         return 0 < min(x, y) and max(x, y) < Const.ARENA_GRID_COUNT
@@ -165,7 +165,7 @@ class Navigator():
 
     def decide(self):
         """
-        Main function of Navigator.
+        Main function of Navigator, will modify action to decide movement.
         """
         # print("----- start -----")
         self.initialize()
