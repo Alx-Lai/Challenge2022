@@ -42,16 +42,16 @@ class Helper(object):
 
     def get_self_position(self) -> pg.Vector2:
         """return a Vector2 as your position."""
-        return self.model.players[self.player_id].position
+        return self.model.players[self.player_id].position.copy()
 
     def get_self_direction(self) -> pg.Vector2:
         """return a Vector2 as your direction."""
-        return self.model.players[self.player_id].direction
+        return self.model.players[self.player_id].direction.copy()
 
     # movement
     def get_self_speed(self) -> pg.Vector2:
         """return a Vector2 as your speed."""
-        return self.model.players[self.player_id].speed
+        return self.model.players[self.player_id].speed.copy()
 
     def get_self_rotation_speed(self) -> int:
         """
@@ -200,19 +200,19 @@ class Helper(object):
 
     # movement
     def get_player_position(self) -> list:
-        """return all player's position, use id as index"""
-        return [player.position for player in self.model.players]
+        """return Vector2 list represent all player's position, use id as index"""
+        return [player.position.copy() for player in self.model.players]
 
     def get_player_direction(self) -> list:
-        """return all player's direction, use id as index"""
-        return [player.direction for player in self.model.players]
+        """return Vector2 list represent all player's direction, use id as index"""
+        return [player.direction.copy() for player in self.model.players]
 
     def get_player_speed(self) -> list:
         """
         return a Vector2 list represent all player's speed,
         use id as index.
         """
-        return [player.speed for player in self.model.players]
+        return [player.speed.copy() for player in self.model.players]
 
     def get_player_base_speed(self) -> list:
         """
@@ -353,7 +353,7 @@ class Helper(object):
         """get the information of the bullet."""
         return [
             {
-                "speed": bullet.speed, "position": bullet.position,
+                "speed": bullet.speed.copy(), "position": bullet.position.copy(),
                 "repulsion": bullet.repulsion, "lifespam": bullet.lifespam,
                 "attacker": bullet.attacker.player_id
             }
@@ -365,7 +365,7 @@ class Helper(object):
         """get the position and type of the items."""
         return [
             {
-                "position": item.position, "type": item.type
+                "position": item.position.copy(), "type": item.type
             }
             for item in self.model.items
         ]
@@ -391,11 +391,11 @@ class Helper(object):
     # get field data
     def get_wall_position(self) -> list:
         """return all obstacles"""
-        return [wall.position for wall in self.model.obstacles]
+        return [wall.position.copy() for wall in self.model.obstacles]
 
     def get_RE_field_position(self) -> list:
         """return RE_Field obstacles"""
-        return [RE_field.position for RE_field in self.model.obstacles \
+        return [RE_field.position.copy() for RE_field in self.model.obstacles \
                 if isinstance(RE_field,RE_Field)]
 
     def get_nearest_RE_position(self) -> pg.Vector2:
