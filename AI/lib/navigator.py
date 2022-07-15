@@ -11,7 +11,7 @@ class Navigator():
         self.brain = brain
         self.lastDijkstraTime = -DIJKSTRA_FREQUENCY
 
-    def dijkstra(self, start: int):
+    def Dijkstra(self, start: int):
         """
         Run Dijkstra's Algorithm and return two lists ([distance], [pre_index]).
         """
@@ -33,52 +33,50 @@ class Navigator():
                     hq.heappush(heap, (distance + w, x, d))
         return dis, pre
     
-    def destination(self) -> pg.Vector2:
+    def Destination(self) -> pg.Vector2:
         """
         Return a Vector2 representing the best destination to go to, return (-1,-1) if it decides to stay.
         """
         items = self.brain.helper.get_item_info()
-        dis, pre = self.dijkstra(index(self.brain.position))
-
+        dis, pre = self.Dijkstra(Index(self.brain.position))
 
         # if have special gun, neglect gun items
-        tmp_items = items
+        tmpItems = items
         if self.brain.helper.get_self_gun_type() != Const.GUN_TYPE_NORMAL_GUN:
             items = [item for item in items if item["type"] >= 4]
 
         # no choice
         if not items:
-            items = tmp_items
+            items = tmpItems
 
         # find closet item
-        best_item = items[0]
+        bestItem = items[0]
         for item in items[1:]:
-            if dis[index(best_item["position"])] > dis[index(item["position"])]:
-                best_item = item
+            if dis[Index(bestItem["position"])] > dis[Index(item["position"])]:
+                bestItem = item
         
         # find turning point
-        x, y = normalize(best_item["position"])
-        dest = pg.Vector2(x, y)
-        mem = pre[index(x, y)]
-        while pre[index(x, y)] != -1:
-            tmp = pre[index(x, y)]
+        pos = Normalize(bestItem["position"])
+        dest = pos.copy()
+        mem = pre[Index(pos)]
+        while pre[Index(pos)] != -1:
+            tmp = pre[Index(pos)]
             if mem != tmp:
-                dest = pg.Vector2(x, y)
+                dest = pos.copy()
                 mem = tmp
-            x -= DX[tmp] * WIDTH
-            y -= DY[tmp] * WIDTH
+            pos -= DXY[tmp] * WIDTH
         return dest
 
-    def decide(self):
+    def Decide(self):
         """
         Main function of Navigator, will modify action to decide movement.
         """
         if self.brain.time - self.lastDijkstraTime >= DIJKSTRA_FREQUENCY:
-            self.dest = self.destination()
+            self.dest = self.Destination()
 
-        rotate_radian = angleBetween(self.brain.direction, self.dest - self.brain.position) # radian
-        if abs(rotate_radian) > MOVING_ROTATIONAL_TOLERANCE:
-            if rotate_radian < 0:
+        rotateRadian = AngleBetween(self.brain.direction, self.dest - self.brain.position) # radian
+        if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
+            if rotateRadian < 0:
                 self.brain.action['left'] = True
             else:
                 self.brain.action['right'] = True

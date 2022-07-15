@@ -1,4 +1,5 @@
 from collections import Counter
+from turtle import width
 import numpy as np
 
 from API.helper import *
@@ -19,13 +20,14 @@ class Brain():
         self.RE_fields = helper.get_RE_field_position()
         # self.wall_segments = self.get_wall_segments()
 
-        self.is_attacking = False
+        self.isAttacking = False
 
         self.edges = [[] for i in range(LENGTH ** 2)] # tuple(node, weight, direc), node indexed by index()
-        self.safe_nodes = [True] * (LENGTH ** 2)
-        self.init_graph()
+        self.safeNodes = [True] * (LENGTH ** 2)
+        self.blocks = [False] * (LENGTH ** 2)
+        self.InitGraph()
         
-    def initialize(self):
+    def Initialize(self):
         """
         Initialize every time TeamAI.decide() is called (every tick).
         """
@@ -36,10 +38,10 @@ class Brain():
         self.direction = self.helper.get_self_direction()
         self.speed = self.helper.get_self_speed()
 
-        self.next_attack = self.helper.get_self_next_attack()
+        self.nextAttack = self.helper.get_self_next_attack()
         self.respawning = self.helper.get_self_is_respawning()
     
-    def get_wall_segments(self):
+    def GetWallSegments(self):
         """
         Decompose all obstacles and RE_fields into wall segments.
         """
@@ -55,44 +57,50 @@ class Brain():
                 walls[(p1.x, p1.y, p2.x, p2.y)] += 1
         return [(pg.Vector2(k[0], k[1]), pg.Vector2(k[2], k[3])) for k, v in walls.items() if v == 1]
         
-    def init_graph(self):
+    def InitGraph(self):
         for pos in self.RE_fields:
-            self.safe_nodes[index(pos)] = False
+            self.safeNodes[Index(pos)] = False
+            self.blocks[Index(pos)] = True
             for i in range(8):
-                nx = pos.x + WIDTH * DX[i]
-                ny = pos.y + WIDTH * DY[i]
-                self.safe_nodes[index(nx, ny)] = False
+                npos = pos + DXY[i] * WIDTH
+                self.safeNodes[Index(npos)] = False
+                self.blocks[Index(npos)] = True
                 for j in range(4):
-                    nnx = nx + WIDTH * DX[j]
-                    nny = ny + WIDTH * DY[j]
-                    self.safe_nodes[index(nnx, nny)] = False
+                    nnpos = npos + DXY[j] * WIDTH
+                    self.safeNodes[Index(nnpos)] = False
         
         for pos in self.obstacles:
-            self.safe_nodes[index(pos)] = False
+            self.safeNodes[Index(pos)] = False
+            self.blocks[Index(pos)] = True
             for i in range(8):
-                nx = pos.x + WIDTH * DX[i]
-                ny = pos.y + WIDTH * DY[i]
-                self.safe_nodes[index(nx, ny)] = False
+                npos = pos + DXY[i] * WIDTH
+                self.safeNodes[Index(npos)] = False
+                self.blocks[Index(npos)] = True
         
         for i in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
-            self.safe_nodes[index(0, i)] = False
+            pos = pg.Vector2(0, i)
+            self.safeNodes[Index(pos)] = False
             for j in range(4):
-                nx = 0 + WIDTH * DX[j]
-                ny = i + WIDTH * DY[j]
-                self.safe_nodes[index(nx, ny)] = False
-            self.safe_nodes[index(i, 0)] = False
+                npos = pos + DXY[j] * WIDTH
+                self.safeNodes[Index(npos)] = False
+            pos = pg.Vector2(i, 0)
+            self.safeNodes[Index(pos)] = False
             for j in range(4):
-                nx = i + WIDTH * DX[j]
-                ny = 0 + WIDTH * DY[j]
-                self.safe_nodes[index(nx, ny)] = False
+                npos = pos + DXY[j] * WIDTH
+                self.safeNodes[Index(npos)] = False
+            EDGE = Const.ARENA_GRID_COUNT - WIDTH
+            self.safeNodes[Index(pg.Vector2(EDGE, i))] = False
+            self.safeNodes[Index(pg.Vector2(i, EDGE))] = False
 
         for x in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
             for y in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
+                pos = pg.Vector2(x, y)
                 for i in range(8):
-                    nx = x + WIDTH * DX[i]
-                    ny = y + WIDTH * DY[i]
-                    if in_graph(nx, ny) and self.safe_nodes[index(nx, ny)]:
-                        self.edges[index(x, y)].append((index(nx, ny), DW[i], i))
+                    npos = pos + DXY[i] * WIDTH
+                    if InGraph(npos) and self.safeNodes[Index(npos)]:
+                        if i>=4 and (self.blocks[Index(pos+DXY[i-4]*WIDTH)] or self.blocks[Index(pos+DXY[(i-3)%4]*WIDTH)]):
+                            continue
+                        self.edges[Index(pos)].append((Index(npos), DW[i], i))
     
 
 
