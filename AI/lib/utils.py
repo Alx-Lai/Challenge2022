@@ -12,6 +12,9 @@ def maxIndex(inputList: list) -> int:
     maxValue = max(inputList)
     return inputList.index(maxValue)
 
+def clamp(tar, smallest, largest):
+    return max(smallest, min(tar, largest))
+
 # Geometry
 def unitVector(vector):
     return vector / np.linalg.norm(vector)
@@ -57,7 +60,7 @@ def index(px, py = -1) -> int:
             return 0
         x = round(px * SCALE)
         y = round(py * SCALE)
-    return y + x * LENGTH
+    return clamp(y + x * LENGTH, 0, LENGTH ** 2-1)
 
 def normalize(px, py = -1):
     if py == -1:

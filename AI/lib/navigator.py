@@ -9,6 +9,7 @@ from AI.lib.utils import *
 class Navigator():
     def __init__(self, brain: Brain):
         self.brain = brain
+        self.lastDijkstraTime = -DIJKSTRA_FREQUENCY
 
     def dijkstra(self, start: int):
         """
@@ -72,7 +73,7 @@ class Navigator():
         """
         Main function of Navigator, will modify action to decide movement.
         """
-        if self.brain.time % DIJKSTRA_FREQUENCY == 0:
+        if self.brain.time - self.lastDijkstraTime >= DIJKSTRA_FREQUENCY:
             self.dest = self.destination()
 
         rotate_radian = angleBetween(self.brain.direction, self.dest - self.brain.position) # radian

@@ -13,19 +13,12 @@ class Attacker():
         Check if target can be hit directly from current position.
         Method: Simulate the shot.
         """
-        SIMULATE_DELTA = 0.5
-        delta = SIMULATE_DELTA
-        direction = target - self.brain.position
         current = self.brain.position
-
-    def directHit2(self, target: pg.Vector2):
-        """
-        Check if target can be hit directly from current position.
-        Method: Check every wall segments.
-        """
-        position = self.brain.position
-        for seg in self.brain.wall_segments:
-            if banana(position, target, seg[0], seg[1]):
+        delta = target - current
+        delta.scale_to_length(SHOOT_SIMULATE_LENGTH)
+        while index(current) != index(target):
+            current += delta
+            if not self.brain.safe_nodes[index(current)]:
                 return False
         return True
 
@@ -34,13 +27,13 @@ class Attacker():
         Get a list of position of attackable targets.
         """
         self.targets = []
-        tar_alive = [time == 0 for time in self.brain.helper.get_player_respawn_time()]
-        for idx, tar_pos in enumerate(self.brain.helper.get_player_position()):
-            if idx == self.brain.id or not tar_alive[idx]:
+        isRespawning = self.brain.helper.get_player_is_respawning()
+        for idx, targetPos in enumerate(self.brain.helper.get_player_position()):
+            if idx == self.brain.id or isRespawning[idx]:
                 continue
-            # if self.directHit(tar_pos):
-            if (tar_pos - self.brain.position).length() < ATTACK_RANGE:
-                self.targets.append(tar_pos)
+            if self.directHit(targetPos):
+            # if (tar_pos - self.brain.position).length() < ATTACK_RANGE:
+                self.targets.append(targetPos)
     
     def decide(self):
         """

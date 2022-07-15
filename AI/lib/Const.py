@@ -21,9 +21,10 @@ DW = [1] * 4 + [math.sqrt(2)] * 4
 
 # Navigator
 MOVING_ROTATIONAL_TOLERANCE = 0.03 # radian
-DIJKSTRA_FREQUENCY = 3 # frames per evaluate
+DIJKSTRA_FREQUENCY = 30 # frames per evaluate
 
 # Attacker
 ATTACK_ROTATIONAL_TOLERANCE = 0.03 # radian
 ATTACK_TARGET_SCAN_FREQUENCY = 60 # frames per scan
 ATTACK_RANGE = 10.0 # grids
+SHOOT_SIMULATE_LENGTH = 0.2
