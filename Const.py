@@ -11,12 +11,12 @@ PLAYER_NUMBER = 4
 PLAYER_INIT_POSITION = [pg.Vector2(9.5, 9.5), pg.Vector2(20.5, 9.5), pg.Vector2(9.5, 20.5), pg.Vector2(20.5, 20.5)]
 
 PLAYER_RADIUS = 0.5                       # L
-PLAYER_BASE_SPEED = 0.5 / FPS             # L / T
-PLAYER_ROTATION_SPEED = 3 / FPS           # radian / T
+PLAYER_BASE_SPEED = 2 / FPS               # L / T
+PLAYER_ROTATION_SPEED = 2 / FPS           # radian / T
 PLAYER_REPULSION_RESISTANCE = 0
 
 PLAYER_ATTACK_SPEED = 0.5                 # bullet / T
-PLAYER_ATTACK_KICK = 1 / 10               # speed 
+PLAYER_ATTACK_KICK = 2 / 10               # speed 
 PLAYER_ATTACK_ACCURACY = 0.25             # radian
 PLAYER_ATTACK_AMMO = 1                    # bullet
 PLAYER_AUX_LINE_LENGTH = 1                # L
@@ -32,7 +32,7 @@ PLAYER_ALIVE_SCORE = [0, 100, 200, 300]
 BULLET_RADIUS = 0.2                       # L
 BULLET_REPULSION = 3 / 10                 # speed
 BULLET_SPEED = 15 / FPS                   # L / T
-BULLET_LIFESPAN = 6 * FPS                 # T
+BULLET_LIFESPAN = 3 * FPS                 # T
 BULLET_TRACE_TIME = 0.1 * FPS             # T
 BULLET_HIT_SCORE = 10
 
@@ -51,20 +51,20 @@ GUN_BULLET_TRACE_TIME_MULTIPLIER = [1, 1, 2, 0.6]
 GUN_BULLET_REPULSION_MULTIPLIER = [1, 1/3, 2, 1]
 GUN_BULLET_ACCURACY_MULTIPLIER = [1, 1, 0.1, 2]
 
-SHOTGUN_SPREAD_ANGLE = math.pi / 36  # radian
+SHOTGUN_SPREAD_ANGLE = math.pi / 36       # radian
 
 BUFF_TYPE_ATTACK_SPEED = 4
 BUFF_TYPE_REPULSION = 5
 BUFF_TYPE_ATTACK_ACCURACY = 6
 
 BUFF_VALUE_ATTACK_SPEED = 0.2             # bullet / T
-BUFF_VALUE_REPULSION = 4 / FPS            # L / T
+BUFF_VALUE_REPULSION = 0.4 / 10           # speed
 BUFF_VALUE_ATTACK_ACCURACY = -0.04        # radian
 
-ITEM_GENERATOR_COOLDOWN = 1 * FPS  # T
+ITEM_GENERATOR_COOLDOWN = 1 * FPS         # T
 ITEM_MAX = 10
-ITEM_GUN_RADIUS = 0.5  # L
-ITEM_BUFF_RADIUS = 0.5  # L
+ITEM_GUN_RADIUS = 0.5                     # L
+ITEM_BUFF_RADIUS = 0.5                    # L
 
 OBSTACLE_RADIUS = 0.5                     # L
 RE_FIELD_RADIUS = 0.5                     # L
@@ -125,7 +125,7 @@ PLAYER_SWITCH_GUN_SOUND_PATH = "./View/source/switch_weapon.mp3"
 STATE_POP = 0  # for convenience, not really a state which we can be in
 STATE_MENU = 1
 STATE_PLAY = 2
-STATE_STOP = 3  # not implemented yet
+STATE_STOP = 3 
 STATE_ENDGAME = 4
 
 # controller
