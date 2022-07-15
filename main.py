@@ -17,9 +17,10 @@ def main(argv):
     # EventManager listen to events and notice model, controller, view
     AIs = []
     special_modes = []
+    q_mode = False
     map_name = "random"
     try:
-        opts, args = getopt.getopt(argv[1:], "ntm:")
+        opts, args = getopt.getopt(argv[1:], "qntm:")
     except:
         print ("Usage: main.py -m <map_name> <AI_1> <AI_2> ...")
         sys.exit(2)
@@ -30,6 +31,9 @@ def main(argv):
             special_modes.append('TIMEOUT')
         elif opt.lower() in ('-m', '--map'):
             map_name = arg
+        elif opt.lower() in ('-q', '--quiet'):
+            q_mode = True
+            
     for arg in args:
         AIs.append(arg)
     assert len(AIs) <= Const.PLAYER_NUMBER, "too many AIs!"
@@ -38,7 +42,7 @@ def main(argv):
     model      = GameEngine(ev_manager, map_name, AIs)
     controller = Controller(ev_manager, model)
     view       = GraphicalView(ev_manager, model)
-    sound      = Audio(ev_manager, model)
+    sound      = Audio(ev_manager, model, q_mode)
     interface  = Interface(ev_manager, model, special_modes)
 
     # Main loop

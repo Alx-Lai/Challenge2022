@@ -4,24 +4,29 @@ from EventManager.EventManager import *
 from Model.Model import GameEngine
 
 class Audio():
-    pg.mixer.init()
-    menu_music = pg.mixer.Sound(Const.MENU_MUSIC_PATH)
-    background_music = pg.mixer.Sound(Const.BACKGROUND_MUSIC_PATH)
-    normal_gun_sound = pg.mixer.Sound(Const.NORMAL_GUN_SOUND_PATH)
-    sniper_sound = pg.mixer.Sound(Const.SNIPER_SOUND_PATH)
-    shotgun_sound = pg.mixer.Sound(Const.SHOT_GUN_SOUND_PATH)
-    machine_gun_sound = pg.mixer.Sound(Const.MACHINE_GUN_SOUND_PATH)
-    player_died_sound = pg.mixer.Sound(Const.PLAYER_DIED_SOUND_PATH)
-    player_killed_sound = pg.mixer.Sound(Const.PLAYER_KILLED_SOUND_PATH)
-    player_get_hit_sound = pg.mixer.Sound(Const.PLAYER_HIT_SOUND_PATH)
-    player_hit_wall_sound = pg.mixer.Sound(Const.PLAYER_HIT_WALL_SOUND_PATH)
-    player_pick_up_item_sound = pg.mixer.Sound(Const.PLAYER_PICKUP_ITEM_SOUND_PATH)
-    player_switch_gun_sound = pg.mixer.Sound(Const.PLAYER_SWITCH_GUN_SOUND_PATH)
 
-    def __init__(self, ev_manager: EventManager, model: GameEngine):
-            self.ev_manager = ev_manager
-            self.model = model
-            ev_manager.register_listener(self)
+    def __init__(self, ev_manager: EventManager, model: GameEngine, q_mode: bool):
+        self.ev_manager = ev_manager
+        self.model = model
+        ev_manager.register_listener(self)
+
+        self.q_mode = q_mode
+
+        if not self.q_mode:
+            pg.mixer.init()
+
+            self.menu_music = pg.mixer.Sound(Const.MENU_MUSIC_PATH)
+            self.background_music = pg.mixer.Sound(Const.BACKGROUND_MUSIC_PATH)
+            self.normal_gun_sound = pg.mixer.Sound(Const.NORMAL_GUN_SOUND_PATH)
+            self.sniper_sound = pg.mixer.Sound(Const.SNIPER_SOUND_PATH)
+            self.shotgun_sound = pg.mixer.Sound(Const.SHOT_GUN_SOUND_PATH)
+            self.machine_gun_sound = pg.mixer.Sound(Const.MACHINE_GUN_SOUND_PATH)
+            self.player_died_sound = pg.mixer.Sound(Const.PLAYER_DIED_SOUND_PATH)
+            self.player_killed_sound = pg.mixer.Sound(Const.PLAYER_KILLED_SOUND_PATH)
+            self.player_get_hit_sound = pg.mixer.Sound(Const.PLAYER_HIT_SOUND_PATH)
+            self.player_hit_wall_sound = pg.mixer.Sound(Const.PLAYER_HIT_WALL_SOUND_PATH)
+            self.player_pick_up_item_sound = pg.mixer.Sound(Const.PLAYER_PICKUP_ITEM_SOUND_PATH)
+            self.player_switch_gun_sound = pg.mixer.Sound(Const.PLAYER_SWITCH_GUN_SOUND_PATH)
 
             self.menu_music.set_volume(0.5)
             self.background_music.set_volume(1)
@@ -38,6 +43,9 @@ class Audio():
 
     
     def notify(self, event):
+        if self.q_mode:
+            return
+
         if isinstance(event, EventPlayerAttackSuccess):
             if event.gun_type == Const.GUN_TYPE_NORMAL_GUN:
                 self.normal_gun_sound.play()
