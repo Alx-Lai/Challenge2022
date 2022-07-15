@@ -237,14 +237,13 @@ class GraphicalView:
                     pg.draw.lines(self.screen, Const.PLAYER_COLOR[bullet.attacker.player_id], False, points, 3)
 
                 # bullet
-                match bullet.gun_type:
-                    case Const.GUN_TYPE_NORMAL_GUN:
+                if bullet.gun_type == Const.GUN_TYPE_NORMAL_GUN:
                         pg.draw.circle(self.screen, color, center, radius)
-                    case Const.GUN_TYPE_MACHINE_GUN:
+                elif bullet.gun_type == Const.GUN_TYPE_MACHINE_GUN:
                         pg.draw.circle(self.screen, color, center, radius / 1.5)
-                    case Const.GUN_TYPE_SNIPER:
+                elif bullet.gun_type == Const.GUN_TYPE_SNIPER:
                         pg.draw.rect(self.screen, color, rect)
-                    case Const.GUN_TYPE_SHOTGUN:
+                elif bullet.gun_type == Const.GUN_TYPE_SHOTGUN:
                         pg.draw.circle(self.screen, color, center, radius)
 
         # draw items
