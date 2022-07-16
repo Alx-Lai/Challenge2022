@@ -1,6 +1,7 @@
 from AI.lib.brain import Brain
 from AI.lib.utils import *
 from AI.lib.Const import *
+import math
 
 class Attacker():
     def __init__(self, brain: Brain):
@@ -16,13 +17,24 @@ class Attacker():
         current = self.brain.position.copy()
         delta = target - current
         delta.scale_to_length(SHOOT_SIMULATE_LENGTH)
-        # print("----- start -----")
-        while Index(current) != Index(target):
-            # print(F"current:{current}, idx:{Index(current)} ; target:{target}, idx:{Index(target)}")
+        cnt = 0
+        cntMax = Const.ARENA_GRID_COUNT * math.sqrt(2) / SHOOT_SIMULATE_LENGTH
+        while Index(current) != Index(target) and cnt <= cntMax:
             current += delta
+            cnt += 1
             if self.brain.blocks[Index(current)]:
                 return False
         return True
+
+    def getAttackRange(self):
+        """
+        Get the attack range of current accuracy.
+        """
+        inAccuracy = self.brain.helper.get_self_attack_accuracy() + ATTACK_ROTATIONAL_TOLERANCE
+        attackRange = max(MINIMUM_ATTACK_RANGE, Const.PLAYER_RADIUS / inAccuracy)
+        if self.brain.helper.get_self_gun_type() == Const.GUN_TYPE_SHOTGUN:
+            attackRange *= SHOTGUN_ATTACK_RANGE_MULTIPLIER
+        return attackRange
 
     def ScanTargets(self):
         """
@@ -31,8 +43,9 @@ class Attacker():
         self.targets = []
         isRespawning = self.brain.helper.get_player_is_respawning()
         for idx, targetPos in enumerate(self.brain.helper.get_player_position()):
-            if idx != self.brain.id and not isRespawning[idx] and self.DirectHit(targetPos) and (targetPos - self.brain.position).length() < ATTACK_RANGE:
-                self.targets.append(targetPos)
+            if idx != self.brain.id and not isRespawning[idx] and self.DirectHit(targetPos) \
+                and (targetPos - self.brain.position).length() < self.getAttackRange():
+                self.targets.append(targetPos)    
     
     def shootCheck(self):
         """
@@ -53,10 +66,11 @@ class Attacker():
             self.lastScanTime = self.brain.time
         
         if self.brain.respawning or self.brain.nextAttack > 0 or not self.targets:
-            self.brain.isAttacking = False
+            self.brain.mode = Mode.IDLE
             return
         
-        self.brain.isAttacking = True
+        # print(self.targets)
+        self.brain.mode = Mode.ATTACK
         rotateRadian = min([AngleBetween(self.brain.direction, target - self.brain.position) for target in self.targets])
         if abs(rotateRadian) > ATTACK_ROTATIONAL_TOLERANCE:
             if rotateRadian < 0:
@@ -67,4 +81,4 @@ class Attacker():
             self.brain.action['forward'] = True
             if self.shootCheck():
                 self.brain.action['attack'] = True
-                self.brain.isAttacking = False
+                self.brain.mode = Mode.IDLE

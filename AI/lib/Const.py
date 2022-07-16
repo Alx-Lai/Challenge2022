@@ -1,7 +1,7 @@
 import math
 import pygame as pg
+from enum import Enum
 import Const
-
 
 # Actions
 AI_DIR_FORWARD      = 0
@@ -23,11 +23,19 @@ DXY = [ pg.Vector2(0, 1), pg.Vector2(1, 0), pg.Vector2(0, -1), pg.Vector2(-1, 0)
 DW = [1] * 4 + [math.sqrt(2)] * 4
 
 # Navigator
-MOVING_ROTATIONAL_TOLERANCE = 0.03 # radian
+MOVING_ROTATIONAL_TOLERANCE = 0.02 # radian
 DIJKSTRA_FREQUENCY = 30 # frames per evaluate
 
 # Attacker
-ATTACK_ROTATIONAL_TOLERANCE = 0.03 # radian
+ATTACK_ROTATIONAL_TOLERANCE = 0.02 # radian
 ATTACK_TARGET_SCAN_FREQUENCY = 30 # frames per scan
-ATTACK_RANGE = Const.PLAYER_RADIUS / ATTACK_ROTATIONAL_TOLERANCE - 1 # grids
+MINIMUM_ATTACK_RANGE = 5 # grids
+SHOTGUN_ATTACK_RANGE_MULTIPLIER = 2
+ADDITIONAL_ATTACK_RANGE = 5
 SHOOT_SIMULATE_LENGTH = 0.2
+
+# Modes
+class Mode(Enum):
+    IDLE = 0
+    COLLECT = 1
+    ATTACK = 2

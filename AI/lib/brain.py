@@ -1,5 +1,4 @@
 from collections import Counter
-from turtle import width
 import numpy as np
 
 from API.helper import *
@@ -20,7 +19,7 @@ class Brain():
         self.RE_fields = helper.get_RE_field_position()
         # self.wall_segments = self.get_wall_segments()
 
-        self.isAttacking = False
+        self.mode = Mode.IDLE
 
         self.edges = [[] for i in range(LENGTH ** 2)] # tuple(node, weight, direc), node indexed by index()
         self.safeNodes = [True] * (LENGTH ** 2)

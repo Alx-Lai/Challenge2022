@@ -10,6 +10,7 @@ class Navigator():
     def __init__(self, brain: Brain):
         self.brain = brain
         self.lastDijkstraTime = -DIJKSTRA_FREQUENCY
+        self.target = pg.Vector2(0, 0)
 
     def Dijkstra(self, start: int):
         """
@@ -67,6 +68,16 @@ class Navigator():
             pos -= DXY[tmp] * WIDTH
         return dest
 
+    def shootCheck(self):
+        """
+        Check if it is safe to shoot at current position.
+        """
+        pos = self.brain.position.copy()
+        delta = self.brain.direction.copy()
+        delta.rotate(90).scale_to_length(Const.PLAYER_RADIUS) # Left Delta
+        kick = -self.brain.direction * self.brain.helper.get_self_kick()
+        return self.brain.safeNodes[Index(pos + delta + kick)] and self.brain.safeNodes[Index(pos - delta + kick)]
+    
     def Decide(self):
         """
         Main function of Navigator, will modify action to decide movement.
@@ -74,7 +85,7 @@ class Navigator():
         if self.brain.time - self.lastDijkstraTime >= DIJKSTRA_FREQUENCY:
             self.dest = self.Destination()
 
-        rotateRadian = AngleBetween(self.brain.direction, self.dest - self.brain.position) # radian
+        rotateRadian = AngleBetween(-self.brain.direction, self.dest - self.brain.position) # radian
         if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
             if rotateRadian < 0:
                 self.brain.action['left'] = True
@@ -82,4 +93,6 @@ class Navigator():
                 self.brain.action['right'] = True
             return
         else:
-            self.brain.action['forward'] = True
+            if (self.dest - self.brain.position).length() >= self.brain.helper.get_self_kick() and self.shootCheck():
+                self.brain.action['attack'] = True
+            self.brain.action['backward'] = True

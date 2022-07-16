@@ -12,8 +12,12 @@ def MaxIndex(inputList: list) -> int:
     maxValue = max(inputList)
     return inputList.index(maxValue)
 
-def Clamp(tar, smallest, largest):
-    return max(smallest, min(tar, largest))
+def Clamp(tar: int, smallest: int, largest: int) -> int:
+    try:
+        return max(smallest, min(tar, largest))
+    except:
+        print("Clamp ERROR: ", tar, smallest, largest)
+
 
 # Geometry
 def UnitVector(vector):
@@ -47,14 +51,20 @@ def Banana(a1: pg.Vector2, a2: pg.Vector2, b1: pg.Vector2, b2: pg.Vector2):
 
 # Graph
 def InGraph(vec: pg.Vector2) -> bool:
+    try:
         return 0 <= min(vec.x, vec.y) and max(vec.x, vec.y) < Const.ARENA_GRID_COUNT
+    except:
+        print("InGraph ERROR: ", vec)
 
 def Index(vec: pg.Vector2) -> int:
     if not InGraph(vec):
         return 0
-    x = round(vec.x * SCALE)
-    y = round(vec.y * SCALE)
-    return Clamp(y + x * LENGTH, 0, LENGTH ** 2-1)
+    try:
+        x = round(vec.x * SCALE)
+        y = round(vec.y * SCALE)
+        return Clamp(y + x * LENGTH, 0, LENGTH ** 2-1)
+    except:
+        print("Index ERROR: ", vec, x, y)
 
 def Normalize(vec: pg.Vector2) -> pg.Vector2:
     nx = round(vec.x * SCALE) / SCALE
