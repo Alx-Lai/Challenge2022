@@ -13,17 +13,17 @@ class TeamAI():
     def __init__(self, helper):
         self.helper = helper
         self.enhancement = [0, 0, 0, 0]
-        self.action = ACTION_NONE
+        self.action = ACTION_NONE.copy()
         self.player_id = helper.get_self_id()
         self.counter = 0
         self.rotate = 0
         self.wander = False
     
     def reset(self):
-        self.action = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
+        self.action = ACTION_NONE.copy()
     
     def auto_attack(self):
-        if self.helper.get_player_next_attack()[self.player_id] == 0:
+        if self.helper.get_self_next_attack() == 0:
             self.counter = 10
             self.action['attack'] = True
         if self.counter > 0:

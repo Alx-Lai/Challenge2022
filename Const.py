@@ -30,7 +30,7 @@ PLAYER_MAX_RESPAWN_COUNT = [2, 2, 2, 2]
 PLAYER_ALIVE_SCORE = [0, 100, 200, 300]
 
 BULLET_RADIUS = 0.2                       # L
-BULLET_REPULSION = 3 / 10                 # speed
+BULLET_REPULSION = 2 / 10                 # speed
 BULLET_SPEED = 15 / FPS                   # L / T
 BULLET_LIFESPAN = 3 * FPS                 # T
 BULLET_TRACE_TIME = 0.1 * FPS             # T
