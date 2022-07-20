@@ -196,7 +196,7 @@ class Helper(object):
         return a bool list represent all player is killed or not,
         use id as index
         """
-        return [player.killed() for player in self.model.players]
+        return [not player.killed() for player in self.model.players]
 
     # movement
     def get_player_position(self) -> list:
@@ -354,7 +354,7 @@ class Helper(object):
         return [
             {
                 "speed": bullet.speed.copy(), "position": bullet.position.copy(),
-                "repulsion": bullet.repulsion, "lifespam": bullet.lifespam,
+                "repulsion": bullet.repulsion, "lifespan": bullet.lifespan,
                 "attacker": bullet.attacker.player_id
             }
             for bullet in self.model.bullets if isinstance(bullet, Bullet)
