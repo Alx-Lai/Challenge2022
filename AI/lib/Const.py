@@ -22,9 +22,13 @@ DXY = [ pg.Vector2(0, 1), pg.Vector2(1, 0), pg.Vector2(0, -1), pg.Vector2(-1, 0)
         pg.Vector2(1, 1), pg.Vector2(1, -1), pg.Vector2(-1, -1), pg.Vector2(-1, 1)]
 DW = [1] * 4 + [math.sqrt(2)] * 4
 
+# Brain
+SEGMENT_CLEAR_SIMULATE_LENGTH = 0.2 # grid
+
 # Navigator
 MOVING_ROTATIONAL_TOLERANCE = 0.02 # radian
 DIJKSTRA_FREQUENCY = 30 # frames per evaluate
+BOOST_CHECK_ANGLE_TOLERANCE = 0.05 # radian
 
 # Attacker
 ATTACK_ROTATIONAL_TOLERANCE = 0.02 # radian

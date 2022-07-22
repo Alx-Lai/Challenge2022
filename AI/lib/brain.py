@@ -1,5 +1,6 @@
 from collections import Counter
 import numpy as np
+import math
 
 from API.helper import *
 from AI.lib.utils import *
@@ -22,11 +23,12 @@ class Brain():
         self.mode = Mode.IDLE
 
         self.edges = [[] for i in range(LENGTH ** 2)] # tuple(node, weight, direc), node indexed by index()
-        self.safeNodes = [True] * (LENGTH ** 2)
-        self.blocks = [False] * (LENGTH ** 2)
+        self.isWalkable = [True] * (LENGTH ** 2)    # Construct Graph 
+        self.isDanger = [False] * (LENGTH ** 2)     # RE_Fields
+        self.isObstacle = [False] * (LENGTH ** 2)   # All obstacles
         self.InitGraph()
         
-    def Initialize(self):
+    def Initialize(self) -> None:
         """
         Initialize every time TeamAI.decide() is called (every tick).
         """
@@ -40,7 +42,7 @@ class Brain():
         self.nextAttack = self.helper.get_self_next_attack()
         self.respawning = self.helper.get_self_is_respawning()
     
-    def GetWallSegments(self):
+    def GetWallSegments(self) -> list:
         """
         Decompose all obstacles and RE_fields into wall segments.
         """
@@ -56,51 +58,119 @@ class Brain():
                 walls[(p1.x, p1.y, p2.x, p2.y)] += 1
         return [(pg.Vector2(k[0], k[1]), pg.Vector2(k[2], k[3])) for k, v in walls.items() if v == 1]
         
-    def InitGraph(self):
+    def InitGraph(self) -> None:
         for pos in self.RE_fields:
-            self.safeNodes[Index(pos)] = False
-            self.blocks[Index(pos)] = True
+            self.isWalkable[Index(pos)] = False
+            self.isDanger[Index(pos)] = True
+            self.isObstacle[Index(pos)] = True
             for i in range(8):
                 npos = pos + DXY[i] * WIDTH
-                self.safeNodes[Index(npos)] = False
-                self.blocks[Index(npos)] = True
+                self.isWalkable[Index(npos)] = False
+                self.isDanger[Index(npos)] = True
+                self.isObstacle[Index(npos)] = True
                 for j in range(4):
                     nnpos = npos + DXY[j] * WIDTH
-                    self.safeNodes[Index(nnpos)] = False
+                    self.isWalkable[Index(nnpos)] = False
+                    self.isDanger[Index(nnpos)] = True
         
         for pos in self.obstacles:
-            self.safeNodes[Index(pos)] = False
-            self.blocks[Index(pos)] = True
+            self.isWalkable[Index(pos)] = False
+            self.isObstacle[Index(pos)] = True
             for i in range(8):
                 npos = pos + DXY[i] * WIDTH
-                self.safeNodes[Index(npos)] = False
-                self.blocks[Index(npos)] = True
+                self.isWalkable[Index(npos)] = False
+                self.isObstacle[Index(npos)] = True
         
         for i in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
             pos = pg.Vector2(0, i)
-            self.safeNodes[Index(pos)] = False
+            self.isWalkable[Index(pos)] = False
+            self.isDanger[Index(pos)] = True
             for j in range(4):
                 npos = pos + DXY[j] * WIDTH
-                self.safeNodes[Index(npos)] = False
+                self.isWalkable[Index(npos)] = False
+                self.isDanger[Index(npos)] = True
             pos = pg.Vector2(i, 0)
-            self.safeNodes[Index(pos)] = False
+            self.isWalkable[Index(pos)] = False
+            self.isDanger[Index(pos)] = True
             for j in range(4):
                 npos = pos + DXY[j] * WIDTH
-                self.safeNodes[Index(npos)] = False
+                self.isWalkable[Index(npos)] = False
+                self.isDanger[Index(npos)] = True
             EDGE = Const.ARENA_GRID_COUNT - WIDTH
-            self.safeNodes[Index(pg.Vector2(EDGE, i))] = False
-            self.safeNodes[Index(pg.Vector2(i, EDGE))] = False
+            self.isWalkable[Index(pg.Vector2(EDGE, i))] = False
+            self.isWalkable[Index(pg.Vector2(i, EDGE))] = False
+            self.isDanger[Index(pg.Vector2(EDGE, i))] = False
+            self.isDanger[Index(pg.Vector2(i, EDGE))] = False
+
 
         for x in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
             for y in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
                 pos = pg.Vector2(x, y)
                 for i in range(8):
                     npos = pos + DXY[i] * WIDTH
-                    if InGraph(npos) and self.safeNodes[Index(npos)]:
-                        if i>=4 and (self.blocks[Index(pos+DXY[i-4]*WIDTH)] or self.blocks[Index(pos+DXY[(i-3)%4]*WIDTH)]):
+                    if InGraph(npos) and self.isWalkable[Index(npos)]:
+                        if i>=4 and (self.isObstacle[Index(pos+DXY[i-4]*WIDTH)] or self.isObstacle[Index(pos+DXY[(i-3)%4]*WIDTH)]):
                             continue
                         self.edges[Index(pos)].append((Index(npos), DW[i], i))
+
+    def SegmentClearCheck(self, p1: pg.Vector2, p2: pg.Vector2) -> bool:
+        """
+        Check if segment(p1, p2) has no block in between.
+        Method: Simulate a shot from p1 to p2.
+        """
+        current = p1.copy()
+        delta = p2 - p1
+        if delta.length() <= SEGMENT_CLEAR_SIMULATE_LENGTH * 2:
+            return True
+        delta.scale_to_length(SEGMENT_CLEAR_SIMULATE_LENGTH)
+        cnt = 0
+        cntMax = Const.ARENA_GRID_COUNT * math.sqrt(2) / SEGMENT_CLEAR_SIMULATE_LENGTH
+        while Index(current) != Index(p2) and cnt <= cntMax:
+            current += delta
+            cnt += 1
+            if self.isObstacle[Index(current)]:
+                return False
+        return True
     
+    def SegmentSafeCheck(self, p1: pg.Vector2, p2: pg.Vector2) -> bool:
+        """
+        Check if segment(p1, p2) is safe.
+        Method: Simulate a shot from p1 to p2.
+        """
+        current = p1.copy()
+        delta = p2 - p1
+        if delta.length() <= SEGMENT_CLEAR_SIMULATE_LENGTH * 2:
+            return True
+        delta.scale_to_length(SEGMENT_CLEAR_SIMULATE_LENGTH)
+        cnt = 0
+        cntMax = Const.ARENA_GRID_COUNT * math.sqrt(2) / SEGMENT_CLEAR_SIMULATE_LENGTH
+        while Index(current) != Index(p2) and cnt <= cntMax:
+            current += delta
+            cnt += 1
+            if self.isDanger[Index(current)]:
+                return False
+        return True
+    
+    def KickCheck(self, direction: pg.Vector2, power: float = -1, targetId: int = -1) -> bool:
+        """
+        Check if player will be safe after receiving a kick.
+        """
+        if targetId == -1:
+            targetId = self.id
+        kick = direction.copy()
+        if power != -1:
+            kick.scale_to_length(power)
+        
+        pos = self.helper.get_player_position()[targetId]
+        radius = kick.copy()
+        radius.scale_to_length(Const.PLAYER_RADIUS)
+        if not self.SegmentSafeCheck(pos, pos+radius+kick):
+            return False
+        radius.rotate(90)
+        return self.SegmentSafeCheck(pos+radius, pos+radius+kick) and self.SegmentSafeCheck(pos-radius, pos-radius+kick)
 
-
-
+    def ShootCheck(self, multiplier: float = 1.0):
+        """
+        Check if it is safe to shoot at current position.
+        """
+        return self.KickCheck(-self.direction, self.helper.get_self_kick() * multiplier)

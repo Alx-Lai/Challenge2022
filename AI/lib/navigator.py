@@ -67,17 +67,16 @@ class Navigator():
                 mem = tmp
             pos -= DXY[tmp] * WIDTH
         return dest
-
-    def shootCheck(self):
-        """
-        Check if it is safe to shoot at current position.
-        """
-        pos = self.brain.position.copy()
-        delta = self.brain.direction.copy()
-        delta.rotate(90).scale_to_length(Const.PLAYER_RADIUS) # Left Delta
-        kick = -self.brain.direction * self.brain.helper.get_self_kick()
-        return self.brain.safeNodes[Index(pos + delta + kick)] and self.brain.safeNodes[Index(pos - delta + kick)]
     
+    def BoostCheck(self):
+        minAngle = min(AngleBetween(vec, self.brain.direction) for vec in DXY[:4])
+        if minAngle < BOOST_CHECK_ANGLE_TOLERANCE:
+            # if parallel to horizontal or verical line, consider reflective shot
+            return self.brain.ShootCheck(4)
+        else:
+            return self.brain.ShootCheck(1)
+
+
     def Decide(self):
         """
         Main function of Navigator, will modify action to decide movement.
@@ -85,6 +84,7 @@ class Navigator():
         if self.brain.time - self.lastDijkstraTime >= DIJKSTRA_FREQUENCY:
             self.dest = self.Destination()
 
+        self.brain.mode = Mode.IDLE
         rotateRadian = AngleBetween(-self.brain.direction, self.dest - self.brain.position) # radian
         if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
             if rotateRadian < 0:
@@ -93,6 +93,6 @@ class Navigator():
                 self.brain.action['right'] = True
             return
         else:
-            if (self.dest - self.brain.position).length() >= self.brain.helper.get_self_kick() and self.shootCheck():
+            if (self.dest - self.brain.position).length() >= self.brain.helper.get_self_kick() and self.BoostCheck():
                 self.brain.action['attack'] = True
             self.brain.action['backward'] = True

@@ -22,7 +22,7 @@ class Attacker():
         while Index(current) != Index(target) and cnt <= cntMax:
             current += delta
             cnt += 1
-            if self.brain.blocks[Index(current)]:
+            if self.brain.isObstacle[Index(current)]:
                 return False
         return True
 
@@ -47,16 +47,6 @@ class Attacker():
                 and (targetPos - self.brain.position).length() < self.getAttackRange():
                 self.targets.append(targetPos)    
     
-    def shootCheck(self):
-        """
-        Check if it is safe to shoot at current position.
-        """
-        pos = self.brain.position.copy()
-        delta = self.brain.direction.copy()
-        delta.rotate(90).scale_to_length(Const.PLAYER_RADIUS) # Left Delta
-        kick = -self.brain.direction * self.brain.helper.get_self_kick()
-        return self.brain.safeNodes[Index(pos + delta + kick)] and self.brain.safeNodes[Index(pos - delta + kick)]
-    
     def Decide(self):
         """
         Main function of Attacker, modify action and return true when attack
@@ -69,7 +59,6 @@ class Attacker():
             self.brain.mode = Mode.IDLE
             return
         
-        # print(self.targets)
         self.brain.mode = Mode.ATTACK
         rotateRadian = min([AngleBetween(self.brain.direction, target - self.brain.position) for target in self.targets])
         if abs(rotateRadian) > ATTACK_ROTATIONAL_TOLERANCE:
@@ -79,6 +68,6 @@ class Attacker():
                 self.brain.action['right'] = True
         else:
             self.brain.action['forward'] = True
-            if self.shootCheck():
+            if self.brain.ShootCheck():
                 self.brain.action['attack'] = True
                 self.brain.mode = Mode.IDLE
