@@ -46,9 +46,12 @@ class GraphicalView:
             self.real_screen = pg.display.set_mode(self.real_window_size, (pg.FULLSCREEN if fullscreen else 0) | pg.SCALED)
             self.screen = pg.Surface(Const.WINDOW_SIZE)
 
-    def load_img(self, path: str):
+    def load_img(self, path: str, alpha: bool = False):
         image = pg.image.load(path)
-        return image.convert_alpha()
+        if alpha:
+            return image.convert_alpha()
+        else:
+            return image.convert()
 
     def initialize(self):
         '''
@@ -67,7 +70,7 @@ class GraphicalView:
         for player_color in Const.PLAYER_IMAGE_PATH:
             player = []
             for path in player_color:
-                player.append(self.load_img(path))
+                player.append(self.load_img(path, True))
             self.player_images.append(player)
 
         self.item_buff = [0, self.load_img(Const.BUFF_ATTACK_CD_PATH),
@@ -131,7 +134,10 @@ class GraphicalView:
         new_y = int(scale * (DR.y - TL.y))
         diff_x = new_x - (DR.x - TL.x)
         diff_y = new_y - (DR.y - TL.y)
-        tmp_img = pg.transform.rotate(img, angle)
+        if angle == 0:
+            tmp_img = img
+        else:
+            tmp_img = pg.transform.rotate(img, angle)
         tmp_img = pg.transform.scale(tmp_img, (new_x, new_y))
         self.screen.blit(tmp_img, (TL.x - diff_x/2, TL.y - diff_y/2))
 
@@ -140,20 +146,17 @@ class GraphicalView:
         text_interval = Const.WINDOW_SIZE[0]/7
         text_start = Const.WINDOW_SIZE[0]/2 - text_interval*2
         text_top = Const.WINDOW_SIZE[1]/1.75
-        player_score = []
-        i = 0
+        player_score = [player.score for player in self.model.players]
+        
         #endgame caption
-        if endgame == True:
+        if endgame:
             caption = Text("CONGRATULATION", 80, (255,255,255))
             caption.blit(self.screen, topleft=(Const.WINDOW_SIZE[0]/4.5, Const.WINDOW_SIZE[1]/4))
-        elif pause == True:
+        elif pause:
             caption = Text("PAUSE", 80, (255,255,255))
             caption.blit(self.screen, topleft=(Const.WINDOW_SIZE[0]/2.6, Const.WINDOW_SIZE[1]/4))
-        #init score array
-        for player in self.model.players:
-            player_score.append(player.score)
-
-        for player in self.model.players:
+        
+        for i, player in enumerate(self.model.players):
             #draw score
             score_text = Text(str(int(player.score)), text_size, Const.SCORE_COLOR[player.player_id])
             score_text.blit(self.screen, topleft=(text_start + i*text_interval, text_top))
@@ -163,11 +166,8 @@ class GraphicalView:
             self.print_obj(self.player_images[player.player_id][player.gun.type], Vector2(center[0] - radius, center[1] - radius),
                            Vector2(center[0] + radius, center[1] + radius))
             #draw crown
-            if draw_crown == True:
-                if player_score[i] == max(player_score):
+            if draw_crown and player.score == max(player_score):
                     self.screen.blit(self.crown, (text_start + (i+0.3)*text_interval, center[1] - radius))
-            i += 1
-            
 
     def draw_score(self, text_size = 54, draw_crown = True):
         pg.draw.rect(self.screen, (0,0,0), pg.Rect(Const.ARENA_SIZE[0], 0, Const.WINDOW_SIZE[0] - Const.ARENA_SIZE[0],  Const.WINDOW_SIZE[1]))
@@ -179,20 +179,16 @@ class GraphicalView:
         caption = Text("SCORE", 32, (255,255,255))
         caption.blit(self.screen, topleft=(text_left, text_start - text_interval))
         #init score array
-        player_score = []
-        i = 0
-        for player in self.model.players:
-            player_score.append(player.score)
+        player_score = [player.score for player in self.model.players]
 
-        for player in self.model.players:
+        for i, player in enumerate(self.model.players):
             #draw score
             score_text = Text(str(int(player.score)), text_size, Const.SCORE_COLOR[player.player_id])
             score_text.blit(self.screen, topleft=(text_left, text_start + i*text_interval))
-            if draw_crown == True:
-                if player_score[i] == max(player_score):
+            if draw_crown and player.score == max(player_score):
                     self.screen.blit(self.crown, (text_left, text_start + (i-0.5)*text_interval))
-            i+=1
-
+            
+            
     def rand_backgroud_color(self, times):
         if self.background_count == times:
             self.background_color = Const.BACKGROUND_COLOR_CHANGE[randint(0, 3)]
