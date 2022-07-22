@@ -24,11 +24,15 @@ DW = [1] * 4 + [math.sqrt(2)] * 4
 
 # Brain
 SEGMENT_CLEAR_SIMULATE_LENGTH = 0.2 # grid
+DIJKSTRA_FREQUENCY = 10 # frames per evaluate
 
 # Navigator
-MOVING_ROTATIONAL_TOLERANCE = 0.02 # radian
-DIJKSTRA_FREQUENCY = 30 # frames per evaluate
+BOOST_CHECK_MULTIPLIER = 4
 BOOST_CHECK_ANGLE_TOLERANCE = 0.05 # radian
+MOVING_ROTATIONAL_TOLERANCE = 0.02 # radian
+
+# Collector
+ITEM_SCAN_FREQUENCY = 30 # frames per scan
 
 # Attacker
 ATTACK_ROTATIONAL_TOLERANCE = 0.02 # radian

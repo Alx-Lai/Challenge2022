@@ -1,6 +1,7 @@
 import random
 from AI.lib.brain import Brain
 from AI.lib.attacker import Attacker
+from AI.lib.collector import Collector
 from AI.lib.navigator import Navigator
 from AI.lib.protector import Protector
 from AI.lib.Const import *
@@ -11,6 +12,7 @@ class TeamAI():
         self.enhancement = [0, 0, 0, 0]
         self.brain = Brain(helper)
         self.navigator = Navigator(self.brain)
+        self.collector = Collector(self.brain, self.navigator)
         self.attacker = Attacker(self.brain)
         self.protector = Protector(self.brain)
     
@@ -32,8 +34,8 @@ class TeamAI():
 
         if self.brain.mode == Mode.ATTACK:
             self.attacker.Decide()
-        if self.brain.mode in (Mode.IDLE, Mode.COLLECT):
-            self.navigator.Decide()
+        if self.brain.mode == Mode.COLLECT:
+            self.collector.Decide()
         self.protector.Decide()
         return self.brain.action
     

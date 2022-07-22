@@ -1,5 +1,6 @@
 from collections import Counter
 import numpy as np
+import heapq as hq
 import math
 
 from API.helper import *
@@ -23,11 +24,16 @@ class Brain():
         self.mode = Mode.IDLE
 
         self.edges = [[] for i in range(LENGTH ** 2)] # tuple(node, weight, direc), node indexed by index()
-        self.isWalkable = [True] * (LENGTH ** 2)    # Construct Graph 
-        self.isDanger = [False] * (LENGTH ** 2)     # RE_Fields
-        self.isObstacle = [False] * (LENGTH ** 2)   # All obstacles
+        self.isWalkable = [True] * (LENGTH ** 2)      # Construct Graph 
+        self.isDanger = [False] * (LENGTH ** 2)       # RE_Fields
+        self.isObstacle = [False] * (LENGTH ** 2)     # All obstacles
         self.InitGraph()
+
+        self.lastDijkstraTime = -DIJKSTRA_FREQUENCY
+        self.dijkstraDistance = [math.inf] * (LENGTH ** 2)
+        self.dijkstraPrevious = [-1] * (LENGTH ** 2)
         
+
     def Initialize(self) -> None:
         """
         Initialize every time TeamAI.decide() is called (every tick).
@@ -41,7 +47,11 @@ class Brain():
 
         self.nextAttack = self.helper.get_self_next_attack()
         self.respawning = self.helper.get_self_is_respawning()
+
+        if self.time - self.lastDijkstraTime >= DIJKSTRA_FREQUENCY:
+            self.Dijkstra()
     
+
     def GetWallSegments(self) -> list:
         """
         Decompose all obstacles and RE_fields into wall segments.
@@ -58,6 +68,7 @@ class Brain():
                 walls[(p1.x, p1.y, p2.x, p2.y)] += 1
         return [(pg.Vector2(k[0], k[1]), pg.Vector2(k[2], k[3])) for k, v in walls.items() if v == 1]
         
+
     def InitGraph(self) -> None:
         for pos in self.RE_fields:
             self.isWalkable[Index(pos)] = False
@@ -102,7 +113,6 @@ class Brain():
             self.isDanger[Index(pg.Vector2(EDGE, i))] = False
             self.isDanger[Index(pg.Vector2(i, EDGE))] = False
 
-
         for x in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
             for y in np.arange(0, Const.ARENA_GRID_COUNT, WIDTH):
                 pos = pg.Vector2(x, y)
@@ -112,6 +122,31 @@ class Brain():
                         if i>=4 and (self.isObstacle[Index(pos+DXY[i-4]*WIDTH)] or self.isObstacle[Index(pos+DXY[(i-3)%4]*WIDTH)]):
                             continue
                         self.edges[Index(pos)].append((Index(npos), DW[i], i))
+
+
+    def Dijkstra(self):
+        """
+        Run Dijkstra's Algorithm.
+        """
+        self.lastDijkstraTime = self.time
+        self.dijkstraDistance = [math.inf] * (LENGTH ** 2)
+        self.dijkstraPrevious = [-1] * (LENGTH ** 2)
+        start = Index(self.position)
+        self.dijkstraDistance[start] = 0
+        heap = []
+        for (x, w, d) in self.edges[start]:
+            hq.heappush(heap, (w, x, d))
+        
+        while heap:
+            distance, node, direction = hq.heappop(heap)
+            if self.dijkstraDistance[node] < math.inf:
+                continue
+            self.dijkstraDistance[node] = distance
+            self.dijkstraPrevious[node] = direction
+            for (x, w, d) in self.edges[node]:
+                if self.dijkstraDistance[x] == math.inf:
+                    hq.heappush(heap, (distance + w, x, d))
+
 
     def SegmentClearCheck(self, p1: pg.Vector2, p2: pg.Vector2) -> bool:
         """
@@ -132,6 +167,7 @@ class Brain():
                 return False
         return True
     
+
     def SegmentSafeCheck(self, p1: pg.Vector2, p2: pg.Vector2) -> bool:
         """
         Check if segment(p1, p2) is safe.
@@ -151,6 +187,7 @@ class Brain():
                 return False
         return True
     
+
     def KickCheck(self, direction: pg.Vector2, power: float = -1, targetId: int = -1) -> bool:
         """
         Check if player will be safe after receiving a kick.
@@ -168,6 +205,7 @@ class Brain():
             return False
         radius.rotate(90)
         return self.SegmentSafeCheck(pos+radius, pos+radius+kick) and self.SegmentSafeCheck(pos-radius, pos-radius+kick)
+
 
     def ShootCheck(self, multiplier: float = 1.0):
         """
