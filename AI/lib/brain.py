@@ -40,6 +40,7 @@ class Brain():
         self.playerHabit = [0] * (Const.PLAYER_NUMBER)
         self.playerMoveDotDirection = [[0] * PLAYER_HABIT_DOT_AMOUNT] * Const.PLAYER_NUMBER
 
+
     def Initialize(self) -> None:
         """
         Initialize every time TeamAI.decide() is called (every tick).
@@ -65,6 +66,7 @@ class Brain():
         self.playerDirection = self.helper.get_player_direction()
         self.UpdatePlayerHabit()
 
+
     def GetWallSegments(self) -> list:
         """
         Decompose all obstacles and RE_fields into wall segments.
@@ -83,6 +85,9 @@ class Brain():
         
 
     def InitGraph(self) -> None:
+        """
+        Generate graph and calculate grid information.
+        """
         for pos in self.RE_fields:
             self.isWalkable[Index(pos)] = False
             self.isDanger[Index(pos)] = True

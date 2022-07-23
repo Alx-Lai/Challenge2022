@@ -18,6 +18,7 @@ class TeamAI():
 
         self.actionTime = 0
     
+    
     def ModeDecision(self):
         self.actionTime += 1
         nearTargetDistance = (self.brain.helper.get_nearest_player_position() - self.brain.position).length()
@@ -46,6 +47,7 @@ class TeamAI():
             self.brain.mode = Mode.ATTACK
         else:
             self.brain.mode = Mode.COLLECT
+
 
     def decide(self):
         self.brain.Initialize()

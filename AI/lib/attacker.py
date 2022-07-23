@@ -12,7 +12,7 @@ class Attacker():
         self.target = None
         self.attackReady = False
     
-    def DirectHit(self, target: pg.Vector2):
+    def DirectHit(self, target: pg.Vector2) -> bool:
         """
         Check if target can be hit directly from current position.
         Method: Simulate the shot.
@@ -30,7 +30,7 @@ class Attacker():
         return True
 
 
-    def GetAttackRange(self):
+    def GetAttackRange(self) -> float:
         """
         Get the attack range of current accuracy.
         """
@@ -41,15 +41,15 @@ class Attacker():
         return attackRange
 
 
-    def InAttackRange(self, target: pg.Vector2):
+    def InAttackRange(self, target: pg.Vector2) -> bool:
         """
-        Check if the target position is in current attck range. 
+        Check if the target position is in current attack range. 
         """
         distance = (self.brain.position - target).length()
         return distance < self.GetAttackRange()
 
 
-    def Scoring(self, target: pg.Vector2):
+    def Scoring(self, target: pg.Vector2) -> float:
         """
         Calculate the score of a specific target, considering position, attack range, direct hit, etc.
         """

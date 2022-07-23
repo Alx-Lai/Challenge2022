@@ -45,6 +45,9 @@ class Navigator():
     
 
     def BoostCheck(self, direction: pg.Vector2 = pg.Vector2(0,0)):
+        """
+        Check if it is safe to boost via attack on current position.
+        """
         if direction == pg.Vector2(0, 0):
             direction = self.brain.direction
         minAngle = min(AngleBetween(vec, direction) for vec in DXY[:4])

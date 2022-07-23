@@ -12,27 +12,27 @@ AI_DIR_ATTACK       = 4
 AI_DIR_STOP         = 5
 ACTION_NONE = {'forward':False, 'backward':False, 'left':False, 'right':False, 'attack':False}
 
+# D, R, U, L, DR, UR, UL, DL
+DXY = [ pg.Vector2(0, 1), pg.Vector2(1, 0), pg.Vector2(0, -1), pg.Vector2(-1, 0), \
+        pg.Vector2(1, 1), pg.Vector2(1, -1), pg.Vector2(-1, -1), pg.Vector2(-1, 1)]
+DW = [1] * 4 + [math.sqrt(2)] * 4
+
 # Basic
 MAX_DISTANCE = Const.ARENA_GRID_COUNT * math.sqrt(2)
 MAX_ACTION_TIME = 20 * Const.FPS # frames
 ATTACK_TIME = Const.GAME_LENGTH / 4
 BERSERK_DISTANCE = 8
 
-# Graph
-SCALE = 2.0
-WIDTH = 1 / SCALE
-LENGTH = int(Const.ARENA_GRID_COUNT * SCALE)
-
-# D, R, U, L, DR, UR, UL, DL
-DXY = [ pg.Vector2(0, 1), pg.Vector2(1, 0), pg.Vector2(0, -1), pg.Vector2(-1, 0), \
-        pg.Vector2(1, 1), pg.Vector2(1, -1), pg.Vector2(-1, -1), pg.Vector2(-1, 1)]
-DW = [1] * 4 + [math.sqrt(2)] * 4
-
 # Brain
 SEGMENT_CLEAR_SIMULATE_LENGTH = 0.2 # grid
 DIJKSTRA_FREQUENCY = 10 # frames per evaluate
 PLAYER_HABIT_DOT_AMOUNT = 10
 PLAYER_HABIT_MULTIPLIER = 0.9
+
+# Graph
+SCALE = 2.0
+WIDTH = 1 / SCALE
+LENGTH = int(Const.ARENA_GRID_COUNT * SCALE)
 
 # Navigator
 MAX_ALT_DISTANCE = 10

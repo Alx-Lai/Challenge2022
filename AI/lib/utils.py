@@ -49,6 +49,7 @@ def Banana(a1: pg.Vector2, a2: pg.Vector2, b1: pg.Vector2, b2: pg.Vector2):
     return  Orientation(a2-a1, b1-a1) * Orientation(a2-a1, b2-a1) < 0 and \
             Orientation(b2-b1, a1-b1) * Orientation(b2-b1, a2-b1) < 0
 
+
 # Graph
 def InGraph(vec: pg.Vector2) -> bool:
     try:
