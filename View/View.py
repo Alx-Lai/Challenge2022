@@ -70,7 +70,7 @@ class GraphicalView:
         for player_color in Const.PLAYER_IMAGE_PATH:
             player = []
             for path in player_color:
-                player.append(self.load_img(path, True))
+                player.append(self.load_img(path, alpha=True))
             self.player_images.append(player)
 
         self.item_buff = [0, self.load_img(Const.BUFF_ATTACK_CD_PATH),
@@ -85,7 +85,7 @@ class GraphicalView:
         self.background_top = self.load_img(Const.BACKGROUND_TOP_PATH)
         self.menu = self.load_img(Const.MENU_PATH)
         self.score_background = self.load_img(Const.SCORE_BACKGROUND_PATH)
-        self.crown = self.load_img(Const.CROWN_PATH)
+        self.crown = self.load_img(Const.CROWN_PATH, alpha=True)
         self.background_count = 0
         self.background_color = Const.BACKGROUND_COLOR
 
