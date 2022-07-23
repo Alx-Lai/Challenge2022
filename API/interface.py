@@ -19,8 +19,8 @@ class Interface(object):
         self.model = model
         self.player_AI = {}
         self.is_init_AI = False
-        self.debug_mode = 'NODEBUG' not in modes
-        self.timeout_mode = 'TIMEOUT' in modes
+        self.debug_mode = 'DEBUG' in modes
+        self.timeout_mode = 'NOTIMEOUT' not in modes
         self.signal_support = False
 
         if self.timeout_mode and os.name != 'nt':

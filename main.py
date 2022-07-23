@@ -20,15 +20,15 @@ def main(argv):
     q_mode = False
     map_name = "random"
     try:
-        opts, args = getopt.getopt(argv[1:], "qntm:", ["nodebug", "timeout", "map=", "quiet"])
+        opts, args = getopt.getopt(argv[1:], "qntm:", ["debug", "notimeout", "map=", "quiet"])
     except:
-        print ("Usage: main.py [-q] [-m <map_name>] [<AI_1> <AI_2> ...]")
+        print ("Usage: main.py [-qdn] [-m <map_name>] [<AI_1> <AI_2> ...]")
         sys.exit(2)
     for opt, arg in opts:
-        if opt.lower() in ('-n', '--nodebug'):
-            special_modes.append('NODEBUG')
-        elif opt.lower() in ('-t', '--timeout'):
-            special_modes.append('TIMEOUT')
+        if opt.lower() in ('-d', '--debug'):
+            special_modes.append('DEBUG')
+        elif opt.lower() in ('-n', '--notimeout'):
+            special_modes.append('NOTIMEOUT')
         elif opt.lower() in ('-m', '--map'):
             map_name = arg
         elif opt.lower() in ('-q', '--quiet'):
