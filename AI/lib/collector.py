@@ -20,12 +20,28 @@ class Collector():
         """
         if not self.brain.isWalkable[Index(item["position"])]:
             return -math.inf
-        score = -(self.brain.dijkstraDistance[Index(item["position"])]) / (MAX_DISTANCE)
+        score = (MAX_DISTANCE - self.brain.dijkstraDistance[Index(item["position"])]) / (MAX_DISTANCE)
         if item["type"] <= 3: # gun
-            if self.brain.helper.get_self_gun_type == Const.GUN_TYPE_NORMAL_GUN:
-                score += -(self.brain.time) / (Const.GAME_LENGTH * 2)
+            if self.brain.helper.get_self_gun_type() in (Const.GUN_TYPE_NORMAL_GUN, Const.GUN_TYPE_SNIPER):
+                if item["type"] == Const.GUN_TYPE_MACHINE_GUN:
+                    score += 0.5
+                elif item["type"] == Const.GUN_TYPE_SHOTGUN:
+                    score += 1.5
+                else:
+                    score += 0.2
+                if self.brain.time > ATTACK_TIME:
+                    score *= 2
+            else:
+                score *= 0.1
         else: # buff
-            score += (self.brain.time) / (Const.GAME_LENGTH * 2)
+            if item["type"] == Const.BUFF_TYPE_ATTACK_SPEED:
+                score += (Const.GAME_LENGTH - self.brain.time) / (Const.GAME_LENGTH) * 1.5
+            elif item["type"] == Const.BUFF_TYPE_ATTACK_ACCURACY:
+                score += (Const.GAME_LENGTH - self.brain.time) / (Const.GAME_LENGTH) 
+            else:
+                score += (Const.GAME_LENGTH - self.brain.time) / (Const.GAME_LENGTH) * 0.5
+            if self.brain.time < ATTACK_TIME:
+                score *= 2
         return score
         
 

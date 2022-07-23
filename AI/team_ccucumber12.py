@@ -20,18 +20,31 @@ class TeamAI():
     
     def ModeDecision(self):
         self.actionTime += 1
+        nearTargetDistance = (self.brain.helper.get_nearest_player_position() - self.brain.position).length()
+        if (self.brain.helper.get_self_gun_type() in (Const.GUN_TYPE_MACHINE_GUN, Const.GUN_TYPE_SHOTGUN) and nearTargetDistance <= BERSERK_DISTANCE) \
+            or (nearTargetDistance <= BERSERK_DISTANCE / 3):
+            self.brain.mode = Mode.ATTACK
+            self.actionTime = 0
+            return 
+        
         if self.brain.mode != Mode.IDLE and self.actionTime < MAX_ACTION_TIME:
             return 
+        
         self.actionTime = 0
-        attackPoint = self.brain.time 
-        collectPoint = (Const.GAME_LENGTH - self.brain.time) 
+        attackPoint = self.brain.time * 5
+        collectPoint = (Const.GAME_LENGTH - self.brain.time) / 2
         if self.brain.helper.get_self_gun_type() == Const.GUN_TYPE_MACHINE_GUN:
-            attackPoint *= 5
+            attackPoint *= 2
+        if self.brain.helper.get_self_gun_type() == Const.GUN_TYPE_SHOTGUN:
+            attackPoint *= 10
+        if self.brain.helper.get_self_gun_type() == Const.GUN_TYPE_NORMAL_GUN:
+            attackPoint /= 20
+            collectPoint = collectPoint * 20 + Const.GAME_LENGTH * 5
+        if nearTargetDistance <= BERSERK_DISTANCE:
+            attackPoint *= 10
         if random.randint(1, attackPoint + collectPoint) <= attackPoint:
-            # print("ATTACK")
             self.brain.mode = Mode.ATTACK
         else:
-            # print("COLLECT")
             self.brain.mode = Mode.COLLECT
 
     def decide(self):
