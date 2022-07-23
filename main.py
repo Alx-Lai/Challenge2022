@@ -1,6 +1,6 @@
 import pygame as pg
 import sys
-import getopt
+import argparse
 
 from EventManager.EventManager import EventManager
 from Model.Model import GameEngine
@@ -19,23 +19,24 @@ def main(argv):
     special_modes = []
     q_mode = False
     map_name = "random"
-    try:
-        opts, args = getopt.getopt(argv[1:], "qntm:", ["debug", "notimeout", "map=", "quiet"])
-    except:
-        print ("Usage: main.py [-qdn] [-m <map_name>] [<AI_1> <AI_2> ...]")
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt.lower() in ('-d', '--debug'):
-            special_modes.append('DEBUG')
-        elif opt.lower() in ('-n', '--notimeout'):
-            special_modes.append('NOTIMEOUT')
-        elif opt.lower() in ('-m', '--map'):
-            map_name = arg
-        elif opt.lower() in ('-q', '--quiet'):
-            q_mode = True
-            
-    for arg in args:
-        AIs.append(arg)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-d', '--debug', action='store_true', help='activate debug mode')
+    parser.add_argument('-n', '--notimeout', action='store_true', help='deactivate timeout')
+    parser.add_argument('-m', '--map', type=str, default='random', help='map type')
+    parser.add_argument('-q', '--quiet', action='store_true', help='turn off sound')
+    parser.add_argument('rest', nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+    
+    if args.debug:
+        special_modes.append('DEBUG')
+    if args.notimeout:
+        special_modes.append('NOTIMEOUT')
+    q_mode = args.quiet
+    map_name = args.map
+
+    
+    for AI in args.rest:
+        AIs.append(AI)
     assert len(AIs) <= Const.PLAYER_NUMBER, "too many AIs!"
 
     ev_manager = EventManager()
