@@ -18,7 +18,7 @@ class TeamAI():
 
         self.actionTime = 0
     
-    
+
     def ModeDecision(self):
         self.actionTime += 1
         nearTargetDistance = (self.brain.helper.get_nearest_player_position() - self.brain.position).length()
@@ -43,6 +43,9 @@ class TeamAI():
             collectPoint = collectPoint * 20 + Const.GAME_LENGTH * 5
         if nearTargetDistance <= BERSERK_DISTANCE:
             attackPoint *= 10
+
+        attackPoint //= 1
+        collectPoint //= 1
         if random.randint(1, attackPoint + collectPoint) <= attackPoint:
             self.brain.mode = Mode.ATTACK
         else:
