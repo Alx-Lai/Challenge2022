@@ -22,6 +22,7 @@ class Brain():
         # self.wall_segments = self.get_wall_segments()
 
         self.mode = Mode.IDLE
+        self.respawnCount = helper.get_self_respawn_count()
 
         self.edges = [[] for i in range(LENGTH ** 2)] # tuple(node, weight, direc), node indexed by index()
         self.isWalkable = [True] * (LENGTH ** 2)      # Construct Graph 
@@ -33,6 +34,10 @@ class Brain():
         self.dijkstraDistance = [math.inf] * (LENGTH ** 2)
         self.dijkstraPrevious = [-1] * (LENGTH ** 2)
         
+        self.previousPlayerPosition = []
+        self.playerPosition = Const.PLAYER_INIT_POSITION.copy()
+        self.playerHabit = [0] * (Const.PLAYER_NUMBER)
+        self.playerMoveDotDirection = [[0] * PLAYER_HABIT_DOT_AMOUNT] * Const.PLAYER_NUMBER
 
     def Initialize(self) -> None:
         """
@@ -47,10 +52,17 @@ class Brain():
 
         self.nextAttack = self.helper.get_self_next_attack()
         self.respawning = self.helper.get_self_is_respawning()
+        if self.helper.get_self_respawn_count() != self.respawnCount:
+            self.mode = Mode.IDLE
+            self.respawnCount = self.helper.get_self_respawn_count()
 
         if self.time - self.lastDijkstraTime >= DIJKSTRA_FREQUENCY:
             self.Dijkstra()
-    
+
+        self.previousPlayerPosition = self.playerPosition.copy()
+        self.playerPosition = self.helper.get_player_position()
+        self.playerDirection = self.helper.get_player_direction()
+        self.UpdatePlayerHabit()
 
     def GetWallSegments(self) -> list:
         """
@@ -147,6 +159,24 @@ class Brain():
                 if self.dijkstraDistance[x] == math.inf:
                     hq.heappush(heap, (distance + w, x, d))
 
+
+    def UpdatePlayerHabit(self) -> None:
+        """
+        Use previous and current position of all player to predict their habit.
+        """
+        self.playerDirection
+        for i in range(Const.PLAYER_NUMBER):
+            for j in range(PLAYER_HABIT_DOT_AMOUNT - 1):
+                self.playerMoveDotDirection[i][j] = self.playerMoveDotDirection[i][j+1] * PLAYER_HABIT_MULTIPLIER
+            delta = self.playerPosition[i] - self.previousPlayerPosition[i]
+            self.playerMoveDotDirection[i][PLAYER_HABIT_DOT_AMOUNT-1] = delta.dot(self.playerDirection[i])
+            
+            mul = 0
+            for j in range(PLAYER_HABIT_DOT_AMOUNT):
+                mul += self.playerMoveDotDirection[i][j]
+            length = (1 - PLAYER_HABIT_MULTIPLIER ** PLAYER_HABIT_DOT_AMOUNT) / (1 - PLAYER_HABIT_MULTIPLIER)
+            self.playerHabit[i] = self.playerDirection[i] * (mul / length)
+    
 
     def SegmentClearCheck(self, p1: pg.Vector2, p2: pg.Vector2) -> bool:
         """

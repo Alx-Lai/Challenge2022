@@ -9,10 +9,29 @@ class Navigator():
         self.brain = brain
     
 
-    def simplify(self, target: pg.Vector2) -> pg.Vector2:
+    def CheckTarget(self, target: pg.Vector2) -> None:
+        """
+        Check if the target location is safe to approach and change to a nearby location if not. 
+        """
+        if self.brain.isWalkable[Index(target)]:
+            return 
+        distance = 0
+        while distance <= MAX_ALT_DISTANCE:
+            distance += WIDTH
+            for i in range(8):
+                pos = target + DXY[i] * distance
+                if self.brain.isWalkable[Index(pos)]:
+                    target = pos
+                    return 
+        # print(target, " Failed to get safe location.")
+        target = self.brain.position
+
+
+    def Simplify(self, target: pg.Vector2) -> pg.Vector2:
         """
         Return a Vector2 representing the first turning corner. 
         """
+        self.CheckTarget(target)
         pos = Normalize(target)
         dest = pos.copy()
         mem = self.brain.dijkstraPrevious[Index(pos)]
@@ -38,7 +57,7 @@ class Navigator():
         """
         Main function of Navigator, will modify action to decide movement.
         """
-        target = self.simplify(target)
+        target = self.Simplify(target)
         rotateRadian = AngleBetween(-self.brain.direction, target - self.brain.position) # radian
         if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
             if rotateRadian < 0:

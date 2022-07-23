@@ -13,19 +13,25 @@ class TeamAI():
         self.brain = Brain(helper)
         self.navigator = Navigator(self.brain)
         self.collector = Collector(self.brain, self.navigator)
-        self.attacker = Attacker(self.brain)
+        self.attacker = Attacker(self.brain, self.navigator)
         self.protector = Protector(self.brain)
+
+        self.actionTime = 0
     
     def ModeDecision(self):
-        if self.brain.mode != Mode.IDLE:
+        self.actionTime += 1
+        if self.brain.mode != Mode.IDLE and self.actionTime < MAX_ACTION_TIME:
             return 
+        self.actionTime = 0
         attackPoint = self.brain.time 
         collectPoint = (Const.GAME_LENGTH - self.brain.time) 
         if self.brain.helper.get_self_gun_type() == Const.GUN_TYPE_MACHINE_GUN:
             attackPoint *= 5
         if random.randint(1, attackPoint + collectPoint) <= attackPoint:
+            # print("ATTACK")
             self.brain.mode = Mode.ATTACK
         else:
+            # print("COLLECT")
             self.brain.mode = Mode.COLLECT
 
     def decide(self):
