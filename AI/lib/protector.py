@@ -18,9 +18,9 @@ class Protector():
         bullets = self.brain.helper.get_bullet_info()
         for tick in range(ticks):
             for bullet in bullets:
-                if bullet['lifespam'] < 0:
+                if bullet['lifespan'] < 0:
                     continue
-                bullet['lifespam'] -= 1
+                bullet['lifespan'] -= 1
                 bullet['position'] += bullet['speed']
                 if self.hitCheck(bullet['position']):
                     if not self.brain.KickCheck(bullet['speed'], bullet['repulsion']) and self.brain.ShootCheck():

@@ -37,7 +37,6 @@ class TeamAI():
     def decide(self):
         self.brain.Initialize()
         self.ModeDecision()
-
         if self.brain.mode == Mode.ATTACK:
             self.attacker.Decide()
         if self.brain.mode == Mode.COLLECT:

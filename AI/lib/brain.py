@@ -26,6 +26,7 @@ class Brain():
 
         self.edges = [[] for i in range(LENGTH ** 2)] # tuple(node, weight, direc), node indexed by index()
         self.isWalkable = [True] * (LENGTH ** 2)      # Construct Graph 
+        self.isWarning = [False] * (LENGTH ** 2)      # RE_Fields surroundings
         self.isDanger = [False] * (LENGTH ** 2)       # RE_Fields
         self.isObstacle = [False] * (LENGTH ** 2)     # All obstacles
         self.InitGraph()
@@ -95,6 +96,12 @@ class Brain():
                     nnpos = npos + DXY[j] * WIDTH
                     self.isWalkable[Index(nnpos)] = False
                     self.isDanger[Index(nnpos)] = True
+                for j in range(8):
+                    nnpos = npos + DXY[j] * WIDTH
+                    self.isWarning[Index(nnpos)] = True
+                    for u in range(4):
+                        nnnpos = nnpos + DXY[u] * WIDTH
+                        self.isWarning[Index(nnnpos)] = True
         
         for pos in self.obstacles:
             self.isWalkable[Index(pos)] = False
@@ -133,7 +140,10 @@ class Brain():
                     if InGraph(npos) and self.isWalkable[Index(npos)]:
                         if i>=4 and (self.isObstacle[Index(pos+DXY[i-4]*WIDTH)] or self.isObstacle[Index(pos+DXY[(i-3)%4]*WIDTH)]):
                             continue
-                        self.edges[Index(pos)].append((Index(npos), DW[i], i))
+                        weight = DW[i] 
+                        if self.isWarning[Index(npos)]:
+                            weight += 10
+                        self.edges[Index(pos)].append((Index(npos), weight, i))
 
 
     def Dijkstra(self):

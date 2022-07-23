@@ -44,8 +44,10 @@ class Navigator():
         return dest
     
 
-    def BoostCheck(self):
-        minAngle = min(AngleBetween(vec, self.brain.direction) for vec in DXY[:4])
+    def BoostCheck(self, direction: pg.Vector2 = pg.Vector2(0,0)):
+        if direction == pg.Vector2(0, 0):
+            direction = self.brain.direction
+        minAngle = min(AngleBetween(vec, direction) for vec in DXY[:4])
         if minAngle < BOOST_CHECK_ANGLE_TOLERANCE:
             # if parallel to horizontal or verical line, consider reflective shot
             return self.brain.ShootCheck(1 * BOOST_CHECK_MULTIPLIER)
@@ -58,14 +60,35 @@ class Navigator():
         Main function of Navigator, will modify action to decide movement.
         """
         target = self.Simplify(target)
-        rotateRadian = AngleBetween(-self.brain.direction, target - self.brain.position) # radian
-        if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
-            if rotateRadian < 0:
-                self.brain.action['left'] = True
+        direction = target - self.brain.position
+        distance = direction.length()
+        if distance < self.brain.helper.get_self_kick() or not self.BoostCheck(direction):
+            # Do not attack boost
+            rotateRadianFront = AngleBetween(self.brain.direction, direction)
+            rotateRadianBack = AngleBetween(-self.brain.direction, direction)
+            if abs(rotateRadianFront) > abs(rotateRadianBack) or distance > self.brain.helper.get_self_kick() - BACKWARD_EPS:
+                moveType = 'backward'
+                rotateRadian = rotateRadianBack
             else:
-                self.brain.action['right'] = True
-            return
+                moveType = 'forward'
+                rotateRadian = rotateRadianFront
+            if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
+                if rotateRadian < 0:
+                    self.brain.action['left'] = True
+                else:
+                    self.brain.action['right'] = True
+                return 
+            else:
+                self.brain.action[moveType] = True
         else:
-            if (target - self.brain.position).length() >= self.brain.helper.get_self_kick() and self.BoostCheck():
-                self.brain.action['attack'] = True
-            self.brain.action['backward'] = True
+            # Use attack boost
+            rotateRadian = AngleBetween(-self.brain.direction, direction)
+            if abs(rotateRadian) > MOVING_ROTATIONAL_TOLERANCE:
+                if rotateRadian < 0:
+                    self.brain.action['left'] = True
+                else:
+                    self.brain.action['right'] = True
+            else:
+                if self.BoostCheck():
+                    self.brain.action['attack'] = True
+                self.brain.action['backward'] = True
