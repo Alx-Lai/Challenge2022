@@ -1,4 +1,3 @@
-from urllib.request import HTTPBasicAuthHandler
 import pygame as pg
 from AI.lib.brain import Brain
 from AI.lib.utils import *
