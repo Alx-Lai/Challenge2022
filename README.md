@@ -20,4 +20,4 @@ Sound Attributions:
 + Explode by [Fupicat](https://freesound.org/people/Fupicat/) | License: Creative Commons 0
 + Switch_Weapon by [Rickplayer](https://freesound.org/people/Rickplayer/) | License: Creative Commons 0
 
-開發 Document： TBD
+開發 Document： [Here](https://hackmd.io/vvlah31XS7ySSyItX4jFSQ)
